@@ -22,6 +22,7 @@
 <li><a href="#advice的种类">Advice的种类</a></li>
 <li><a href="#aop的实现jdkproxy和cglib">AOP的实现：jdkProxy和Cglib</a></li>
 <li><a href="#spring里代理模式的实现">Spring里代理模式的实现</a></li>
+<li><a href="#事务传播">事务传播</a></li>
 <li><a href="#什么是aop">什么是AOP</a></li>
 </ul>
 <!-- tocstop -->
@@ -82,11 +83,17 @@
 <p>Ø MessageSource：能够实现国际化等功能</p>
 <p>Ø ApplicationEventPublisher：能够注册监听器，实现监听机制</p>
 <p><img src="image-20200406163605604.png" alt></p>
-<h2><span id="三个常用的applicationcontext实现是">三个常用的ApplicationContext实现是:</span></h2><p>\1.  ClassPathXmlApplicationContext:它从classpath路径下的一个XML文件加载context的,将Context作为classpath下的资源。加载应用程序classpath下的context使用的代码如下：</p>
+<h2><span id="三个常用的applicationcontext实现是">三个常用的ApplicationContext实现是:</span></h2><ol>
+<li>ClassPathXmlApplicationContext:它从classpath路径下的一个XML文件加载context的,将Context作为classpath下的资源。加载应用程序classpath下的context使用的代码如下：</li>
+</ol>
 <p>ApplicationContext context = new ClassPathXmlApplicationContext(“bean.xml”);</p>
-<p>\2.  FileSystemXmlApplicationContext:它从文件系统的一个XML文件加载上下文定义的。从文件系统加载应用程序上下文通过如下代码实现。</p>
+<ol start="2">
+<li>FileSystemXmlApplicationContext:它从文件系统的一个XML文件加载上下文定义的。从文件系统加载应用程序上下文通过如下代码实现。</li>
+</ol>
 <p>ApplicationContext context = new FileSystemXmlApplicationContext(“bean.xml”);</p>
-<p>\3.  XmlWebApplicationContext:它从一个web应用程序中包含的XML文件加载context。</p>
+<ol start="3">
+<li>XmlWebApplicationContext:它从一个web应用程序中包含的XML文件加载context。</li>
+</ol>
 <h2><span id="getbean方法的代码逻辑">GetBean方法的代码逻辑</span></h2><p>Ø 转换beanName</p>
 <p>Ø 从缓存中加载实例</p>
 <p>Ø 实例化Bean</p>
@@ -96,10 +103,11 @@
 <h2><span id="spring-bean的作用域">Spring Bean的作用域</span></h2><p>Ø Singleton：Spring的默认作用域，容器里拥有唯一的Bean实例</p>
 <p>Ø Prototype：针对每个getBean请求，容器都会创建一个Bean实例</p>
 <p>Ø Request：会对每个HTTP请求创建一个Bean实例</p>
-<p>Ø Seesion：会对每个Session创建一个Bean实例</p>
-<p>Ø globalSession：会为每个全局Http Session创建一个Bean实例，改作用域仅对Portlet有效</p>
+<p>Ø Session：会对每个Session创建一个Bean实例</p>
+<p>Ø globalSession：会为每个全局Http Session创建一个Bean实例，该作用域仅对Portlet有效</p>
 <p><img src="image-20200406163629950.png" alt></p>
 <p><img src="image-20200406163635201.png" alt></p>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/05/java0-1558500658.jpg" alt="深究Spring中Bean的生命周期"></p>
 <h2><span id="关注点分离不同的问题交给不同的部分去解决">关注点分离：不同的问题交给不同的部分去解决</span></h2><p>Ø 面向切面编程AOP正是此种技术的体现</p>
 <p>Ø 通用化功能代码的实现，对应的就是所谓的切面（Aspect）</p>
 <p>Ø 业务功能代码和切面代码分开后，架构将变得高内聚低耦合</p>
@@ -135,6 +143,41 @@
 <p>Ø getBean方法返回的实际上是Proxy的实例</p>
 <p>Ø Proxy实例是Spring采用JDK Proxy或Cglib动态生成的</p>
 <p><img src="image-20200406163746413.png" alt></p>
+<h2><span id="事务传播">事务传播</span></h2><p>1.PROPAGATION_REQUIRED(默认实现)：当前没有事务则新建事务，有则加入当前事务</p>
+<p>2.PROPAGATION_SUPPORTS：支持当前事务，如果当前没有事务则以非事务方式执行</p>
+<p>3.PROPAGATION_MANDATORY：使用当前事务，如果没有则抛出异常</p>
+<p>4.PROPAGATION__REQUIRES_NEW：新建事务，如果当前有事务则把当前事务挂起</p>
+<p>5.PROPAGATION_NOT_SUPPORTED：以非事务的方式执行，如果当前有事务则把当前事务挂起</p>
+<p>6.PROPAGATION_NEVER：以非事务的方式执行，如果当前有事务则抛出异常</p>
+<p>7.PROPAGATION_NESTED：如果当前存在事务，则在嵌套事务内执行，如果当前没有事务，则执行1</p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DEFAULT</td>
+<td>使用数据库本身使用的隔离级别 ORACLE（读已提交） MySQL（可重复读）</td>
+</tr>
+<tr>
+<td>READ_UNCOMITTED</td>
+<td>读未提交（脏读）最低的隔离级别，一切皆有可能。</td>
+</tr>
+<tr>
+<td>READ_COMMITED</td>
+<td>读已提交，ORACLE默认隔离级别，有幻读以及不可重复读风险。</td>
+</tr>
+<tr>
+<td>REPEATABLE_READ</td>
+<td>可重复读，解决不可重复读的隔离级别，但还是有幻读风险。</td>
+</tr>
+<tr>
+<td>SERLALIZABLE</td>
+<td>串行化，最高的事务隔离级别，不管多少事务，挨个运行完一个事务的所有子事务之后才可以执行另外一个事务里面的所有子事务，这样就解决了脏读、不可重复读和幻读的问题了</td>
+</tr>
+</tbody></table>
 <h2><span id="什么是aop">什么是AOP</span></h2><p>这种在运行时，动态地将通用代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。</p>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
