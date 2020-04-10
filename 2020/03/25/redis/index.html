@@ -26,11 +26,11 @@
 </ul>
 </li>
 <li><a href="#从海量数据里查询某一固定前缀的key">从海量数据里查询某一固定前缀的key √</a><ul>
-<li><a href="#使用keys对线上的业务的影响">使用keys对线上的业务的影响</a><ul>
+<li><a href="#使用keys对线上的业务的影响">使用keys对线上的业务的影响 √</a><ul>
 <li><a href="#keys-pattern查找所有符合给定模式pattern的key">KEYS pattern：查找所有符合给定模式pattern的key</a></li>
 </ul>
 </li>
-<li><a href="#从海量key里查询出某一固定前缀的key">从海量Key里查询出某一固定前缀的Key</a></li>
+<li><a href="#从海量key里查询出某一固定前缀的key">从海量Key里查询出某一固定前缀的Key √</a></li>
 </ul>
 </li>
 <li><a href="#如何通过redis实现分布式锁">如何通过Redis实现分布式锁</a><ul>
@@ -52,13 +52,13 @@
 <li><a href="#redis如何持久化">Redis如何持久化</a><ul>
 <li><a href="#rdb快照持久化保存某个时间点的全量数据快照">Rdb（快照）持久化：保存某个时间点的全量数据快照</a><ul>
 <li><a href="#rdb快照持久化保存某个时间点的全量数据快照">RDB（快照）持久化：保存某个时间点的全量数据快照</a></li>
-<li><a href="#自动化触发rdb持久化的方式">自动化触发RDB持久化的方式</a></li>
+<li><a href="#自动化触发rdb持久化的方式">自动化触发RDB持久化的方式 ×</a></li>
 <li><a href="#copy-on-write">Copy-on-Write</a></li>
 <li><a href="#rdb持久化的缺点">RDB持久化的缺点 √</a></li>
 </ul>
 </li>
 <li><a href="#aofappend-only-file持久化保持写状态">AOF（Append-Only-File）持久化：保持写状态</a><ul>
-<li><a href="#日志重写解决aof文件大小不断增大的问题原理如下">日志重写解决AOF文件大小不断增大的问题，原理如下 √</a></li>
+<li><a href="#日志重写解决aof文件大小不断增大的问题原理如下-">日志重写解决AOF文件大小不断增大的问题，原理如下 -</a></li>
 </ul>
 </li>
 <li><a href="#redis数据的恢复">Redis数据的恢复</a><ul>
@@ -69,7 +69,7 @@
 <li><a href="#数据恢复">数据恢复</a></li>
 </ul>
 </li>
-<li><a href="#使用pipline的好处">使用Pipline的好处</a></li>
+<li><a href="#使用pipline的好处-">使用Pipline的好处 -</a></li>
 </ul>
 </li>
 <li><a href="#redis的同步机制">Redis的同步机制</a><ul>
@@ -86,7 +86,8 @@
 </li>
 </ul>
 </li>
-<li><a href="#redis的集群原理">Redis的集群原理</a><ul>
+<li><a href="#redis的集群原理">Redis的集群原理</a></li>
+<li><a href="#集群可用性">集群可用性</a><ul>
 <li><a href="#如何从海量数据里快速找到所需">如何从海量数据里快速找到所需？</a></li>
 <li><a href="#一致性哈希算法对232取模将哈希值空间组织成虚拟的圆环">一致性哈希算法：对2^32取模，将哈希值空间组织成虚拟的圆环</a></li>
 <li><a href="#将数据key使用相同的函数hash计算出哈希值">将数据key使用相同的函数Hash计算出哈希值</a></li>
@@ -146,9 +147,9 @@
 </ol>
 <h2><span id="从海量数据里查询某一固定前缀的key">从海量数据里查询某一固定前缀的key √</span></h2><p><strong>留意细节</strong></p>
 <p>Ø 摸清数据规模，即问清楚边界</p>
-<h3><span id="使用keys对线上的业务的影响">使用keys对线上的业务的影响</span></h3><h4><span id="keys-pattern查找所有符合给定模式pattern的key">KEYS pattern：查找所有符合给定模式pattern的key</span></h4><p>Ø KEYS指令一次性返回所有匹配的key</p>
+<h3><span id="使用keys对线上的业务的影响">使用keys对线上的业务的影响 √</span></h3><h4><span id="keys-pattern查找所有符合给定模式pattern的key">KEYS pattern：查找所有符合给定模式pattern的key</span></h4><p>Ø KEYS指令一次性返回所有匹配的key</p>
 <p>Ø 键的数量过大会使服务卡顿</p>
-<h3><span id="从海量key里查询出某一固定前缀的key">从海量Key里查询出某一固定前缀的Key</span></h3><p><strong>SCAN cursor [MATCH pattern] [COUNT count]</strong></p>
+<h3><span id="从海量key里查询出某一固定前缀的key">从海量Key里查询出某一固定前缀的Key √</span></h3><p><strong>SCAN cursor [MATCH pattern] [COUNT count]</strong></p>
 <p>Ø 基于游标的迭代器，需要基于上一次的游标延续之前的迭代过程</p>
 <p>Ø 以0作为游标开始一次新的迭代，直到命令返回游标0完成一次遍历</p>
 <p>Ø 不保证每次执行都返回某个给定数量的元素，支持模糊查询</p>
@@ -205,7 +206,7 @@
 <p><img src="image-20200325160856961.png" alt></p>
 <p>上次执行save指令的时间</p>
 <p><img src="image-20200325160907700.png" alt></p>
-<h4><span id="自动化触发rdb持久化的方式">自动化触发RDB持久化的方式</span></h4><p>Ø 根据redis.conf配置里的SAVE m n定时触发（用的是BGSAVE）</p>
+<h4><span id="自动化触发rdb持久化的方式">自动化触发RDB持久化的方式 ×</span></h4><p>Ø 根据redis.conf配置里的SAVE m n定时触发（用的是BGSAVE）</p>
 <p>Ø 主从复制时，主节点自动触发</p>
 <p>Ø 执行Debug Reload</p>
 <p>Ø 执行Shutdown且没有开启AOF持久化</p>
@@ -226,7 +227,7 @@
 <p>然后在redis client里面输入config set appendonly yes使其生效</p>
 <p><img src="image-20200325161651580.png" alt></p>
 <p>fork子线程将内存里面的数据更改转换成对应指令然后同时也记录新的变动到原aof。</p>
-<h4><span id="日志重写解决aof文件大小不断增大的问题原理如下">日志重写解决AOF文件大小不断增大的问题，原理如下 √</span></h4><p>Ø 调用fork(), 创建一个子进程</p>
+<h4><span id="日志重写解决aof文件大小不断增大的问题原理如下-">日志重写解决AOF文件大小不断增大的问题，原理如下 -</span></h4><p>Ø 调用fork(), 创建一个子进程</p>
 <p>Ø 子进程把新的AOF写到一个临时文件里，不依赖原来的AOF文件</p>
 <p>Ø 主进程持续将新的变动同时写到内存和原来的AOF里</p>
 <p>Ø 主进程获取子进程重写AOF的完成信号，往新AOF同步增量变动</p>
@@ -245,7 +246,7 @@
 <h5><span id="数据恢复">数据恢复</span></h5><p>当我们开启了混合持久化时，启动redis依然优先加载aof文件，aof文件加载可能有两种情况如下：</p>
 <p>aof文件开头是rdb的格式, 先加载 rdb内容再加载剩余的 aof。</p>
 <p>aof文件开头不是rdb的格式，直接以aof格式加载整个文件。</p>
-<h4><span id="使用pipline的好处">使用Pipline的好处</span></h4><p>Ø Pipeline和Linux的管道类似</p>
+<h4><span id="使用pipline的好处-">使用Pipline的好处  -</span></h4><p>Ø Pipeline和Linux的管道类似</p>
 <p>Ø Redis基于请求/响应模型，单个请求处理需要一一应答</p>
 <p>Ø Pipeline批量执行指令，节省多次IO往返的时间</p>
 <p>Ø 有顺序依赖的指令建议分批发送</p>
@@ -285,7 +286,8 @@
 <li><strong>Fail</strong> 节点 ping 不通某节点后，会向集群所有节点广播该节点挂掉的消息。其他节点收到消息后标记已下线。</li>
 </ul>
 <p>由于去中心化和通信机制，Redis Cluster 选择了最终一致性和基本可用。</p>
-<h2><span id="redis的集群原理">Redis的集群原理</span></h2><h3><span id="如何从海量数据里快速找到所需">如何从海量数据里快速找到所需？</span></h3><p>Ø 分片：按照某种规则去划分数据，分散存储在多个节点上</p>
+<h2><span id="redis的集群原理">Redis的集群原理</span></h2><h2><span id="集群可用性">集群可用性</span></h2><p>如果集群任意master挂掉,且当前master没有slave.集群进入fail状态,也可以理解成集群的slot映射[0-16383]不完整时进入fail状态.。</p>
+<h3><span id="如何从海量数据里快速找到所需">如何从海量数据里快速找到所需？</span></h3><p>Ø 分片：按照某种规则去划分数据，分散存储在多个节点上</p>
 <p>Ø 常规的按照哈希划分无法实现节点的动态增减</p>
 <h3><span id="一致性哈希算法对232取模将哈希值空间组织成虚拟的圆环">一致性哈希算法：对2^32取模，将哈希值空间组织成虚拟的圆环</span></h3><p><img src="image-20200325162559040.png" alt></p>
 <p>顺时针递增</p>
