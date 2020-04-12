@@ -6,17 +6,17 @@
 <ul>
 <li><a href="#进程和线程的区别">进程和线程的区别</a><ul>
 <li><a href="#进程是资源分配的最小单位线程是cpu调度的最小单位">进程是资源分配的最小单位，线程是CPU调度的最小单位</a></li>
-<li><a href="#进程和线程的区别-1">进程和线程的区别</a></li>
+<li><a href="#进程和线程的区别-">进程和线程的区别 -</a></li>
 <li><a href="#总结">总结</a></li>
-<li><a href="#进程和线程通信方式">进程和线程通信方式</a></li>
+<li><a href="#进程和线程通信方式-">进程和线程通信方式 -</a></li>
 </ul>
 </li>
-<li><a href="#java进程和线程的关系">Java进程和线程的关系</a></li>
-<li><a href="#java中thread的start和run方法的区别">Java中Thread的start和run方法的区别</a></li>
-<li><a href="#thread-runnable以及callable有什么区别">Thread、Runnable以及Callable有什么区别</a></li>
+<li><a href="#java进程和线程的关系-">Java进程和线程的关系 -</a></li>
+<li><a href="#java中thread的start和run方法的区别">Java中Thread的start和run方法的区别 √</a></li>
+<li><a href="#thread-runnable以及callable有什么区别-">Thread、Runnable以及Callable有什么区别 -</a></li>
 <li><a href="#如何给run方法传参">如何给run()方法传参</a><ul>
-<li><a href="#实现的方式主要有三种">实现的方式主要有三种</a></li>
-<li><a href="#如何获取线程的返回值">如何获取线程的返回值</a><ul>
+<li><a href="#实现的方式主要有三种-">实现的方式主要有三种 -</a></li>
+<li><a href="#如何获取线程的返回值">如何获取线程的返回值 √</a><ul>
 <li><a href="#方法1主线程等待法">方法1：主线程等待法</a></li>
 <li><a href="#方法2使用thread类的join阻塞当前线程等待子线程处理完毕">方法2：使用Thread类的join()阻塞当前线程等待子线程处理完毕</a></li>
 <li><a href="#方法3通过callable接口实现通过futuretask-or-线程池获取">方法3：通过Callable接口实现：通过FutureTask Or 线程池获取</a></li>
@@ -26,12 +26,12 @@
 </ul>
 </li>
 <li><a href="#线程的状态">线程的状态</a></li>
-<li><a href="#sleep和wait">Sleep和wait</a><ul>
+<li><a href="#sleep和wait-">Sleep和wait -</a><ul>
 <li><a href="#基本的差别">基本的差别</a></li>
 <li><a href="#最主要的本质区别">最主要的本质区别</a></li>
 </ul>
 </li>
-<li><a href="#notify和notifyall的区别">Notify和notifyAll的区别</a><ul>
+<li><a href="#notify和notifyall的区别">Notify和notifyAll的区别 √</a><ul>
 <li><a href="#两个概念">两个概念</a><ul>
 <li><a href="#锁池entrylist">锁池EntryList</a></li>
 <li><a href="#等待池waitset">等待池WaitSet</a></li>
@@ -39,9 +39,9 @@
 </li>
 </ul>
 </li>
-<li><a href="#yeild方法">Yeild方法</a></li>
-<li><a href="#守护线程">守护线程</a></li>
-<li><a href="#如何中断线程">如何中断线程</a><ul>
+<li><a href="#yeild方法">Yeild方法 √</a></li>
+<li><a href="#守护线程-">守护线程 -</a></li>
+<li><a href="#如何中断线程">如何中断线程 √</a><ul>
 <li><a href="#已经被抛弃的方法">已经被抛弃的方法</a></li>
 <li><a href="#目前使用的方法">目前使用的方法</a></li>
 </ul>
@@ -55,7 +55,7 @@
 <p>Ø 进程是抢占处理器的调度单位；线程属于某个进程，共享其资源</p>
 <p>Ø 线程只由栈、寄存器，程序计数器和TCB组成</p>
 <p><img src="image-20200405094518246.png" alt></p>
-<h3><span id="进程和线程的区别">进程和线程的区别</span></h3><p><font color="red">根本区别</font>：进程是资源分配的最小单位，而线程CPU调度的最小单位</p>
+<h3><span id="进程和线程的区别-">进程和线程的区别 -</span></h3><p><font color="red">根本区别</font>：进程是资源分配的最小单位，而线程CPU调度的最小单位</p>
 <p><font color="red">开销方面</font>：每个进程都有独立的代码和数据空间（程序上下文），进程之间切换开销大；线程可以看做轻量级的进程，同一类线程共享代码和数据空间，每个线程都有自己独立的运行栈、寄存器和程序计数器（PC），线程之间切换的开销小 </p>
 <p><font color="red">所处环境</font>：在操作系统中能同时运行多个进程（程序）；而在同一个进程（程序）中有多个线程同时执行（通过CPU调度，在每个时间片中只有一个线程执行） </p>
 <p><font color="red">内存分配</font>：系统在运行的时候会为每个进程分配不同的内存空间；而对线程而言，除了CPU外，系统不会为线程分配内存（线程所使用的资源来自其所属进程的资源），线程组之间只能共享资源</p>
@@ -63,11 +63,11 @@
 <p>Ø 进程有独立的地址空间，相互不影响，线程只是进程的不同执行路径</p>
 <p>Ø 线程没有独立的地址空间，多进程的程序比多线程程序健壮</p>
 <p>Ø 进程切换比线程的切换开销大</p>
-<h3><span id="进程和线程通信方式">进程和线程通信方式</span></h3><p><strong>进程</strong>：</p>
+<h3><span id="进程和线程通信方式-">进程和线程通信方式 -</span></h3><p><strong>进程</strong>：</p>
 <p>（1）管道（pipe，半双工），流管道（s_pipe，全双工），有名管道（FIFO，全双工）<br>（2）信号量（sophomore/mutex）<br>（3）信号（signal）<br>（4）消息队列<br>（5）共享内存<br>（6）套接字（socket）</p>
 <p><strong>线程</strong>：</p>
-<p>（1）volatile变量<br>（2）使用Object类的wait() 和 notify() 方法<br>（3）使用JUC工具类 CountDownLatch、CyclicBarrier、Exchanger、Semaphore<br>（4）使用 ReentrantLock 结合 Condition<br>（5）LockSupport方法</p>
-<h2><span id="java进程和线程的关系">Java进程和线程的关系</span></h2><p>Ø Java对操作系统提供的功能进行封装，包括进程和线程</p>
+<p>（1）volatile变量<br>（2）使用Object类的wait() 和 notify() 方法<br>（3）使用JUC工具类 CountDownLatch、CyclicBarrier、Exchanger、Semaphore<br>（4）使用 ReentrantLock 结合 Condition<br>（5）LockSupport方法<br>（6）阻塞队列</p>
+<h2><span id="java进程和线程的关系-">Java进程和线程的关系 -</span></h2><p>Ø Java对操作系统提供的功能进行封装，包括进程和线程</p>
 <p>Ø 运行一个程序会产生一个进程，进程包含至少一个线程</p>
 <p>Ø 每个进程对应一个<font color="red">JVM实例</font>，多个线程共享JVM里的堆</p>
 <p>Ø Java采用单线程编程模型，程序会自动创建主线程</p>
@@ -75,11 +75,11 @@
 <p><font color="red">JVM是多线程的</font></p>
 <p>JVM实例在创建的时候同时会创建很多其他的线程，比如GC的线程。</p>
 <p>各个JVM实例之间是相互隔离的。</p>
-<h2><span id="java中thread的start和run方法的区别">Java中Thread的start和run方法的区别</span></h2><p><img src="image-20200405095635582.png" alt></p>
+<h2><span id="java中thread的start和run方法的区别">Java中Thread的start和run方法的区别 √</span></h2><p><img src="image-20200405095635582.png" alt></p>
 <p><img src="image-20200405095643937.png" alt></p>
 <p><img src="image-20200405095653496.png" alt></p>
 <p>调用线程的start方法是创建了新的线程，在新的线程中执行。<br>调用线程的run方法是在主线程中执行该方法，和调用普通方法一样</p>
-<h2><span id="thread-runnable以及callable有什么区别">Thread、Runnable以及Callable有什么区别</span></h2><p><img src="image-20200405095750934.png" alt></p>
+<h2><span id="thread-runnable以及callable有什么区别-">Thread、Runnable以及Callable有什么区别 -</span></h2><p><img src="image-20200405095750934.png" alt></p>
 <ul>
 <li>由于java不能多继承可以实现多个接口，因此，在创建线程的时候尽量多考虑采用实现接口的形式；</li>
 <li>实现callable接口，提交给ExecutorService返回的是异步执行的结果，另外，通常也可以利用FutureTask(Callable  callable)将callable进行包装然后FutureTask提交给ExecutorService。</li>
@@ -93,11 +93,11 @@
 <p><strong>Future就是对于具体的Runnable或者Callable任务的执行结果进行</strong>取消、查询是否完成、获取结果、设置结果操作</p>
 <p>FutureTask类实现了RunnableFuture接口,<code>所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值</code></p>
 <p>可以看出RunnableFuture继承了Runnable接口和Future接口，而FutureTask实现了RunnableFuture接口。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。</p>
-<h2><span id="如何给run方法传参">如何给run()方法传参</span></h2><h3><span id="实现的方式主要有三种">实现的方式主要有三种</span></h3><p>Ø 构造参数传参</p>
+<h2><span id="如何给run方法传参">如何给run()方法传参</span></h2><h3><span id="实现的方式主要有三种-">实现的方式主要有三种 -</span></h3><p>Ø 构造参数传参</p>
 <p>Ø 成员变量传参</p>
 <p>Ø 回调函数传参</p>
 <p><img src="image-20200405101302498.png" alt></p>
-<h3><span id="如何获取线程的返回值">如何获取线程的返回值</span></h3><h4><span id="方法1主线程等待法">方法1：主线程等待法</span></h4><p><img src="image-20200405101320713.png" alt></p>
+<h3><span id="如何获取线程的返回值">如何获取线程的返回值 √</span></h3><h4><span id="方法1主线程等待法">方法1：主线程等待法</span></h4><p><img src="image-20200405101320713.png" alt></p>
 <p>缺点是控制时间不够精准，而且逻辑一多实现起来很麻烦</p>
 <h4><span id="方法2使用thread类的join阻塞当前线程等待子线程处理完毕">方法2：使用Thread类的join()阻塞当前线程等待子线程处理完毕</span></h4><p><img src="image-20200405101511632.png" alt></p>
 <p>缺点是粒度不够细，比如说无法做到线程1达到某个时刻去执行线程2的方法</p>
@@ -162,7 +162,7 @@
 <p>Ø 结束（Terminated）：已终止线程的状态，线程已经结束执行</p>
 <p>结束后运行join会发生异常</p>
 <p><img src="image-20200405101912677.png" alt></p>
-<h2><span id="sleep和wait">Sleep和wait</span></h2><h3><span id="基本的差别">基本的差别</span></h3><p>Ø Sleep是Thread类的方法，wait是Object类中定义的方法</p>
+<h2><span id="sleep和wait-">Sleep和wait -</span></h2><h3><span id="基本的差别">基本的差别</span></h3><p>Ø Sleep是Thread类的方法，wait是Object类中定义的方法</p>
 <p>Ø Sleep()方法可以在任何地方使用</p>
 <p>Ø Wait()方法只能在synchronized方法或者synchronized块中使用</p>
 <p>Ø sleep()方法在休眠时间达到后如果再次获得CPU时间片就会继续执行，而wait()方法必须等待Object.notift/Object.notifyAll通知后，才会离开等待池，并且再次获得CPU时间片才会继续执行。</p>
@@ -194,7 +194,7 @@
 <p>就会发现A无限等待，然后B已经执行完了，程序还没结束。</p>
 <p>此时可以在B中加入notify来唤醒A、或者notifyall</p>
 <p><img src="image-20200405103049686.png" alt></p>
-<h2><span id="notify和notifyall的区别">Notify和notifyAll的区别</span></h2><h3><span id="两个概念">两个概念</span></h3><h4><span id="锁池entrylist">锁池EntryList</span></h4><p>假设线程A已经拥有了某个对象（不是类）的锁，而其他线程B、C想要调用这个对象的某个synchronized方法（或者块），由于B、C线程在进入对象的synchronized方法（或者块）之前必须先获得该对象锁的拥有权，而恰巧该对象的锁目前正被线程A所占用，此时B、C线程就会被阻塞，进入一个地方去等待锁的释放，这个地方便是该对象的锁池。 </p>
+<h2><span id="notify和notifyall的区别">Notify和notifyAll的区别 √</span></h2><h3><span id="两个概念">两个概念</span></h3><h4><span id="锁池entrylist">锁池EntryList</span></h4><p>假设线程A已经拥有了某个对象（不是类）的锁，而其他线程B、C想要调用这个对象的某个synchronized方法（或者块），由于B、C线程在进入对象的synchronized方法（或者块）之前必须先获得该对象锁的拥有权，而恰巧该对象的锁目前正被线程A所占用，此时B、C线程就会被阻塞，进入一个地方去等待锁的释放，这个地方便是该对象的锁池。 </p>
 <h4><span id="等待池waitset">等待池WaitSet</span></h4><p>假设线程A调用了某个对象的wait()方法，线程A就会释放该对象的锁，同时线程A就进入到了该对象的等待池中，进入到等待池中的线程不会去竞争该对象的锁</p>
 <p>Ø NotifyAll会让所有处于等待池的线程全部进入锁池去竞争获取锁的机会</p>
 <p>Ø Notify只会随机选择一个处于等待池中的线程进入锁池去竞争获取锁的机会</p>
@@ -204,7 +204,7 @@
 <p>如果改成notifyAll</p>
 <p><img src="image-20200405103148463.png" alt></p>
 <p>所有的线程都被唤醒了，但是最后<font color="red">只有一个执行成功</font>。其余线程<font color="red">又回到等待池</font>中。</p>
-<h2><span id="yeild方法">Yeild方法</span></h2><p>用了yield方法后，该线程就会把CPU时间让掉，让其他或者自己的线程执行（也就是谁先抢到谁执行）</p>
+<h2><span id="yeild方法">Yeild方法 √</span></h2><p>用了yield方法后，该线程就会把CPU时间让掉，让其他或者自己的线程执行（也就是谁先抢到谁执行）</p>
 <p>Yield对锁的行为没有影响 </p>
 <p>只会分配<strong>给当前线程相同优先级</strong>的线程 </p>
 <p>在Java程序中，通过一个<strong>整型成员变量</strong>Priority<strong>来控制优先级，优先级的范围从1~10.在构建线程的时候可以通过</strong>setPriority(int)方法进行设置，默认优先级为5，优先级高的线程相较于优先级低的线程优先获得处理器时间片。需要注意的是在不同JVM以及操作系统上，线程规划存在差异，有些操作系统甚至会忽略线程优先级的设定。</p>
@@ -212,12 +212,12 @@
 <p><img src="image-20200405103920271.png" alt></p>
 <p><img src="image-20200405103928822.png" alt></p>
 <p>Yield对锁的行为没有影响</p>
-<h2><span id="守护线程">守护线程</span></h2><p>守护线程是一种特殊的线程，就和它的名字一样，它是系统的守护者，在后台默默地守护一些系统服务，比如垃圾回收线程就可以理解守护线程。与之对应的就是用户线程，用户线程就可以认为是系统的工作线程，它会完成整个系统的业务操作。</p>
-<p>这里需要注意的是<strong>守护线程在退出的时候并不会执行finnaly</strong>块中的代码，所以将释放资源等操作不要放在finnaly块中执行，这种操作是不安全的</p>
+<h2><span id="守护线程-">守护线程 -</span></h2><p>守护线程是一种特殊的线程，就和它的名字一样，它是系统的守护者，在后台默默地守护一些系统服务，比如垃圾回收线程就可以理解守护线程。与之对应的就是用户线程，用户线程就可以认为是系统的工作线程，它会完成整个系统的业务操作。</p>
+<p>这里需要注意的是<strong>守护线程在退出的时候并不会执行finnally</strong>块中的代码，所以将释放资源等操作不要放在finnally块中执行，这种操作是不安全的</p>
 <p>线程可以通过setDaemon(true)的方法将线程设置为守护线程。并且需要注意的是设置守护线程要先于start()方法，否则会报</p>
 <p>Exception in thread “main” java.lang.IllegalThreadStateException at java.lang.Thread.setDaemon(Thread.java:1365) at learn.DaemonDemo.main(DaemonDemo.java:19)</p>
 <p>这样的异常，但是该线程还是会执行，只不过会当做正常的用户线程执行。</p>
-<h2><span id="如何中断线程">如何中断线程</span></h2><h3><span id="已经被抛弃的方法">已经被抛弃的方法</span></h3><p>Ø 通过调用stop()方法停止线程</p>
+<h2><span id="如何中断线程">如何中断线程 √</span></h2><h3><span id="已经被抛弃的方法">已经被抛弃的方法</span></h3><p>Ø 通过调用stop()方法停止线程</p>
 <p>Ø 通过调用suspend()和resume()方法</p>
 <p>stop方法是一种“恶意”的中断，一旦执行stop方法，即终止当前正在运行的线程，不管线程逻辑是否完整，这是非常危险的， stop方法会破坏原子逻辑也可能会导致数据不同步。</p>
 <p>suspend(）在导致线程暂停的同时，并不会去释放任何锁资源</p>
