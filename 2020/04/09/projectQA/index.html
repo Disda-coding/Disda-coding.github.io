@@ -57,7 +57,8 @@
 </ul>
 <!-- tocstop -->
 
-<h1><span id="设计原则">设计原则</span></h1><p>秒杀场景是一种读多写少的场景。</p>
+<h1><span id="设计原则">设计原则</span></h1><p>单一责任制，秒杀模块不依赖其他模块，即使挂了正常下单也能走。</p>
+<p>秒杀场景是一种读多写少的场景。</p>
 <ol>
 <li><p>尽量将请求拦截在上游，在秒杀前将下单按钮置灰，秒杀开始后只能下单一次。</p>
 </li>
@@ -67,21 +68,28 @@
 </li>
 </ol>
 <h1><span id="数据库设计">数据库设计</span></h1><p><img src="image-20200409183104311.png" alt></p>
-<p>item</p>
+<p>item 商品信息表</p>
 <p><img src="image-20200409183733005.png" alt></p>
-<p>item_stock</p>
+<p>item_stock 库存表</p>
 <p><img src="image-20200409183704658.png" alt></p>
-<p>order_info</p>
+<p>order_info 下单信息表</p>
 <p><img src="image-20200409183638605.png" alt></p>
-<p>promo</p>
+<blockquote>
+<p>订单号有16位</p>
+<p>前8位为时间信息，年月日</p>
+<p>中间6位为自增序列</p>
+<p>最后两位分库分表</p>
+</blockquote>
+<p>promo 秒杀商品信息表</p>
 <p><img src="image-20200409183609319.png" alt></p>
-<p>sequence_info</p>
+<p>sequence_info </p>
+<p>order_info表根据里面的step去存</p>
 <p><img src="image-20200409183549383.png" alt></p>
 <p>stock_log</p>
 <p><img src="image-20200409183500903.png" alt></p>
-<p>user_info</p>
+<p>user_info 用户信息表</p>
 <p><img src="image-20200409183418037.png" alt></p>
-<p>user_password</p>
+<p>user_password 用户密码表</p>
 <p><img src="image-20200409183222767.png" alt></p>
 <h1><span id="页面静态化">页面静态化</span></h1><p>cdn的核心原理并将静态页面部署到cdn上，之后使用了phantomjs的无头浏览器方案实现了将静态请求和动态请求合并一同部署到cdn上，更进一步的将商品详情页的流量能力提升到极致；</p>
 <p>页面静态化，其实就是将动态生成的jsp页面，变成静态的HTML页面，让用户直接访问。这样的好处就是：</p>
@@ -100,7 +108,8 @@
 <p>不实时显示库存。</p>
 <p>例如用户抢购需要填写二维码。</p>
 <p>不能及时反馈抢购成功消息，显示排队中。</p>
-<h1><span id="接口防刷">接口防刷</span></h1><h2><span id="nginx">Nginx</span></h2><p>Nginx黑名单：过滤日志访问API接口的IP，统计每10分钟调用超过100次的IP，直接丢进nginx的访问黑名单</p>
+<h1><span id="接口防刷">接口防刷</span></h1><h2><span id="nginx">Nginx</span></h2><p>校验恶意请求</p>
+<p>Nginx黑名单：过滤日志访问API接口的IP，统计每10分钟调用超过100次的IP，直接丢进nginx的访问黑名单</p>
 <p>在 Nginx 上限制单 IP 单位时间的请求数，以及单 IP 的并发连接数。</p>
 <h2><span id="隐藏接口">隐藏接口</span></h2><p>每次点击秒杀按钮，先从服务器获取一个秒杀验证值（接口内判断是否到秒杀时间），使用md5加密userID和秒杀ID然后再加盐。</p>
 <p>Redis以缓存用户ID和商品ID为Key，秒杀地址为Value缓存验证值，过期时间设置1分钟左右的随机值。</p>
@@ -118,6 +127,7 @@
 <li>服务端异步队列将请求出队，出队成功的请求可以生成秒杀订单，减少数据库库存，返回秒杀订单详情。</li>
 </ol>
 <p>异步队列开启事务，如果失败在catch中将库存加回去，同时去掉标志位。</p>
+<p>如果Redis超卖了就使用lua脚本</p>
 <p>可以使用JVM缓存去做flag，但是需要用zookeeper。</p>
 <h1><span id="分布式session">分布式Session</span></h1><p>对每个登录的用户分发Token，将Token放入Redis中，确保分布式的访问。</p>
 <h1><span id="限流算法">限流算法</span></h1><p>主要使用Guava的RateLimiter进行限流，采用的是令牌桶机制。</p>
