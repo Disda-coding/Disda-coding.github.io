@@ -1,4 +1,83 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>设计模式也可以这么简单【转】 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">设计模式也可以这么简单【转】</h1><a id="logo" href="/.">Disda</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">设计模式也可以这么简单【转】</h1><div class="post-content"><p>一直想写一篇介绍设计模式的文章，让读者可以很快看完，而且一看就懂，看懂就会用，同时不会将各个模式搞混。自认为本文还是写得不错的😂😂😂，花了不少心思来写这文章和做图，力求让读者真的能看着简单同时有所收获。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>设计模式也可以这么简单【转】 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">设计模式也可以这么简单【转】</h1><a id="logo" href="/.">Disda</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">设计模式也可以这么简单【转】</h1><div class="post-content"><!-- toc -->
+
+<ul>
+<li><a href="#创建型模式">创建型模式</a><ul>
+<li><a href="#简单工厂模式">简单工厂模式</a></li>
+<li><a href="#工厂模式">工厂模式</a></li>
+<li><a href="#抽象工厂模式">抽象工厂模式</a></li>
+<li><a href="#单例模式">单例模式</a></li>
+<li><a href="#建造者模式">建造者模式</a></li>
+<li><a href="#原型模式">原型模式</a></li>
+<li><a href="#创建型模式总结">创建型模式总结</a></li>
+</ul>
+</li>
+<li><a href="#结构型模式">结构型模式</a><ul>
+<li><a href="#代理模式">代理模式</a></li>
+<li><a href="#适配器模式">适配器模式</a><ul>
+<li><a href="#默认适配器模式">默认适配器模式</a></li>
+<li><a href="#对象适配器模式">对象适配器模式</a></li>
+<li><a href="#类适配器模式">类适配器模式</a></li>
+<li><a href="#适配器模式总结">适配器模式总结</a></li>
+</ul>
+</li>
+<li><a href="#桥梁模式">桥梁模式</a></li>
+<li><a href="#装饰模式">装饰模式</a></li>
+<li><a href="#门面模式">门面模式</a></li>
+<li><a href="#组合模式">组合模式</a></li>
+<li><a href="#享元模式">享元模式</a></li>
+<li><a href="#结构型模式总结">结构型模式总结</a></li>
+</ul>
+</li>
+<li><a href="#行为型模式">行为型模式</a><ul>
+<li><a href="#策略模式">策略模式</a></li>
+<li><a href="#观察者模式">观察者模式</a></li>
+<li><a href="#责任链模式">责任链模式</a></li>
+<li><a href="#模板方法模式">模板方法模式</a></li>
+<li><a href="#状态模式">状态模式</a></li>
+<li><a href="#行为型模式总结">行为型模式总结</a></li>
+</ul>
+</li>
+<li><a href="#总结">总结</a><ul>
+<li><a href="#jdk中的设计模式">JDK中的设计模式</a></li>
+</ul>
+</li>
+<li><a href="#creational创建模式">Creational（创建模式）</a><ul>
+<li><a href="#abstract-factory抽象工厂模式">Abstract factory（抽象工厂模式）:</a></li>
+<li><a href="#builder建造者模式">Builder（建造者模式）:</a></li>
+<li><a href="#factory工厂模式">Factory（工厂模式）:</a></li>
+<li><a href="#prototype原型模式">Prototype（原型模式）:</a></li>
+<li><a href="#singleton单例模式">Singleton（单例模式）:</a></li>
+</ul>
+</li>
+<li><a href="#structural结构模式">Structural（结构模式）</a><ul>
+<li><a href="#adapter适配器模式">Adapter（适配器模式）:</a></li>
+<li><a href="#bridge桥梁模式">Bridge（桥梁模式）：</a></li>
+<li><a href="#composite组合模式">Composite（组合模式）:</a></li>
+<li><a href="#decorator装饰模式">Decorator（装饰模式）:</a></li>
+<li><a href="#facade门面模式">Facade（门面模式）:</a></li>
+<li><a href="#flyweight享元模式">Flyweight（享元模式）:</a></li>
+<li><a href="#proxy代理模式">Proxy（代理模式）:</a></li>
+</ul>
+</li>
+<li><a href="#behavioral行为模式">Behavioral(行为模式)</a><ul>
+<li><a href="#chain-of-responsibility责任链模式">Chain of responsibility（责任链模式）:</a></li>
+<li><a href="#command命令模式">Command（命令模式）:</a></li>
+<li><a href="#interpreter">Interpreter:</a></li>
+<li><a href="#iterator">Iterator:</a></li>
+<li><a href="#mediator">Mediator:</a></li>
+<li><a href="#memento备忘录模式">Memento（备忘录模式）:</a></li>
+<li><a href="#null-object">Null Object:</a></li>
+<li><a href="#observer观察者模式">Observer（观察者模式）:</a></li>
+<li><a href="#state状态模式">State（状态模式）:</a></li>
+<li><a href="#strategy策略模式">Strategy（策略模式）:</a></li>
+<li><a href="#template-method模板模式">Template method（模板模式）:</a></li>
+<li><a href="#visitor">Visitor:</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<p>一直想写一篇介绍设计模式的文章，让读者可以很快看完，而且一看就懂，看懂就会用，同时不会将各个模式搞混。自认为本文还是写得不错的😂😂😂，花了不少心思来写这文章和做图，力求让读者真的能看着简单同时有所收获。</p>
 <p>设计模式是对大家实际工作中写的各种代码进行高层次抽象的总结，其中最出名的当属 <em>Gang of Four</em> (<em>GoF</em>) 的分类了，他们将设计模式分类为 23 种经典的模式，根据用途我们又可以分为三大类，分别为创建型模式、结构型模式和行为型模式。</p>
 <p>有一些重要的设计原则在开篇和大家分享下，这些原则将贯通全文：</p>
 <ol>

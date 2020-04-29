@@ -587,6 +587,7 @@
 <p>BC范式（BCNF）：符合3NF，并且，主属性不依赖于主属性。若关系模式R属于第一范式，且每个属性都不传递依赖于键码，则R属于BC范式。</p>
 <h3><span id="优缺点">优缺点</span></h3><p>规范化的优点是明显的，它避免了大量的数据冗余，节省了存储空间，保持了数据的一致性。当一个库里的数据经常发生变化时，达到3NF的库可以使用户不必在超过两个以上的地方更改同一个值。那么是不是只要把所有的表都规范为3NF后，数据库的设计就是最优的呢?这可不一定。范式越高意味着表的划分更细，一个数据库中需要的表也就越多，用户不得不将原本相关联的数据分摊到多个表中。当用户同时需要这些数据时只能采用连接表的形式将数据重新合并在一起。同时把多个表联接在一起的花费是巨大的，尤其是当需要连接的两张或者多张表数据非常庞大的时候，表连接操作几乎是一个噩梦，这严重地降低了系统运行性能</p>
 <h2><span id="数据库连接">数据库连接</span></h2><p><img src="clip_image017.jpg" alt="数据库连接"></p>
+<p><a href="https://blog.csdn.net/DarkAngel1228/article/details/80004222?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1&amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1" target="_blank" rel="noopener">https://blog.csdn.net/DarkAngel1228/article/details/80004222?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1&amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1</a> 主从</p>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
