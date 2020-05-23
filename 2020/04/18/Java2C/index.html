@@ -13,6 +13,10 @@
 <li><a href="#指针遍历法">指针遍历法：</a></li>
 </ul>
 </li>
+<li><a href="#左值和右值">左值和右值</a></li>
+<li><a href="#拷贝构造函数">拷贝构造函数</a></li>
+<li><a href="#拷贝初始化">拷贝初始化</a></li>
+<li><a href="#重载拷贝赋值运算符">重载拷贝赋值运算符</a></li>
 </ul>
 </li>
 <li><a href="#练习">练习</a><ul>
@@ -65,6 +69,20 @@
 <h3><span id="指针遍历法">指针遍历法：</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> p=ia;p!=ia+<span class="number">3</span>;++p)&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> q=*p;q!=*p+<span class="number">4</span>;++q)&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>其中p中存放地址是ia[x]的地址而且ia[x]和ia[x+1]的地址是连续的，而*p是取ia[x][0]的地址。</p>
+<h2><span id="左值和右值">左值和右值</span></h2><h2><span id="拷贝构造函数">拷贝构造函数</span></h2><p>如果一个构造函数的第一个参数是自身类类型的引用，且任何额外参数都有默认值，则此构造函数是拷贝构造函数。当使用<strong>拷贝初始化</strong>时，我们会用到拷贝构造函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo(); <span class="comment">//默认构造函数</span></span><br><span class="line">    Foo(<span class="keyword">const</span> Foo&amp;);<span class="comment">//拷贝构造函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>拷贝函数通常不应该是explicit的</strong></p>
+<h2><span id="拷贝初始化">拷贝初始化</span></h2><ul>
+<li><p>用=定义变量</p>
+</li>
+<li><p>将一个对象作为实参传递给一个非引用类型的形参</p>
+</li>
+<li><p>从花括号列表初始化一个数组中的元素或一个聚合类中的成员</p>
+</li>
+</ul>
+<h2><span id="重载拷贝赋值运算符">重载拷贝赋值运算符</span></h2><p>如果一个类未定义自己的拷贝赋值运算符，编译器会为它生成一个合成拷贝赋值运算符</p>
+<p>如果一个运算符是一个成员函数，其左侧运算对象就绑定到隐式的this参数。赋值运算符通常返回一个指向其左侧运算对象的引用。</p>
 <h1><span id="练习">练习</span></h1><h2><span id="943">9.43</span></h2><p>如果使用!=来比较两个迭代器在这题是不行的，但是如果不是特殊条件最好写成！=的判断条件。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">replace</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">const</span> <span class="built_in">string</span>&amp; oldVal, <span class="keyword">const</span> <span class="built_in">string</span>&amp; newVal)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">auto</span> curr = s.<span class="built_in">begin</span>();</span><br><span class="line">	<span class="keyword">while</span> (curr &lt;= s.<span class="built_in">end</span>() - oldVal.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (oldVal == s.substr(curr-<span class="built_in">begin</span>(s),  oldVal.<span class="built_in">size</span>()))</span><br><span class="line">		&#123;</span><br><span class="line">			curr = s.erase(curr, curr + oldVal.<span class="built_in">size</span>());</span><br><span class="line">			curr = s.insert(curr, newVal.<span class="built_in">begin</span>(), newVal.<span class="built_in">end</span>());</span><br><span class="line">			curr += newVal.<span class="built_in">size</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			++curr;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">string</span> s = <span class="string">"tho "</span>;</span><br><span class="line">    <span class="built_in">string</span> oldVal = <span class="string">"tho"</span>;</span><br><span class="line">    <span class="built_in">string</span> newVal = <span class="string">"though"</span>;</span><br><span class="line">	replace(s, oldVal, newVal);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; s;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
