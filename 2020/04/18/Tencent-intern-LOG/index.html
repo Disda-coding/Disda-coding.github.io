@@ -11,6 +11,8 @@
 <li><a href="#2020526">2020/5/26</a></li>
 <li><a href="#examples">Examples</a></li>
 <li><a href="#2020527">2020/5/27</a></li>
+<li><a href="#2020528">2020/5/28</a></li>
+<li><a href="#2020529">2020/5/29</a></li>
 </ul>
 <!-- tocstop -->
 
@@ -98,6 +100,35 @@
 </li>
 <li><p>感觉这样的生活还是蛮舒服的，虽然说大城市给予自己的时间变少了，但是公司的氛围都特别融洽，慢慢感受到了瑞雪文化。越发的想留在腾讯了，我也是越来越好，越来越自信了。</p>
 </li>
+</ul>
+<h2><span id="2020528">2020/5/28</span></h2><ul>
+<li><p>按照需求修改Xmind</p>
+<blockquote>
+<p>修改了代码实现标签追加功能</p>
+<p>增加了默认权限为0的操作</p>
+<p>修改代码实现了按顺序添加属性功能</p>
+<p>实现了区分用例标题和属性</p>
+</blockquote>
+<p>但是很遗憾的是xmind包不支持xmind zen版本</p>
+<p>因此我决定改变一个思路，去找有没有将zen转为json的包，并且对json进行层次遍历，这样虽然效率低了但是也能实现功能，代码也可以复用。</p>
+</li>
+<li><p>继续学习Verilog</p>
+<blockquote>
+<p>数据流模型化</p>
+</blockquote>
+</li>
+<li><p>项目经理让我帮黄博对接一下AI LAB</p>
+</li>
+<li><p>晚上健身+骑车回酒店</p>
+</li>
+</ul>
+<h2><span id="2020529">2020/5/29</span></h2><ul>
+<li>继续研究如何解析Xmind</li>
+<li>放弃了自己写的解析代码，查询了相关文档使用了json库自带的功能。</li>
+<li>完成了对JSON的解析，并且将结果封装成对象。</li>
+<li>默认一个ZEN文档一个画布</li>
+<li>为了代码可读性、维护性和开发的便捷性，牺牲一丢丢性能，将解析Xmind单独写成一个文件。</li>
+<li>完成对JSON文件的解析生成模型节点，并且对模型节点解析，结合我之前的解析代码把整个Xmind文件按格式解析出来。</li>
 </ul>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
