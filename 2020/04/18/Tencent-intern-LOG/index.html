@@ -15,6 +15,12 @@
 <li><a href="#2020529">2020/5/29</a></li>
 <li><a href="#202061">2020/6/1</a></li>
 <li><a href="#202062">2020/6/2</a></li>
+<li><a href="#202063">2020/6/3</a></li>
+<li><a href="#202064">2020/6/4</a></li>
+<li><a href="#202065">2020/6/5</a></li>
+<li><a href="#202068">2020/6/8</a></li>
+<li><a href="#202069">2020/6/9</a></li>
+<li><a href="#2020610">2020/6/10</a></li>
 </ul>
 <!-- tocstop -->
 
@@ -186,6 +192,109 @@
 </li>
 <li><p>提前请假从酒店搬到租房那里了，今天刚好状态不行，早点回去了。租房还可以，坐个地铁就到公司了，终于不需要那么早起了 哈哈哈。租房条件中规中矩吧。</p>
 </li>
+</ul>
+<h2><span id="202063">2020/6/3</span></h2><ul>
+<li><p>继续阅读Django后台源码</p>
+<ul>
+<li><p>parse_usecase_list</p>
+<blockquote>
+<p>解析用例列表包含：</p>
+<p>​    获取包含用例的个数？</p>
+<p>​    获取传入参数所对应的用例信息</p>
+<p>返回</p>
+</blockquote>
+</li>
+<li><p>update_usecase_content</p>
+<blockquote>
+<p> 更新 用例内容</p>
+<p> 判断用例是否为自动化样例 是的话就需要去做一些合法性判断</p>
+</blockquote>
+</li>
+<li><p>data_import</p>
+<blockquote>
+<p>判断是否曾经写过数据 写过就返回，没写过就创建对象然后异步写DB</p>
+</blockquote>
+</li>
+<li><p>data_import_status</p>
+<blockquote>
+<p>返回上传文件后的结果</p>
+</blockquote>
+</li>
+<li><p>import_task_history</p>
+<blockquote>
+<p>获取当前登录人提交的导入任务列表</p>
+</blockquote>
+</li>
+<li><p>auto_fileupload</p>
+<blockquote>
+<p>逻辑和auto_fileupload差不多 处理一些字段不大一样</p>
+</blockquote>
+</li>
+<li><p>auto_extra_params</p>
+<blockquote>
+<p>获取关联的智研项目信息 并且 更新任务状态和信息</p>
+</blockquote>
+</li>
+<li><p>auto_task_history</p>
+<blockquote>
+<p>获取git自动操作的任务记录列表</p>
+</blockquote>
+</li>
+<li><p>auto_task_history_details</p>
+<blockquote>
+<p>获取git自动操作,指定任务的用例记录详情列表</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>开会，商量天幕后台数据解析和可视化功能。</p>
+</li>
+</ul>
+<h2><span id="202064">2020/6/4</span></h2><ul>
+<li><p>了解了一下python连接数据库的各种包以及相关的ORM包。</p>
+</li>
+<li><p>开会了解了一下逻辑和需求。</p>
+</li>
+<li><p>查看数据库并且分析哪些数据段缺失，哪些数据段需要。</p>
+</li>
+</ul>
+<h2><span id="202065">2020/6/5</span></h2><ul>
+<li><p>继续分析需求和研究数据库</p>
+</li>
+<li><p>查找缺失的字段。</p>
+</li>
+<li><p>解决了sqlachemy连接数据库的问题（enum字段）</p>
+</li>
+</ul>
+<h2><span id="202068">2020/6/8</span></h2><ul>
+<li><p>和waine最后确定需求：</p>
+</li>
+<li><p>通过Excel确定了无法获取的数据，并且反馈给同事。</p>
+</li>
+<li><p>继续研究sqlAchemy，实现了：</p>
+<blockquote>
+<p>对BIGINT的支持</p>
+<p>对表存在与否判断</p>
+<p>创建部分数据库</p>
+<p>完成对园区，交换机，服务器表的建立。</p>
+<p>完成了yaml配置文件的书写</p>
+</blockquote>
+</li>
+</ul>
+<h2><span id="202069">2020/6/9</span></h2><ul>
+<li><p>解决了python一个奇怪的bug（创建对象的时候还是得加（））</p>
+</li>
+<li><p>开发需求</p>
+<blockquote>
+<p>完成了将已知数据录入IDC状态表的功能</p>
+<p>完成了将已知数据录入Server状态表的功能</p>
+<p>完成了将已知数据录入switch状态表的功能</p>
+</blockquote>
+</li>
+</ul>
+<h2><span id="2020610">2020/6/10</span></h2><ul>
+<li>抽取代码 解耦</li>
+<li>根据需求重写逻辑</li>
 </ul>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
