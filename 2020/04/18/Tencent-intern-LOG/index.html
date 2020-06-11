@@ -21,6 +21,7 @@
 <li><a href="#202068">2020/6/8</a></li>
 <li><a href="#202069">2020/6/9</a></li>
 <li><a href="#2020610">2020/6/10</a></li>
+<li><a href="#2020611">2020/6/11</a></li>
 </ul>
 <!-- tocstop -->
 
@@ -279,8 +280,6 @@
 <p>完成对园区，交换机，服务器表的建立。</p>
 <p>完成了yaml配置文件的书写</p>
 </blockquote>
-</li>
-</ul>
 <h2><span id="202069">2020/6/9</span></h2><ul>
 <li><p>解决了python一个奇怪的bug（创建对象的时候还是得加（））</p>
 </li>
@@ -291,10 +290,81 @@
 <p>完成了将已知数据录入switch状态表的功能</p>
 </blockquote>
 </li>
+<li><p>树立流程：</p>
+<blockquote>
+<ol>
+<li><p>对数据表进行分析，并抽取有用的数据项</p>
+</li>
+<li><p>对有用的数据表建立domain object实现对象和数据库之间的映射</p>
+</li>
+<li><p>书写业务逻辑，将表数据有机结合在一起</p>
+</li>
+<li><p>书写测试样例，测试业务逻辑的正确性。</p>
+</li>
+<li><p>对代码进行单机测试</p>
+</li>
+<li><p>核对需求，看看是否能满足标准</p>
+</li>
+<li><p>对代码Review，优化代码（ORM部分优化？）</p>
+</li>
+<li><p>将代码部署到服务器上，进行测试</p>
+</li>
+<li><p>项目迭代</p>
+</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
 </ul>
 <h2><span id="2020610">2020/6/10</span></h2><ul>
-<li>抽取代码 解耦</li>
-<li>根据需求重写逻辑</li>
+<li><p>抽取代码 解耦</p>
+<blockquote>
+<p>使用default.yaml作为配置文件</p>
+<p>代码分层：</p>
+<p>​    DO层 ： 存放ORM对象</p>
+<p>​    DAO层： 用于对数据库以及配置文件处理</p>
+<p>​    Service层：实现业务逻辑</p>
+</blockquote>
+</li>
+<li><p>根据需求重写逻辑</p>
+<blockquote>
+<p>由于代码结构的合理性，修改变得简单。</p>
+</blockquote>
+</li>
+<li><p>阅读新数据库，分析抽取有用的部分，并且创建对应的ORM DO</p>
+<blockquote>
+<p>如何针对每天来插入数据？日期的对比？</p>
+<p>研究python中的日期</p>
+<p>表名根据日期变换带来的数据库表访问问题？</p>
+</blockquote>
+</li>
+<li><p>建立ORM对象小技巧</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#96; [a-zA-Z]*.*</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2><span id="2020611">2020/6/11</span></h2><ul>
+<li><p>动态改变表名</p>
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">OptServerInfoGetter</span><span class="params">(suffix, Base_class=Base)</span>:</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">OptServerRelationInfo</span><span class="params">(Base_class)</span>:</span></span><br><span class="line">     __tablename__ = <span class="string">'opt_info_'</span> + suffix</span><br><span class="line">     manageip = Column(String(<span class="number">16</span>), primary_key=<span class="literal">True</span>)</span><br><span class="line">     interface = Column(String(<span class="number">64</span>))</span><br><span class="line">     description = Column(String(<span class="number">128</span>), primary_key=<span class="literal">True</span>)</span><br><span class="line">     status = Column(String)</span><br><span class="line">     bandwidth = Column()</span><br><span class="line">     unitType = Column()</span><br><span class="line">     rateCount = Column()</span><br><span class="line">     ratePkgCount = Column()</span><br><span class="line">     outputunitType = Column()</span><br><span class="line">     outputrateCount = Column()</span><br><span class="line">     outputratePkgCount = Column()</span><br><span class="line">     orderlist = Column()</span><br><span class="line"> <span class="keyword">return</span> OptServerRelationInfo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">OptServerRelationInfo = OptServerInfoGetter(<span class="string">'20200609'</span>)</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>继续优化代码</p>
+<blockquote>
+<p>​    DO： 存放ORM对象</p>
+<p>​    DAO： 用于对数据库以及配置文件处理</p>
+<p>​    Service：实现业务逻辑</p>
+<p>​    Utils：实现其余工具功能</p>
+</blockquote>
+</li>
+<li><p>需要讲一下卫星的项目：</p>
+</li>
+<li><p>讨论了一下数据的来源问题</p>
+<blockquote>
+<p>进制换算1k 然后峰值计算需要sum来做</p>
+</blockquote>
+</li>
 </ul>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
