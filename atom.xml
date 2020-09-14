@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-05-08T09:36:36.696Z</updated>
+  <updated>2020-05-23T02:01:25.175Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,29 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Tencent-SCF</title>
-    <link href="http://yoursite.com/2020/05/07/SCF/"/>
-    <id>http://yoursite.com/2020/05/07/SCF/</id>
-    <published>2020-05-07T04:50:50.000Z</published>
-    <updated>2020-05-08T09:36:36.696Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>记录一下使用serverless SCF中实践的过程遇到的一些坑。</p><a id="more"></a><!-- toc --><ul><li><a href="#配置环境">配置环境</a><ul><li><a href="#设置api密钥">设置API密钥</a></li><li><a href="#设置角色">设置角色</a></li></ul></li><li><a href="#生产环境">生产环境</a><ul><li><a href="#控制台">控制台</a></li><li><a href="#cli">CLI</a></li><li><a href="#vscode推荐">VSCode（推荐）</a></li></ul></li><li><a href="#scf进阶使用">SCF进阶使用</a><ul><li><a href="#测试">测试</a></li><li><a href="#日志查询">日志查询</a></li><li><a href="#scf监控与告警">SCF监控与告警</a></li></ul></li><li><a href="#scf触发器类型以及如何配置">SCF触发器类型以及如何配置</a><ul><li><a href="#触发器类型">触发器类型</a></li><li><a href="#scf网络与配置">SCF网络与配置</a><ul><li><a href="#配置vpc">配置VPC</a></li></ul></li><li><a href="#配置环境变量">配置环境变量</a></li><li><a href="#api-explorer">API Explorer</a></li></ul></li></ul><!-- tocstop --><h1><span id="配置环境">配置环境</span></h1><h2><span id="设置api密钥">设置API密钥</span></h2><p><img src="image-20200507125902880.png" alt="设置API密钥"></p><p>登录腾讯云，在云产品中去设置一个新的秘钥。</p><h2><span id="设置角色">设置角色</span></h2><p><img src="image-20200507130010962.png" alt="设置角色"></p><p>需要注意的是我们需要为scf去设置角色，防止上传的时候出现问题。</p><p><img src="image-20200507130137864.png" alt></p><p>选择一个策略名，然后重命名为SCF_QcsRole，这个是使用命令行工具的时候运行scf deploy的时候默认上传使用的名字。</p><h1><span id="生产环境">生产环境</span></h1><h2><span id="控制台">控制台</span></h2><p>直接打开我们web端的控制台去coding</p><h2><span id="cli">CLI</span></h2><ul><li>配置python环境和pip。</li></ul><p><a href="https://cloud.tencent.com/document/product/583/33449" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/583/33449</a> 根据链接配置</p><ul><li>执行以下命令，并按照提示输入对应信息：</li></ul><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ scf configure <span class="built_in">set</span></span><br><span class="line">[-] appid = <span class="number">1255721742</span></span><br><span class="line">[-] region = ap-guangzhou</span><br><span class="line">[-] secret-id = ********************************cEr7</span><br><span class="line">[-] secret-key = ****************************mkYA</span><br><span class="line">[-] using-cos = True (By default, it is deployed by COS.)</span><br><span class="line">Allow report information to <span class="built_in">help</span> us optimize scfcli(Y/n):</span><br></pre></td></tr></table></figure><h2><span id="vscode推荐">VSCode（推荐）</span></h2><p>下载tencent scf插件即可。</p><h1><span id="scf进阶使用">SCF进阶使用</span></h1><h2><span id="测试">测试</span></h2><ul><li>VSCode</li></ul><blockquote><p>使用本地调试，然后选择方法即可</p></blockquote><p><img src="image-20200507132307806.png" alt></p><ul><li>控制台</li></ul><blockquote><p>通过 函数服务-&gt; 函数代码里面选择测试方法即可</p></blockquote><p><img src="image-20200507132358519.png" alt></p><p><img src="image-20200507132425062.png" alt></p><h2><span id="日志查询">日志查询</span></h2><ul><li><p>方法一</p><blockquote><p>在控制台点击 日志查询</p></blockquote></li><li><p>方法二</p><blockquote><p>配置日志流水</p></blockquote></li></ul><p><img src="image-20200507132646019.png" alt="日志流水"></p><ol><li><p>创建日志集（地点一定要保持一致）</p><p><img src="image-20200507133349054.png" alt></p></li><li><p>创建日志主题</p><p><img src="image-20200507133421836.png" alt></p></li><li><p>创建日志索引</p><p><img src="image-20200507133451675.png" alt></p></li><li><p>云函数配置日志投递</p><p><img src="image-20200507133545799.png" alt></p></li><li><p>查询日志</p><p><img src="image-20200507133738427.png" alt></p></li></ol><p>在函数配置中可以配置日志投递信息，选择日志集就可以了。</p><h2><span id="scf监控与告警">SCF监控与告警</span></h2><ol><li><p>各项监控信息</p><blockquote><p>可以在 监控信息 里面看到</p></blockquote></li><li><p>配置告警</p><p><img src="image-20200507134302273.png" alt></p><p><img src="image-20200507134340161.png" alt></p><p><img src="image-20200507134616754.png" alt></p><p><img src="image-20200507134558753.png" alt></p><p><img src="image-20200507143042137.png" alt></p></li></ol><h1><span id="scf触发器类型以及如何配置">SCF触发器类型以及如何配置</span></h1><h2><span id="触发器类型">触发器类型</span></h2><ul><li>定时触发</li><li>COS触发</li><li>CMQ主题订阅触发</li><li>Ckafka触发</li><li>API网关触发</li></ul><h2><span id="scf网络与配置">SCF网络与配置</span></h2><p><img src="image-20200507143736842.png" alt></p><h3><span id="配置vpc">配置VPC</span></h3><p><img src="image-20200507155739972.png" alt></p><p><img src="image-20200507155713492.png" alt></p><h2><span id="配置环境变量">配置环境变量</span></h2><p><img src="image-20200507155926430.png" alt></p><h2><span id="api-explorer">API Explorer</span></h2><blockquote><p>文档-&gt;API中心-&gt;云函数-&gt;函数相关接口-&gt;运行函数-&gt;API Explorer</p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;记录一下使用serverless SCF中实践的过程遇到的一些坑。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="LOG" scheme="http://yoursite.com/categories/LOG/"/>
-    
-    
-      <category term="实习" scheme="http://yoursite.com/tags/%E5%AE%9E%E4%B9%A0/"/>
-    
-  </entry>
   
   <entry>
     <title>SCF之疫情地图</title>
@@ -54,6 +31,29 @@
       
         &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla
       
+    
+    </summary>
+    
+    
+      <category term="LOG" scheme="http://yoursite.com/categories/LOG/"/>
+    
+    
+      <category term="实习" scheme="http://yoursite.com/tags/%E5%AE%9E%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Tencent-SCF</title>
+    <link href="http://yoursite.com/2020/05/07/SCF/"/>
+    <id>http://yoursite.com/2020/05/07/SCF/</id>
+    <published>2020-05-07T04:50:50.000Z</published>
+    <updated>2020-05-08T09:36:36.696Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>记录一下使用serverless SCF中实践的过程遇到的一些坑。</p><a id="more"></a><!-- toc --><ul><li><a href="#配置环境">配置环境</a><ul><li><a href="#设置api密钥">设置API密钥</a></li><li><a href="#设置角色">设置角色</a></li></ul></li><li><a href="#生产环境">生产环境</a><ul><li><a href="#控制台">控制台</a></li><li><a href="#cli">CLI</a></li><li><a href="#vscode推荐">VSCode（推荐）</a></li></ul></li><li><a href="#scf进阶使用">SCF进阶使用</a><ul><li><a href="#测试">测试</a></li><li><a href="#日志查询">日志查询</a></li><li><a href="#scf监控与告警">SCF监控与告警</a></li></ul></li><li><a href="#scf触发器类型以及如何配置">SCF触发器类型以及如何配置</a><ul><li><a href="#触发器类型">触发器类型</a></li><li><a href="#scf网络与配置">SCF网络与配置</a><ul><li><a href="#配置vpc">配置VPC</a></li></ul></li><li><a href="#配置环境变量">配置环境变量</a></li><li><a href="#api-explorer">API Explorer</a></li></ul></li></ul><!-- tocstop --><h1><span id="配置环境">配置环境</span></h1><h2><span id="设置api密钥">设置API密钥</span></h2><p><img src="image-20200507125902880.png" alt="设置API密钥"></p><p>登录腾讯云，在云产品中去设置一个新的秘钥。</p><h2><span id="设置角色">设置角色</span></h2><p><img src="image-20200507130010962.png" alt="设置角色"></p><p>需要注意的是我们需要为scf去设置角色，防止上传的时候出现问题。</p><p><img src="image-20200507130137864.png" alt></p><p>选择一个策略名，然后重命名为SCF_QcsRole，这个是使用命令行工具的时候运行scf deploy的时候默认上传使用的名字。</p><h1><span id="生产环境">生产环境</span></h1><h2><span id="控制台">控制台</span></h2><p>直接打开我们web端的控制台去coding</p><h2><span id="cli">CLI</span></h2><ul><li>配置python环境和pip。</li></ul><p><a href="https://cloud.tencent.com/document/product/583/33449" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/583/33449</a> 根据链接配置</p><ul><li>执行以下命令，并按照提示输入对应信息：</li></ul><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ scf configure <span class="built_in">set</span></span><br><span class="line">[-] appid = <span class="number">1255721742</span></span><br><span class="line">[-] region = ap-guangzhou</span><br><span class="line">[-] secret-id = ********************************cEr7</span><br><span class="line">[-] secret-key = ****************************mkYA</span><br><span class="line">[-] using-cos = True (By default, it is deployed by COS.)</span><br><span class="line">Allow report information to <span class="built_in">help</span> us optimize scfcli(Y/n):</span><br></pre></td></tr></table></figure><h2><span id="vscode推荐">VSCode（推荐）</span></h2><p>下载tencent scf插件即可。</p><h1><span id="scf进阶使用">SCF进阶使用</span></h1><h2><span id="测试">测试</span></h2><ul><li>VSCode</li></ul><blockquote><p>使用本地调试，然后选择方法即可</p></blockquote><p><img src="image-20200507132307806.png" alt></p><ul><li>控制台</li></ul><blockquote><p>通过 函数服务-&gt; 函数代码里面选择测试方法即可</p></blockquote><p><img src="image-20200507132358519.png" alt></p><p><img src="image-20200507132425062.png" alt></p><h2><span id="日志查询">日志查询</span></h2><ul><li><p>方法一</p><blockquote><p>在控制台点击 日志查询</p></blockquote></li><li><p>方法二</p><blockquote><p>配置日志流水</p></blockquote></li></ul><p><img src="image-20200507132646019.png" alt="日志流水"></p><ol><li><p>创建日志集（地点一定要保持一致）</p><p><img src="image-20200507133349054.png" alt></p></li><li><p>创建日志主题</p><p><img src="image-20200507133421836.png" alt></p></li><li><p>创建日志索引</p><p><img src="image-20200507133451675.png" alt></p></li><li><p>云函数配置日志投递</p><p><img src="image-20200507133545799.png" alt></p></li><li><p>查询日志</p><p><img src="image-20200507133738427.png" alt></p></li></ol><p>在函数配置中可以配置日志投递信息，选择日志集就可以了。</p><h2><span id="scf监控与告警">SCF监控与告警</span></h2><ol><li><p>各项监控信息</p><blockquote><p>可以在 监控信息 里面看到</p></blockquote></li><li><p>配置告警</p><p><img src="image-20200507134302273.png" alt></p><p><img src="image-20200507134340161.png" alt></p><p><img src="image-20200507134616754.png" alt></p><p><img src="image-20200507134558753.png" alt></p><p><img src="image-20200507143042137.png" alt></p></li></ol><h1><span id="scf触发器类型以及如何配置">SCF触发器类型以及如何配置</span></h1><h2><span id="触发器类型">触发器类型</span></h2><ul><li>定时触发</li><li>COS触发</li><li>CMQ主题订阅触发</li><li>Ckafka触发</li><li>API网关触发</li></ul><h2><span id="scf网络与配置">SCF网络与配置</span></h2><p><img src="image-20200507143736842.png" alt></p><h3><span id="配置vpc">配置VPC</span></h3><p><img src="image-20200507155739972.png" alt></p><p><img src="image-20200507155713492.png" alt></p><h2><span id="配置环境变量">配置环境变量</span></h2><p><img src="image-20200507155926430.png" alt></p><h2><span id="api-explorer">API Explorer</span></h2><blockquote><p>文档-&gt;API中心-&gt;云函数-&gt;函数相关接口-&gt;运行函数-&gt;API Explorer</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;记录一下使用serverless SCF中实践的过程遇到的一些坑。&lt;/p&gt;
     
     </summary>
     
