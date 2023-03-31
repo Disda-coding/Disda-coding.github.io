@@ -1,0 +1,701 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>大数据建模 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">大数据建模</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">大数据建模</h1><div class="post-content"><a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#降维">降维</a></li>
+<li><a href="#npset_printoptions">np.set_printoptions</a></li>
+<li><a href="#bicount">bicount</a></li>
+<li><a href="#lexsort">lexsort</a></li>
+<li><a href="#练习题">练习题</a><ul>
+<li><a href="#trick">Trick</a></li>
+<li><a href="#matplotlib">Matplotlib</a></li>
+</ul>
+</li>
+<li><a href="#基本操作">基本操作</a></li>
+<li><a href="#风格">风格</a></li>
+<li><a href="#面向对象画图">面向对象画图</a><ul>
+<li><a href="#结合pandas画图">结合pandas画图</a></li>
+<li><a href="#sklearn">sklearn</a></li>
+</ul>
+</li>
+<li><a href="#决策树">决策树</a><ul>
+<li><a href="#剪枝策略">剪枝策略</a></li>
+</ul>
+</li>
+<li><a href="#回归树">回归树</a></li>
+<li><a href="#随机森林">随机森林</a></li>
+<li><a href="#预处理">预处理</a><ul>
+<li><a href="#方差过滤"><strong>方差过滤</strong></a></li>
+<li><a href="#卡方过滤">卡方过滤</a></li>
+<li><a href="#f检验只能检验线性关系">F检验（只能检验线性关系）</a></li>
+<li><a href="#互信息法">互信息法</a></li>
+</ul>
+</li>
+<li><a href="#特征工程">特征工程</a></li>
+<li><a href="#数据预处理">数据预处理</a></li>
+<li><a href="#逻辑回归">逻辑回归</a></li>
+<li><a href="#perceptrons">Perceptrons</a></li>
+<li><a href="#logisticregression">LogisticRegression</a><ul>
+<li><a href="#做题遇到的">做题遇到的</a></li>
+</ul>
+</li>
+<li><a href="#数据格式化map">数据格式化map</a></li>
+<li><a href="#索引">索引</a></li>
+<li><a href="#坐标轴显示百分比">坐标轴显示百分比</a></li>
+<li><a href="#apply">apply</a></li>
+<li><a href="#重采样">重采样</a></li>
+<li><a href="#del">del</a></li>
+<li><a href="#按时间筛选">按时间筛选</a></li>
+<li><a href="#显示中文">显示中文</a></li>
+<li><a href="#重命名">重命名</a></li>
+<li><a href="#填充">填充</a></li>
+<li><a href="#查询">查询</a></li>
+<li><a href="#选择类型">选择类型</a></li>
+<li><a href="#数据展开">数据展开</a></li>
+<li><a href="#数据累加">数据累加</a></li>
+<li><a href="#列操作">列操作</a></li>
+<li><a href="#行操作">行操作</a></li>
+<li><a href="#pivot与groupby">pivot与groupby</a></li>
+<li><a href="#unstack">unstack</a></li>
+<li><a href="#数据聚合">数据聚合</a></li>
+<li><a href="#数据查询">数据查询</a></li>
+<li><a href="#数据汇总">数据汇总</a></li>
+<li><a href="#数据合并">数据合并</a></li>
+<li><a href="#多个df画一起">多个DF画一起</a></li>
+<li><a href="#分析和排序">分析和排序</a></li>
+<li><a href="#双纵坐标轴">双纵坐标轴</a></li>
+<li><a href="#构建空df">构建空DF</a></li>
+<li><a href="#更改日期间隔">更改日期间隔</a></li>
+<li><a href="#查看统计数据">查看统计数据</a></li>
+<li><a href="#保存文件">保存文件</a></li>
+<li><a href="#数据预处理-1">数据预处理</a></li>
+<li><a href="#删除空行">删除空行</a></li>
+<li><a href="#替换">替换</a><ul>
+<li><a href="#算法总结">算法总结</a></li>
+</ul>
+</li>
+<li><a href="#决策树-1">决策树</a></li>
+</ul>
+<!-- tocstop -->
+
+<h3><span id="降维">降维</span></h3><ul>
+<li>ravel()：如果没有必要，不会产生源数据的副本 </li>
+<li>flatten()：返回源数据的副本 </li>
+<li>squeeze()：只能对维数为1的维度降维</li>
+<li>logspace 用于创建等比数列</li>
+</ul>
+<p>假如，我们想要改变基数，不让它以10为底数，我们可以改变base参数，将其设置为2试试。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.logspace(<span class="number">0</span>,<span class="number">9</span>,<span class="number">10</span>,base=<span class="number">2</span>)</span><br><span class="line">a</span><br><span class="line">array([   <span class="number">1.</span>,    <span class="number">2.</span>,    <span class="number">4.</span>,    <span class="number">8.</span>,   <span class="number">16.</span>,   <span class="number">32.</span>,   <span class="number">64.</span>,  <span class="number">128.</span>,  <span class="number">256.</span>,  <span class="number">512.</span>])</span><br></pre></td></tr></table></figure>
+
+<h3><span id="npset_printoptions">np.set_printoptions</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.set_printoptions(precision&#x3D;None, threshold&#x3D;None, edgeitems&#x3D;None, linewidth&#x3D;None, suppress&#x3D;None, nanstr&#x3D;None, infstr&#x3D;None)</span><br></pre></td></tr></table></figure>
+
+<p><strong>precision :</strong></p>
+<p>　　int, optional，float输出的精度，即小数点后维数，默认8（ Number of digits of precision for floating point output (default 8)）</p>
+<p><strong>threshold :</strong></p>
+<p>　　int, optional，当数组数目过大时，设置显示几个数字，其余用省略号（Total number of array elements which trigger summarization rather than full repr (default 1000).）</p>
+<p><strong>edgeitems :</strong></p>
+<p>　　 int, optional，边缘数目（Number of array items in summary at beginning and end of each dimension (default 3)）.</p>
+<p><strong>linewidth :</strong></p>
+<p>　　 int, optional，线条宽度 The number of characters per line for the purpose of inserting line breaks (default 75).</p>
+<p><strong>suppress :</strong></p>
+<p>　　 bool, optional，是否压缩由科学计数法表示的浮点数（Whether or not suppress printing of small floating point values using scientific notation (default False).）</p>
+<p><strong>nanstr :</strong></p>
+<p>　　 str, optional，String representation of floating point not-a-number (default nan).</p>
+<p><strong>infstr :</strong></p>
+<p>　　str, optional，String representation of floating point infinity (default inf).</p>
+<h3><span id="bicount">bicount</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 找到一个数组中最常出现的数字</span></span><br><span class="line">z = np.random.randint(<span class="number">0</span>,<span class="number">10</span>,<span class="number">50</span>)</span><br><span class="line">np.set_printoptions(threshold=<span class="number">1000</span>)</span><br><span class="line">print(z)</span><br><span class="line">print(np.bincount(z))</span><br><span class="line">print(np.argmax(np.bincount(z)))</span><br><span class="line"></span><br><span class="line">[<span class="number">9</span> <span class="number">8</span> <span class="number">0</span> <span class="number">6</span> <span class="number">4</span> <span class="number">8</span> <span class="number">5</span> <span class="number">9</span> <span class="number">7</span> <span class="number">1</span> <span class="number">4</span> <span class="number">0</span> <span class="number">2</span> <span class="number">5</span> <span class="number">7</span> <span class="number">7</span> <span class="number">3</span> <span class="number">8</span> <span class="number">0</span> <span class="number">6</span> <span class="number">4</span> <span class="number">6</span> <span class="number">2</span> <span class="number">5</span> <span class="number">4</span> <span class="number">7</span> <span class="number">6</span> <span class="number">6</span> <span class="number">7</span> <span class="number">0</span> <span class="number">9</span> <span class="number">4</span> <span class="number">5</span> <span class="number">1</span> <span class="number">9</span> <span class="number">6</span> <span class="number">7</span> <span class="number">3</span> <span class="number">7</span> <span class="number">8</span> <span class="number">2</span> <span class="number">1</span> <span class="number">9</span> <span class="number">5</span> <span class="number">0</span> <span class="number">7</span> <span class="number">8</span> <span class="number">5</span> <span class="number">8</span> <span class="number">3</span>]</span><br><span class="line">[<span class="number">5</span> <span class="number">3</span> <span class="number">3</span> <span class="number">3</span> <span class="number">5</span> <span class="number">6</span> <span class="number">6</span> <span class="number">8</span> <span class="number">6</span> <span class="number">5</span>]</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure>
+
+<p>其实bicount将结果映射成一个list，分别代表0出现的次数，1出现的次数。。。</p>
+<p>找到出现最多次数的下标就是找到一个数组中最常出现的数字</p>
+<h3><span id="lexsort">lexsort</span></h3><p>numpy.lexsort() 用于对多个序列进行排序。把它想象成对电子表格进行排序，每一列代表一个序列，<strong>排序时优先照顾靠后的列</strong>。</p>
+<p>这里举一个应用场景：小升初考试，重点班录取学生按照总成绩录取。在总成绩相同时，数学成绩高的优先录取，在总成绩和数学成绩都相同时，按照英语成绩录取…… 这里，总成绩排在电子表格的最后一列，数学成绩在倒数第二列，英语成绩在倒数第三列。</p>
+<h3><span id="练习题">练习题</span></h3><h2><span id="trick">Trick</span></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">np.add? # 显示帮助</span><br><span class="line">np.add?? # 显示源代码</span><br><span class="line"><span class="comment"># fsting用法 python&gt;=3.6</span></span><br><span class="line">number = <span class="number">7</span></span><br><span class="line"><span class="string">f'My lucky number is <span class="subst">&#123;number&#125;</span>'</span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="matplotlib">Matplotlib</span></h2><ul>
+<li><code>%matplotlib inline</code>: 这一句是IPython的魔法函数，可以在IPython编译器里直接使用，作用是内嵌画图，省略掉plt.show()这一步，直接显示图像。</li>
+</ul>
+<h3><span id="基本操作">基本操作</span></h3><ul>
+<li><p>画图</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 标签</span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;plt.xlabel(&#39;xlabel&#39;,fontsize &#x3D; 16)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>线条&amp;颜色</p>
+<table>
+<thead>
+<tr>
+<th align="right">字符</th>
+<th align="right">类型</th>
+<th align="right">字符</th>
+<th align="right">类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right"><code>&#39;-&#39;</code></td>
+<td align="right">实线</td>
+<td align="right"><code>&#39;--&#39;</code></td>
+<td align="right">虚线</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;-.&#39;</code></td>
+<td align="right">虚点线</td>
+<td align="right"><code>&#39;:&#39;</code></td>
+<td align="right">点线</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;.&#39;</code></td>
+<td align="right">点</td>
+<td align="right"><code>&#39;,&#39;</code></td>
+<td align="right">像素点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;o&#39;</code></td>
+<td align="right">圆点</td>
+<td align="right"><code>&#39;v&#39;</code></td>
+<td align="right">下三角点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;^&#39;</code></td>
+<td align="right">上三角点</td>
+<td align="right"><code>&#39;&lt;&#39;</code></td>
+<td align="right">左三角点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;&gt;&#39;</code></td>
+<td align="right">右三角点</td>
+<td align="right"><code>&#39;1&#39;</code></td>
+<td align="right">下三叉点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;2&#39;</code></td>
+<td align="right">上三叉点</td>
+<td align="right"><code>&#39;3&#39;</code></td>
+<td align="right">左三叉点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;4&#39;</code></td>
+<td align="right">右三叉点</td>
+<td align="right"><code>&#39;s&#39;</code></td>
+<td align="right">正方点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;p&#39;</code></td>
+<td align="right">五角点</td>
+<td align="right"><code>&#39;*&#39;</code></td>
+<td align="right">星形点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;h&#39;</code></td>
+<td align="right">六边形点1</td>
+<td align="right"><code>&#39;H&#39;</code></td>
+<td align="right">六边形点2</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;+&#39;</code></td>
+<td align="right">加号点</td>
+<td align="right"><code>&#39;x&#39;</code></td>
+<td align="right">乘号点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;D&#39;</code></td>
+<td align="right">实心菱形点</td>
+<td align="right"><code>&#39;d&#39;</code></td>
+<td align="right">瘦菱形点</td>
+</tr>
+<tr>
+<td align="right"><code>&#39;_&#39;</code></td>
+<td align="right">横线点</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="right">字符</th>
+<th align="right">颜色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right"><code>‘b’</code></td>
+<td align="right">蓝色，blue</td>
+</tr>
+<tr>
+<td align="right"><code>‘g’</code></td>
+<td align="right">绿色，green</td>
+</tr>
+<tr>
+<td align="right"><code>‘r’</code></td>
+<td align="right">红色，red</td>
+</tr>
+<tr>
+<td align="right"><code>‘c’</code></td>
+<td align="right">青色，cyan</td>
+</tr>
+<tr>
+<td align="right"><code>‘m’</code></td>
+<td align="right">品红，magenta</td>
+</tr>
+<tr>
+<td align="right"><code>‘y’</code></td>
+<td align="right">黄色，yellow</td>
+</tr>
+<tr>
+<td align="right"><code>‘k’</code></td>
+<td align="right">黑色，black</td>
+</tr>
+<tr>
+<td align="right"><code>‘w’</code></td>
+<td align="right">白色，white</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>线条风格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">或者将两者结合使用</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;plt.plot([1,2,3,4,5],[1,4,9,16,25],&#39;ro&#39;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>线宽 linewidth</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 子图</span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;python</span><br><span class="line">  # 211 表示一会要画的图是2行一列的 最后一个1表示的是子图当中的第1个图</span><br><span class="line">  plt.subplot(211)</span><br><span class="line">  plt.plot(x,y,color&#x3D;&#39;r&#39;)</span><br><span class="line">  </span><br><span class="line">  # 212 表示一会要画的图是2行一列的 最后一个1表示的是子图当中的第2个图</span><br><span class="line">  plt.subplot(212)</span><br><span class="line">  plt.plot(x,y,color&#x3D;&#39;b&#39;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>标题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 文本</span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;plt.text(x,y,&#39;text)</span><br></pre></td></tr></table></figure>
+
+<p>x,y为数轴上的坐标</p>
+</li>
+<li><p>网格</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 注释</span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;plt.annotate(&#39;tangyudi&#39;,xy&#x3D;(-5,0),xytext&#x3D;(-2,0.3),arrowprops &#x3D; dict(facecolor&#x3D;&#39;red&#39;,shrink&#x3D;0.05,headlength&#x3D; 20,headwidth &#x3D; 20))</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3><span id="风格">风格</span></h3><ul>
+<li><p>查看风格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>[‘dark_background’,<br> ‘seaborn-talk’,<br> ‘seaborn-bright’,<br> ‘seaborn-ticks’,<br> ‘bmh’,<br> ‘ggplot’,<br> ‘seaborn-darkgrid’,<br> ‘classic’,<br> ‘fivethirtyeight’,<br> ‘seaborn-deep’,<br> ‘seaborn-colorblind’,<br> ‘seaborn-muted’,<br> ‘seaborn-pastel’,<br> ‘seaborn-notebook’,<br> ‘seaborn-paper’,<br> ‘seaborn-dark-palette’,<br> ‘seaborn-whitegrid’,<br> ‘seaborn-white’,<br> ‘grayscale’,<br> ‘seaborn-dark’,<br> ‘seaborn-poster’]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">- 使用风格</span><br><span class="line">  &#96;&#96;&#96;plt.style.use(&#39;ggplot&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>Parameters</p>
+<ul>
+<li><p>style：str, dict, Path or list</p>
+<p>A style specification. Valid options are:</p>
+<ul>
+<li><p>str: The name of a style or a path/URL to a style file. For a list of available style names, see <a href="https://matplotlib.org/stable/api/style_api.html?highlight=style#matplotlib.style.matplotlib.style.available" target="_blank" rel="noopener"><code>style.available</code></a>.</p>
+</li>
+<li><p>dict: Dictionary with valid key/value pairs for <a href="https://matplotlib.org/stable/api/matplotlib_configuration_api.html#matplotlib.rcParams" target="_blank" rel="noopener"><code>matplotlib.rcParams</code></a>.</p>
+</li>
+<li><p>Path: A path-like object which is a path to a style file.</p>
+</li>
+<li><p>list: A list of style specifiers (str, Path or dict) applied from first to last in the list.</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">x = np.linspace(<span class="number">-10</span>,<span class="number">10</span>)</span><br><span class="line">y = np.sin(x)</span><br><span class="line">plt.style.use(<span class="string">'ggplot'</span>)</span><br><span class="line">plt.plot(x,y)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3><span id="面向对象画图">面向对象画图</span></h3><pre><code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line">x = np.arange(<span class="number">0</span>, math.pi*<span class="number">2</span>, <span class="number">0.05</span>)</span><br><span class="line">y = np.sin(x)</span><br><span class="line"><span class="comment">#创建图形对象</span></span><br><span class="line">fig = plt.figure()</span><br><span class="line"><span class="comment">#我们使用 add_axes() 将 axes 轴域添加到画布中</span></span><br><span class="line"><span class="comment">#add_axes() 的参数值是一个序列，序列中的 4 个数字分别对应图形的左侧开始画图位			置，底部开始画图位置，宽度缩放，和高度缩放，且每个数字必须介于 0 到 1 之间。</span></span><br><span class="line">ax=fig.add_axes([<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>])</span><br><span class="line">ax.plot(x,y)</span><br><span class="line">ax.set_title(<span class="string">"sine wave"</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">'angle'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'sine'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></code></pre><ul>
+<li>图例</li>
+</ul>
+<p>axes 类的 legend() 方法负责绘制画布中的图例，它需要三个参数，如下所示：</p>
+<p>ax.legend(handles, labels, loc)</p>
+<ul>
+<li>labels 是一个字符串序列，用来指定标签的名称；</li>
+<li>loc 是指定图例位置的参数，其参数值可以用字符串或整数来表示；</li>
+<li>handles 参数，它也是一个序列，它包含了所有线型的实例；</li>
+</ul>
+<p><a href="http://c.biancheng.net/matplotlib/" target="_blank" rel="noopener">http://c.biancheng.net/matplotlib/</a></p>
+<p><img src="https://pic3.zhimg.com/v2-cfe3dd3becbae38d3af4659b4ff1676a_r.jpg" alt="preview"></p>
+<p><a href="https://zhuanlan.zhihu.com/p/139052035" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/139052035</a></p>
+<p><img src="https://pic3.zhimg.com/80/v2-6e4429872eeb8a155433c0ee7c75b6ea_1440w.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-124378df90b3ff1e24eb48c36af08dc9_1440w.jpg" alt="img"></p>
+<p><a href="https://zhuanlan.zhihu.com/p/93423829" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/93423829</a></p>
+<h2><span id="结合pandas画图">结合pandas画图</span></h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">df=pandas.DataFrame()</span><br><span class="line">常见的画图方法如下：</span><br><span class="line">df.plot()</span><br><span class="line">也可以传入参数：df.plot(kind=value)决定画什么类型的图</span><br><span class="line">kind=line    画折线图</span><br><span class="line">kind=bar     x轴画矩形图</span><br><span class="line">kind=barh    y轴画矩形图</span><br><span class="line">kind=pie     画饼图</span><br><span class="line">kind=scatter 画散点</span><br><span class="line">kind=<span class="keyword">box</span>     画盒子图</span><br><span class="line">kind=kde     画核密度估计图</span><br><span class="line"></span><br><span class="line">或者:</span><br><span class="line">df.plot.line()</span><br><span class="line">df.plot.bar()</span><br><span class="line">df.plot.barh()</span><br><span class="line">df.plot.pie()</span><br><span class="line">df.plot.scatter()</span><br><span class="line">df.plot.<span class="keyword">box</span>()</span><br><span class="line">df.plot.kde()</span><br></pre></td></tr></table></figure>
+
+<h2><span id="sklearn">sklearn</span></h2><h3><span id="决策树">决策树</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_wine</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">import</span> graphviz</span><br><span class="line"><span class="comment"># pandas拼接数据</span></span><br><span class="line">df = pd.concat([pd.DataFrame(wine.data), pd.DataFrame(wine.target)],axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line">Xtrain, Xtest, Ytrain, Ytest = train_test_split(wine.data, wine.target, test_size=<span class="number">0.3</span>)</span><br><span class="line"><span class="comment"># 实例化一个分类器</span></span><br><span class="line">clf = tree.DecisionTreeClassifier(criterion=<span class="string">'entropy'</span>,random_state=<span class="number">3</span>,splitter=<span class="string">"random"</span>)</span><br><span class="line"><span class="comment"># 训练</span></span><br><span class="line">clf = clf.fit(Xtrain, Ytrain)</span><br><span class="line"><span class="comment"># 评价结果</span></span><br><span class="line">score = clf.score(Xtest, Ytest)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用graphviz画出决策树</span></span><br><span class="line">dot_data = tree.export_graphviz(clf, feature_names=wine.feature_names, class_names=[<span class="string">'0'</span>, <span class="string">'1'</span>, <span class="string">'2'</span>], filled=<span class="literal">True</span>, rounded=<span class="literal">True</span>, special_characters=<span class="literal">True</span>)</span><br><span class="line">graph = graphviz.Source(dot_data)</span><br><span class="line">graph</span><br><span class="line"><span class="comment"># 确定最优剪枝参数</span></span><br><span class="line">test = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    clf = tree.DecisionTreeClassifier(criterion=<span class="string">'entropy'</span>,random_state=<span class="number">30</span>,</span><br><span class="line">                                      splitter=<span class="string">"random"</span>,</span><br><span class="line">                                     max_depth=i+<span class="number">1</span>,</span><br><span class="line">                                     )</span><br><span class="line">    clf = clf.fit(Xtrain, Ytrain)</span><br><span class="line">    score = clf.score(Xtest, Ytest)</span><br><span class="line">    test.append(score)</span><br><span class="line"></span><br><span class="line">plt.plot(range(<span class="number">1</span>,<span class="number">11</span>), test, color=<span class="string">'red'</span>, label=<span class="string">'max_depth'</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment"># 网格搜索</span></span><br><span class="line"><span class="comment"># 使用网格搜索，能够帮助我们同时调整多个参数，采用枚举法</span></span><br><span class="line">gini_thresholds = np.linspace(<span class="number">0</span>,<span class="number">0.5</span>,<span class="number">20</span>)</span><br><span class="line">entropy_thresholds = np.linspace(<span class="number">0</span>,<span class="number">1</span>,<span class="number">50</span>)</span><br><span class="line">parameters = &#123;</span><br><span class="line">    <span class="string">"criterion"</span>:(<span class="string">'gini'</span>,<span class="string">'entropy'</span>)</span><br><span class="line">    ,<span class="string">"splitter"</span>:(<span class="string">'best'</span>,<span class="string">'random'</span>)</span><br><span class="line">    ,<span class="string">'max_depth'</span>:[*range(<span class="number">1</span>,<span class="number">11</span>)]</span><br><span class="line">    ,<span class="string">'min_samples_leaf'</span>:[*range(<span class="number">1</span>,<span class="number">50</span>,<span class="number">5</span>)]</span><br><span class="line">    ,<span class="string">'min_impurity_decrease'</span>:[*gini_thresholds]</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">clf = DecisionTreeClassifier(random_state=<span class="number">25</span>)</span><br><span class="line">GS = GridSearchCV(clf,parameters,cv=<span class="number">10</span>)</span><br><span class="line">GS.fit(Xtrain,Ytrain)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>特征重要性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#96;&#96;&#96;[*zip(feature_name,clf.feature_importances_)]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Criterion这个参数正是用来决定不纯度的计算方法的。sklearn提供了两种选择：</li>
+</ul>
+<p>1）输入”entropy“，使用<strong>信息熵</strong>（Entropy） </p>
+<p>2）输入”gini“，使用<strong>基尼系数</strong>（Gini Impurity）</p>
+<blockquote>
+<p>通常就使用基尼系数</p>
+<p>数据维度很大，噪音很大时使用基尼系数</p>
+<p>维度低，数据比较清晰的时候，信息熵和基尼系数没区别</p>
+<p>当决策树的拟合程度不够的时候，使用信息熵</p>
+<p>两个都试试，不好就换另外一个</p>
+</blockquote>
+<ul>
+<li><p><strong>random_state &amp; splitter</strong></p>
+<p>random_state用来设置分枝中的随机模式的参数，默认None，在高维度时随机性会表现更明显，低维度的数据（比如鸢尾花数据集），随机性几乎不会显现。输入任意整数，会一直长出同一棵树，让模型稳定下来。</p>
+<p>splitter也是用来控制决策树中的随机选项的，有两种输入值，输入”best”，决策树在分枝时虽然随机，但是还是会优先选择更重要的特征进行分枝（重要性可以通过属性feature_importances_查看），输入“random”，决策树在分枝时会更加随机，树会因为含有更多的不必要信息而更深更大，并因这些不必要信息而降低对训练集的拟合。这也是防止过拟合的一种方式。当你预测到你的模型会过拟合，用这两个参数来帮助你降低树建成之后过拟合的可能性。当然，树一旦建成，我们依然是使用剪枝参数来防止过拟合</p>
+</li>
+</ul>
+<h4><span id="剪枝策略">剪枝策略</span></h4><ul>
+<li><strong>max_depth</strong></li>
+</ul>
+<p>​      限制树的最大深度，超过设定深度的树枝全部剪掉</p>
+<ul>
+<li><p><strong>min_samples_leaf &amp; min_samples_split</strong></p>
+<p>min_samples_leaf限定，一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本，否则分枝就不会发生，或者，分枝会朝着满足每个子节点都包含min_samples_leaf个样本的方向去发生。一般搭配max_depth使用，在回归树中有神奇的效果，可以让模型变得更加平滑。这个参数的数量设置得太小会引起过拟合，设置得太大就会阻止模型学习数据。一般来说，建议从=5开始使用。如果叶节点中含有的样本量变化很大，建议输入浮点数作为样本量的百分比来使用。同时，这个参数可以保证每个叶子的最小尺寸，可以在回归问题中避免低方差，过拟合的叶子节点出现。对于类别不多的分类问题，=1通常就是最佳选择。</p>
+<p>min_samples_split限定，一个节点必须要包含至少min_samples_split个训练样本，这个节点才允许被分枝，否则分枝就不会发生。</p>
+</li>
+</ul>
+<h3><span id="回归树">回归树</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeRegressor</span><br><span class="line">regr_1 = DecisionTreeRegressor(max_depth=<span class="number">2</span>)</span><br><span class="line">regr_1.fit(X, y)</span><br><span class="line">y_1 = regr_1.predict(X_test)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="随机森林">随机森林</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_wine</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line">wine = load_wine()</span><br><span class="line">wine.data</span><br><span class="line">wine.target</span><br><span class="line">Xtrain, Xtest, Ytrain, Ytest = train_test_split(wine.data,wine.target,test_size=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#clf = DecisionTreeClassifier(random_state=0)</span></span><br><span class="line">rfc = RandomForestClassifier(random_state=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#clf = clf.fit(Xtrain,Ytrain)</span></span><br><span class="line">rfc = rfc.fit(Xtrain,Ytrain)</span><br><span class="line"><span class="comment">#score_c = clf.score(Xtest,Ytest)</span></span><br><span class="line">score_r = rfc.score(Xtest,Ytest)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#交叉验证：是数据集划分为n分，依次取每一份做测试集，每n-1份做训练集，多次训练模型以观测模型稳定性的方法</span></span><br><span class="line"></span><br><span class="line">rfc_l = []</span><br><span class="line">clf_l = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    rfc = RandomForestClassifier(n_estimators=<span class="number">25</span>)</span><br><span class="line">    rfc_s = cross_val_score(rfc,wine.data,wine.target,cv=<span class="number">10</span>).mean()</span><br><span class="line">    rfc_l.append(rfc_s)</span><br><span class="line">    clf = DecisionTreeClassifier()</span><br><span class="line">    clf_s = cross_val_score(clf,wine.data,wine.target,cv=<span class="number">10</span>).mean()</span><br><span class="line">    clf_l.append(clf_s)</span><br><span class="line">    </span><br><span class="line">plt.plot(range(<span class="number">1</span>,<span class="number">11</span>),rfc_l,label = <span class="string">"Random Forest"</span>)</span><br><span class="line">plt.plot(range(<span class="number">1</span>,<span class="number">11</span>),clf_l,label = <span class="string">"Decision Tree"</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment">#是否有注意到，单个决策树的波动轨迹和随机森林一致？</span></span><br><span class="line"><span class="comment">#再次验证了我们之前提到的，单个决策树的准确率越高，随机森林的准确率也会越高</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>随机森林填充数据</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">X_missing_reg = X_missing.copy()</span><br><span class="line">sortindex = np.argsort(X_missing_reg.isnull().sum(axis=<span class="number">0</span>)).values</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> sortindex:</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#构建我们的新特征矩阵和新标签</span></span><br><span class="line">    df = X_missing_reg</span><br><span class="line">    fillc = df.iloc[:,i]</span><br><span class="line">    df = pd.concat([df.iloc[:,df.columns != i],pd.DataFrame(y_full)],axis=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#在新特征矩阵中，对含有缺失值的列，进行0的填补</span></span><br><span class="line">    df_0 =SimpleImputer(missing_values=np.nan,</span><br><span class="line">                        strategy=<span class="string">'constant'</span>,fill_value=<span class="number">0</span>).fit_transform(df)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#找出我们的训练集和测试集</span></span><br><span class="line">    Ytrain = fillc[fillc.notnull()]</span><br><span class="line">    Ytest = fillc[fillc.isnull()]</span><br><span class="line">    Xtrain = df_0[Ytrain.index,:]</span><br><span class="line">    Xtest = df_0[Ytest.index,:]</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#用随机森林回归来填补缺失值</span></span><br><span class="line">    rfc = RandomForestRegressor(n_estimators=<span class="number">100</span>)</span><br><span class="line">    rfc = rfc.fit(Xtrain, Ytrain)</span><br><span class="line">    Ypredict = rfc.predict(Xtest)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#将填补好的特征返回到我们的原始的特征矩阵中</span></span><br><span class="line">    X_missing_reg.loc[X_missing_reg.iloc[:,i].isnull(),X_missing_reg.columns[i]] = Ypredict</span><br><span class="line">    <span class="comment"># X_missing_reg.loc[X_missing_reg.iloc[:,i].isnull(),i] = Ypredict 可能报错</span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="预处理">预处理</span></h3><h4><span id="方差过滤"><strong>方差过滤</strong></span></h4><p>比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用<strong>所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> VarianceThreshold</span><br><span class="line">selector = VarianceThreshold() <span class="comment">#实例化，不填参数默认方差为0</span></span><br><span class="line">X_var0 = selector.fit_transform(X) <span class="comment">#获取删除不合格特征之后的新特征矩阵</span></span><br><span class="line"><span class="comment"># 过滤一半的变量</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">X_fsvar = VarianceThreshold(np.median(X.var().values)).fit_transform(X) X.var().values</span><br><span class="line">np.median(X.var().values)</span><br></pre></td></tr></table></figure>
+
+<h4><span id="卡方过滤">卡方过滤</span></h4><p>专门针对离散型标签（即分类问题）的相关性过滤</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier <span class="keyword">as</span> RFC</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> chi2</span><br><span class="line"><span class="comment">#假设在这里我一直我需要300个特征</span></span><br><span class="line">X_fschi = SelectKBest(chi2, k=<span class="number">300</span>).fit_transform(X_fsvar, y)</span><br><span class="line">X_fschi.shape</span><br><span class="line">cross_val_score(RFC(n_estimators=<span class="number">10</span>,random_state=<span class="number">0</span>),X_fschi,y,cv=<span class="number">5</span>).mean()</span><br><span class="line"></span><br><span class="line">chivalue, pvalues_chi = chi2(X_fsvar,y)</span><br><span class="line"><span class="comment">#k取多少？我们想要消除所有p值大于设定值，比如0.05或0.01的特征：</span></span><br><span class="line">k = chivalue.shape[<span class="number">0</span>] - (pvalues_chi &gt; <span class="number">0.05</span>).sum()</span><br><span class="line">X_fschi = SelectKBest(chi2, k=填写具体的k).fit_transform(X_fsvar, y)</span><br><span class="line">cross_val_score(RFC(n_estimators=<span class="number">10</span>,random_state=<span class="number">0</span>),X_fschi,y,cv=<span class="number">5</span>).mean()</span><br></pre></td></tr></table></figure>
+
+<h4><span id="f检验只能检验线性关系">F检验（只能检验线性关系）</span></h4><p>它即可以做回归也可以做分类，因此包含<strong>feature_selection.f_classif</strong>（F检验分类）和<strong>feature_selection.f_regression</strong>（F检验回</p>
+<p>归）两个类。其中F检验分类用于标签是离散型变量的数据，而F检验回归用于标签是连续型变量的数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> f_classif</span><br><span class="line">F, pvalues_f = f_classif(X_fsvar,y) </span><br><span class="line">k = F.shape[<span class="number">0</span>] - (pvalues_f &gt; <span class="number">0.05</span>).sum()</span><br><span class="line">X_fsF = SelectKBest(f_classif, k=填写具体的k).fit_transform(X_fsvar, y)</span><br><span class="line">cross_val_score(RFC(n_estimators=<span class="number">10</span>,random_state=<span class="number">0</span>),X_fsF,y,cv=<span class="number">5</span>).mean()</span><br></pre></td></tr></table></figure>
+
+<h4><span id="互信息法">互信息法</span></h4><h3><span id="特征工程">特征工程</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Normalization 归一化 一般来说将数据分部在0到1之间</span></span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line">data = [[<span class="number">-1</span>, <span class="number">2</span>], [<span class="number">-0.5</span>, <span class="number">6</span>], [<span class="number">0</span>, <span class="number">10</span>], [<span class="number">1</span>, <span class="number">18</span>]]</span><br><span class="line">scaler = MinMaxScaler()</span><br><span class="line"><span class="comment"># scaler = MinMaxScaler(feature_range=[5,10])</span></span><br><span class="line">result_ = scaler.fit_transform(data) <span class="comment">#训练和导出结果一步达成</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># sklearn 里面处理标准化这些需要二维数组</span></span><br><span class="line"><span class="comment"># Standardization 标准化 将数据处理成标准正态分布形式</span></span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line">data = [[<span class="number">-1</span>, <span class="number">2</span>], [<span class="number">-0.5</span>, <span class="number">6</span>], [<span class="number">0</span>, <span class="number">10</span>], [<span class="number">1</span>, <span class="number">18</span>]]</span><br><span class="line">scaler = StandardScaler() <span class="comment">#实例化</span></span><br><span class="line">res = scaler.fit_transform(data) <span class="comment">#使用fit_transform(data)一步达成结果</span></span><br><span class="line">res.mean()</span><br><span class="line">res.std()</span><br></pre></td></tr></table></figure>
+
+<h3><span id="数据预处理">数据预处理</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sklearn 里面处理标准化这些需要二维数组</span></span><br><span class="line">shape(<span class="number">-1</span>,<span class="number">1</span>) <span class="comment"># 变成一列</span></span><br><span class="line">shape(<span class="number">1</span>,<span class="number">-1</span>) <span class="comment"># 变成一行</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果数据自带索引，导入时需指定索引列</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">data = pd.read_csv(<span class="string">r"C:\work\learnbetter\micro-class\week 3 Preprocessing\Narrativedata.csv"</span>,index_col=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 缺失数据处理</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">data = pd.read_csv(<span class="string">r"C:\work\learnbetter\micro-class\week 3 </span></span><br><span class="line"><span class="string">Preprocessing\Narrativedata.csv"</span>,index_col=<span class="number">0</span>)</span><br><span class="line">data.head()</span><br><span class="line">data.loc[:,<span class="string">"Age"</span>] = data.loc[:,<span class="string">"Age"</span>].fillna(data.loc[:,<span class="string">"Age"</span>].median())</span><br><span class="line"><span class="comment">#.fillna 在DataFrame里面直接进行填补</span></span><br><span class="line">data.dropna(axis=<span class="number">0</span>,inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment">#.dropna(axis=0)删除所有有缺失值的行，.dropna(axis=1)删除所有有缺失值的列</span></span><br><span class="line"><span class="comment">#参数inplace，为True表示在原数据集上进行修改，为False表示生成一个复制对象，不修改原数据，默认False</span></span><br><span class="line">                   </span><br><span class="line">                   </span><br><span class="line"><span class="comment"># sklearn只能处理数值型数据，因此要将标签转为数据</span></span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line">y = data.iloc[:,<span class="number">-1</span>] <span class="comment">#要输入的是标签，不是特征矩阵，所以允许一维</span></span><br><span class="line">le = LabelEncoder() <span class="comment">#实例化</span></span><br><span class="line">label=le.fit_transform(y)</span><br><span class="line">data.iloc[:,<span class="number">-1</span>] = label <span class="comment">#让标签等于我们运行出来的结果</span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="逻辑回归">逻辑回归</span></h3><h3><span id="perceptrons">Perceptrons</span></h3><table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>参数取值</th>
+<th>参数解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>penalty</td>
+<td>默认=None，即不加惩罚项，‘l2’（L2正则） or ‘l1’（L1正则） or ‘elasticnet’（混合正则）</td>
+<td>惩罚项，加上惩罚项主要为了避免模型过拟合风险</td>
+</tr>
+<tr>
+<td>alpha</td>
+<td>默认=0.0001，取值为浮点数</td>
+<td>如果penalty不为None，则正则化项需要乘上这个数</td>
+</tr>
+<tr>
+<td>l1_ratio</td>
+<td>默认=0.15，取值在[0,1]</td>
+<td>一般只在penalty=elasticnet时用，当l1_ratio =0就是L2正则，当l1_ratio =1就是L1正则，当在(0,1)之间就是混合正则</td>
+</tr>
+<tr>
+<td>fit_intercept</td>
+<td>bool值，默认=True</td>
+<td>是否对参数 截距项b进行估计，若为False则数据应是中心化的</td>
+</tr>
+<tr>
+<td>max_iter</td>
+<td>int整数，默认=1000</td>
+<td>最大迭代次数，哪怕损失函数依旧大于0/</td>
+</tr>
+<tr>
+<td>tol</td>
+<td>float or None，默认=10^(-3)</td>
+<td>迭代停止的标准。如果不为None，那么当loss-pre-loss&lt;tol的时候，就会停止迭代。因为当前迭代造成的损失函数下降太小了，迭代下去对loss影响不大了。</td>
+</tr>
+<tr>
+<td>shuffle</td>
+<td>bool值，默认=True</td>
+<td>每轮训练后是否打乱数据</td>
+</tr>
+<tr>
+<td>verbose</td>
+<td>取值为整数，默认=0</td>
+<td>verbose = 0 为不在标准输出流输出日志信息，verbose = 1 为输出进度条记录；verbose = 2 为每个epoch输出一行记录</td>
+</tr>
+<tr>
+<td>eta0</td>
+<td>取值双精度浮点型double，默认=1</td>
+<td>学习率，决定梯度下降时每次参数变化的幅度</td>
+</tr>
+<tr>
+<td>n_jobs</td>
+<td>取值为 int or None，默认=None</td>
+<td>在多分类时使用的CPU数量，默认为None（或1），若为-1则使用所有CPU</td>
+</tr>
+<tr>
+<td>random_state</td>
+<td>取值为int, RandomState instance or None，默认=None</td>
+<td>当 shuffle =True时，用于打乱训练数据</td>
+</tr>
+<tr>
+<td>n_iter_no_change</td>
+<td>取值int，默认=5</td>
+<td>在提前停止之前等待验证分数无改进的迭代次数，用于提前停止迭代</td>
+</tr>
+<tr>
+<td>early_stopping</td>
+<td>取值bool值，默认=False</td>
+<td>当验证得分不再提高时是否设置提前停止来终止训练。若设置此项，当验证得分在n_iter_no_change轮内没有提升时提前停止训练</td>
+</tr>
+<tr>
+<td>class_weight</td>
+<td>取值为dict, {class_label: weight} 或者 “balanced”或者None，默认=None</td>
+<td>用于拟合参数时，每一类的权重是多少。当为None时，所有类的权重为1，等权重；当为balanced时，某类的权重为该类频数的反比，当为字典时，则key为类的标签，值为对应的权重</td>
+</tr>
+<tr>
+<td>warm_start</td>
+<td>取值为bool，默认=False</td>
+<td>若为True则调用前一次设置的参数，使用新设置的参数</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>eta0 学习率</p>
+<p>类似于步长，步长太小收敛太慢，步长太长，反复横跳，无法收敛。</p>
+</li>
+</ul>
+<h3><span id="logisticregression">LogisticRegression</span></h3><ul>
+<li><p>penalty：惩罚项，str类型，可选参数为l1和l2，默认为l2。用于指定惩罚项中使用的规范。newton-cg、sag和lbfgs求解算法只支持L2规范。L1G规范假设的是模型的参数满足拉普拉斯分布，L2假设的模型参数满足高斯分布，所谓的范式就是加上对参数的约束，使得模型更不会过拟合(overfit)，但是如果要说是不是加了约束就会好，这个没有人能回答，只能说，加约束的情况下，理论上应该可以获得泛化能力更强的结果。</p>
+</li>
+<li><p>dual：对偶或原始方法，bool类型，默认为False。对偶方法只用在求解线性多核(liblinear)的L2惩罚项上。当样本数量&gt;样本特征的时候，dual通常设置为False。</p>
+</li>
+<li><p>tol：停止求解的标准，float类型，默认为1e-4。就是求解到多少的时候，停止，认为已经求出最优解。</p>
+</li>
+<li><p>c：正则化系数λ的倒数，float类型，默认为1.0。必须是正浮点型数。像SVM一样，越小的数值表示越强的正则化。</p>
+</li>
+<li><p>fit_intercept：是否存在截距或偏差，bool类型，默认为True。</p>
+</li>
+<li><p>intercept_scaling：仅在正则化项为”liblinear”，且fit_intercept设置为True时有用。float类型，默认为1。</p>
+</li>
+<li><p>class_weight：用于标示分类模型中各种类型的权重，可以是一个字典或者’balanced’字符串，默认为不输入，也就是不考虑权重，即为None。如果选择输入的话，可以选择balanced让类库自己计算类型权重，或者自己输入各个类型的权重。举个例子，比如对于0,1的二元模型，我们可以定义class_weight={0:0.9,1:0.1}，这样类型0的权重为90%，而类型1的权重为10%。如果class_weight选择balanced，那么类库会根据训练样本量来计算权重。某种类型样本量越多，则权重越低，样本量越少，则权重越高。当class_weight为balanced时，类权重计算方法如下：n_samples / (n_classes * np.bincount(y))。n_samples为样本数，n_classes为类别数量，np.bincount(y)会输出每个类的样本数，例如y=[1,0,0,1,1],则np.bincount(y)=[2,3]。<br>那么class_weight有什么作用呢？</p>
+<p>在分类模型中，我们经常会遇到两类问题：<br>第一种是误分类的代价很高。比如对合法用户和非法用户进行分类，将非法用户分类为合法用户的代价很高，我们宁愿将合法用户分类为非法用户，这时可以人工再甄别，但是却不愿将非法用户分类为合法用户。这时，我们可以适当提高非法用户的权重。<br>第二种是样本是高度失衡的，比如我们有合法用户和非法用户的二元样本数据10000条，里面合法用户有9995条，非法用户只有5条，如果我们不考虑权重，则我们可以将所有的测试集都预测为合法用户，这样预测准确率理论上有99.95%，但是却没有任何意义。这时，我们可以选择balanced，让类库自动提高非法用户样本的权重。提高了某种分类的权重，相比不考虑权重，会有更多的样本分类划分到高权重的类别，从而可以解决上面两类问题。</p>
+</li>
+<li><p>random_state：随机数种子，int类型，可选参数，默认为无，仅在正则化优化算法为sag,liblinear时有用。</p>
+</li>
+<li><p>solver：优化算法选择参数，只有五个可选参数，即newton-cg,lbfgs,liblinear,sag,saga。默认为liblinear。solver参数决定了我们对逻辑回归损失函数的优化方法，有四种算法可以选择，分别是：</p>
+</li>
+<li><p>liblinear：使用了开源的liblinear库实现，内部使用了坐标轴下降法来迭代优化损失函数。</p>
+</li>
+<li><p>lbfgs：拟牛顿法的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。</p>
+</li>
+<li><p>newton-cg：也是牛顿法家族的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。</p>
+</li>
+<li><p>sag：即随机平均梯度下降，是梯度下降法的变种，和普通梯度下降法的区别是每次迭代仅仅用一部分的样本来计算梯度，适合于样本数据多的时候。</p>
+</li>
+<li><p>saga：线性收敛的随机优化算法的的变重。</p>
+</li>
+</ul>
+<p>总结：<br>liblinear适用于小数据集，而sag和saga适用于大数据集因为速度更快。<br>对于多分类问题，只有newton-cg,sag,saga和lbfgs能够处理多项损失，而liblinear受限于一对剩余(OvR)。啥意思，就是用liblinear的时候，如果是多分类问题，得先把一种类别作为一个类别，剩余的所有类别作为另外一个类别。一次类推，遍历所有类别，进行分类。<br>newton-cg,sag和lbfgs这三种优化算法时都需要损失函数的一阶或者二阶连续导数，因此不能用于没有连续导数的L1正则化，只能用于L2正则化。而liblinear和saga通吃L1正则化和L2正则化。<br>同时，sag每次仅仅使用了部分样本进行梯度迭代，所以当样本量少的时候不要选择它，而如果样本量非常大，比如大于10万，sag是第一选择。但是sag不能用于L1正则化，所以当你有大量的样本，又需要L1正则化的话就要自己做取舍了。要么通过对样本采样来降低样本量，要么回到L2正则化。<br>从上面的描述，大家可能觉得，既然newton-cg, lbfgs和sag这么多限制，如果不是大样本，我们选择liblinear不就行了嘛！错，因为liblinear也有自己的弱点！我们知道，逻辑回归有二元逻辑回归和多元逻辑回归。对于多元逻辑回归常见的有one-vs-rest(OvR)和many-vs-many(MvM)两种。而MvM一般比OvR分类相对准确一些。郁闷的是liblinear只支持OvR，不支持MvM，这样如果我们需要相对精确的多元逻辑回归时，就不能选择liblinear了。也意味着如果我们需要相对精确的多元逻辑回归不能使用L1正则化了。<br>max_iter：算法收敛最大迭代次数，int类型，默认为10。仅在正则化优化算法为newton-cg, sag和lbfgs才有用，算法收敛的最大迭代次数。</p>
+<ul>
+<li><p>multi_class：分类方式选择参数，str类型，可选参数为ovr和multinomial，默认为ovr。ovr即前面提到的one-vs-rest(OvR)，而multinomial即前面提到的many-vs-many(MvM)。如果是二元逻辑回归，ovr和multinomial并没有任何区别，区别主要在多元逻辑回归上。</p>
+</li>
+<li><p>OvR和MvM有什么不同<em>？</em><br>OvR的思想很简单，无论你是多少元逻辑回归，我们都可以看做二元逻辑回归。具体做法是，对于第K类的分类决策，我们把所有第K类的样本作为正例，除了第K类样本以外的所有样本都作为负例，然后在上面做二元逻辑回归，得到第K类的分类模型。其他类的分类模型获得以此类推。<br>而MvM则相对复杂，这里举MvM的特例one-vs-one(OvO)作讲解。如果模型有T类，我们每次在所有的T类样本里面选择两类样本出来，不妨记为T1类和T2类，把所有的输出为T1和T2的样本放在一起，把T1作为正例，T2作为负例，进行二元逻辑回归，得到模型参数。我们一共需要T(T-1)/2次分类。<br>可以看出OvR相对简单，但分类效果相对略差（这里指大多数样本分布情况，某些样本分布下OvR可能更好）。而MvM分类相对精确，但是分类速度没有OvR快。如果选择了ovr，则4种损失函数的优化方法liblinear，newton-cg,lbfgs和sag都可以选择。但是如果选择了multinomial,则只能选择newton-cg, lbfgs和sag了。</p>
+</li>
+<li><p>verbose：日志冗长度，int类型。默认为0。就是不输出训练过程，1的时候偶尔输出结果，大于1，对于每个子模型都输出。</p>
+</li>
+<li><p>warm_start：热启动参数，bool类型。默认为False。如果为True，则下一次训练是以追加树的形式进行（重新使用上一次的调用作为初始化）。</p>
+</li>
+<li><p>n_jobs：并行数。int类型，默认为1。1的时候，用CPU的一个内核运行程序，2的时候，用CPU的2个内核运行程序。为-1的时候，用所有CPU的内核运行程序。</p>
+</li>
+</ul>
+<h2><span id="做题遇到的">做题遇到的</span></h2><h3><span id="数据格式化map">数据格式化map</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将 df2 的获奖时间格式化为 x月x日</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">time_format</span><span class="params">(x)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> x.strftime(<span class="string">"%m月%d日"</span>)</span><br><span class="line"></span><br><span class="line">df2[<span class="string">'获奖时间'</span>] = df2[<span class="string">'获奖时间'</span>].map(time_format)</span><br><span class="line"><span class="comment"># 等同于</span></span><br><span class="line">df2.获奖时间.map(<span class="keyword">lambda</span> x: x.strftime(<span class="string">'%m月%d日'</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">turn_percentage</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%.2f%%'</span> % (x * <span class="number">100</span>);</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">q1_df[<span class="string">'AT_HOME'</span>]=q1_df[<span class="string">'AT_HOME'</span>].apply(turn_percentage)</span><br><span class="line">q1_df[<span class="string">'AT_HOME'</span>]=q1_df[<span class="string">'AT_HOME'</span>].map(<span class="keyword">lambda</span> x: <span class="string">"&#123;:.2%&#125;"</span>.format(x))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示小数</span></span><br><span class="line">pd.set_option(<span class="string">'precision'</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># map传字典</span></span><br><span class="line">df1[<span class="string">'A'</span>] = df1[<span class="string">'A'</span>].map(&#123;<span class="string">'A0'</span>:<span class="string">'cat'</span>,<span class="string">'A3'</span>:<span class="string">'rabbit'</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># map ignore</span></span><br><span class="line">df1[<span class="string">'B'</span>] = df1[<span class="string">'B'</span>].map(<span class="keyword">lambda</span> x:<span class="string">f'<span class="subst">&#123;x&#125;</span> 今天关注了早起Python'</span>, na_action=<span class="string">'ignore'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#applymap可以对整个 dataframe 工作，现在将 df1 的最后三列保留两位小数</span></span><br><span class="line"></span><br><span class="line">df1[[<span class="string">'D'</span>,<span class="string">'E'</span>,<span class="string">'F'</span>]] = df1[[<span class="string">'D'</span>,<span class="string">'E'</span>,<span class="string">'F'</span>]].applymap(<span class="keyword">lambda</span> x:format(x,<span class="string">'.2f'</span>))</span><br></pre></td></tr></table></figure>
+
+<h3><span id="索引">索引</span></h3><ul>
+<li><code>reset_index</code>用于将索引还原成默认值，即从0开始步长为1的数组。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">q1_df[<span class="string">'rate'</span>] = [x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>,len(q1_df[<span class="string">'AT_HOME'</span>])+<span class="number">1</span>)]</span><br><span class="line"><span class="comment"># 如果索引不是默认</span></span><br><span class="line">q1_df.reset_index().set_index(q1_df[<span class="string">'rate'</span>])</span><br><span class="line"><span class="comment"># 如果是默认</span></span><br><span class="line">q1_df.set_index(q1_df[<span class="string">'rate'</span>],inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 删除索引</span></span><br><span class="line">max_data=max_data.reset_index(drop=<span class="literal">True</span>).set_index(max_data[<span class="string">'DATA_DATE'</span>])</span><br><span class="line"><span class="comment"># 修改索引名</span></span><br><span class="line">df.rename_axis([<span class="string">"行政区"</span>, <span class="string">"公司规模"</span>],inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="坐标轴显示百分比">坐标轴显示百分比</span></h3><ul>
+<li>第一种方法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib.ticker <span class="keyword">import</span> FuncFormatter</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_percent</span><span class="params">(temp, position)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%1.0f'</span>%(<span class="number">100</span>*temp) + <span class="string">'%'</span></span><br><span class="line">plt.gca().yaxis.set_major_formatter(FuncFormatter(to_percent))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>推荐</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ax.set_yticklabels([<span class="string">'0%'</span>,<span class="string">'10%'</span>,<span class="string">'20%'</span>,<span class="string">'30%'</span>,<span class="string">'40%'</span>,<span class="string">'50%'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3><span id="apply">apply</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 构建apply函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">judge_state</span><span class="params">(row)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> row[<span class="string">'Austin - EV'</span>] &lt;=<span class="number">0.01</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'Off'</span></span><br><span class="line">    <span class="keyword">elif</span> row[<span class="string">'Austin - EV'</span>]&gt;<span class="number">0.01</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'On'</span></span><br><span class="line"><span class="comment"># 应用apply函数</span></span><br><span class="line">df_Austin_ev = df.apply(judge_state,axis = <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保留2位小数，如23.12%</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">turn_percentage</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%.2f%%'</span> % (x * <span class="number">100</span>)</span><br><span class="line"><span class="comment"># 应用自定义函数</span></span><br><span class="line">ratio=ratio[<span class="string">'Austin - EV'</span>].apply(turn_percentage)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们将会用到 transform 而不是 apply。 原因是， transform 将会保持 dataframe 矩阵的形状(shape)(就是行列数不变)而 apply 会改变矩阵的形状。</span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="重采样">重采样</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重采样</span></span><br><span class="line">df[<span class="string">'购买月份'</span>] = pd.to_datetime(df.日期).dt.to_period(<span class="string">"M"</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="del">del</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">del</span> df[<span class="string">'a'</span>]</span><br><span class="line"><span class="comment"># 等价于</span></span><br><span class="line">df.drop(<span class="string">'a'</span>,axis=<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3><span id="按时间筛选">按时间筛选</span></h3><ul>
+<li>第一种</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将DateTime转成日期格式</span></span><br><span class="line">df[<span class="string">'DateTime'</span>] = pd.to_datetime(df[<span class="string">'DateTime'</span>])</span><br><span class="line"><span class="comment"># 将日期设为index</span></span><br><span class="line">df = df.set_index(<span class="string">'DateTime'</span>)</span><br><span class="line"><span class="comment"># 筛选从2019年3月1号到2019年3月10号整十天的电网数据</span></span><br><span class="line">df1 = df[<span class="string">'2019-03-01'</span>:<span class="string">'2019-03-10'</span>]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第二种<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 设置开始时间</span><br><span class="line">from_date &#x3D; df[&#39;DATA_DATE&#39;]&gt;&#x3D;&#39;2021-01-01&#39;</span><br><span class="line"># 设置结束时间</span><br><span class="line">to_date &#x3D; df[&#39;DATA_DATE&#39;]&lt;&#x3D;&#39;2021-03-31&#39;</span><br><span class="line"># 筛选数据时间段</span><br><span class="line">df &#x3D; df[from_date&amp;to_date]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3><span id="显示中文">显示中文</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># win设置中文</span></span><br><span class="line">plt.rcParams[<span class="string">'font.sans-serif'</span>]=[<span class="string">'SimHei'</span>] <span class="comment">#用来正常显示中文标签</span></span><br><span class="line">plt.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="literal">False</span> <span class="comment">#用来正常显示负号</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># mac设置中文</span></span><br><span class="line">plt.rcParams[<span class="string">'font.family'</span>] = <span class="string">'Heiti TC'</span><span class="comment">#用来正常显示中文标签</span></span><br><span class="line">plt.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="literal">False</span> <span class="comment">#用来正常显示负号</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3><span id="重命名">重命名</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重命名 列</span></span><br><span class="line">q4_df.rename(columns=&#123;<span class="string">'AT_HOME'</span>:<span class="string">'empty_ratio'</span>&#125;,inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 重命名 索引</span></span><br><span class="line">df.rename_axis(<span class="string">"金牌排名"</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="填充">填充</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">bfill 从后面往前填充</span></span><br><span class="line"><span class="string">ffill 从前往后</span></span><br><span class="line"><span class="string">默认列方向填充0，1使用行方向</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 新增一列 最多奖牌数量 列，值为该国 金、银、铜 牌数量中最多的一个奖牌数量</span></span><br><span class="line">df[<span class="string">'最多奖牌数量'</span>] = df.bfill(<span class="number">1</span>)[[<span class="string">"金牌数"</span>, <span class="string">"银牌数"</span>,<span class="string">'铜牌数'</span>]].max(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="查询">查询</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询</span></span><br><span class="line">df.query(<span class="string">'金牌数+银牌数 &gt; 15'</span>)</span><br><span class="line"></span><br><span class="line">df[df.国家奥委会.str.contains(<span class="string">'国'</span>)]</span><br><span class="line"></span><br><span class="line">df_01.loc[df_01[<span class="string">'行业（按行业大类）'</span>].isin([<span class="string">'工业'</span>,<span class="string">'建筑业'</span>])]</span><br><span class="line">df_01.loc[(df_01[<span class="string">'行业（按行业大类）'</span>]==<span class="string">'工业'</span>)|(df_01[<span class="string">'行业（按行业大类）'</span>]==<span class="string">'建筑业'</span>)]</span><br><span class="line">df_01[df_01[<span class="string">'行业（按行业大类）'</span>].str.contains(<span class="string">'工业|建筑业'</span>)]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="选择类型">选择类型</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df4.select_dtypes(include=[<span class="string">'int'</span>,<span class="string">'float64'</span>])</span><br><span class="line">df4.select_dtypes(exclude=[<span class="string">'int'</span>,<span class="string">'float64'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3><span id="数据展开">数据展开</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df5.explode([<span class="string">'A'</span>,<span class="string">'C'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3><span id="数据累加">数据累加</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df[list(<span class="string">'ABCD'</span>)].cumsum()</span><br><span class="line">df[list(<span class="string">'ABCD'</span>)].cumsum(axis = <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3><span id="列操作">列操作</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 插入列</span></span><br><span class="line">tmp3 = (df[<span class="string">'春节期间（除夕至初六）用电量'</span>]-df[<span class="string">'节前温度接近的一周用电量'</span>])/df[<span class="string">'节前温度接近的一周用电量'</span>]</span><br><span class="line">tmp1 = df.iloc[:,:<span class="number">1</span>]</span><br><span class="line">tmp2 = df.iloc[:,<span class="number">1</span>:]</span><br><span class="line">df = pd.concat([tmp1,tmp3.to_frame(),tmp2],axis=<span class="number">1</span>,ignore_index=<span class="literal">True</span>)</span><br><span class="line">df.columns=[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>]</span><br><span class="line">df</span><br><span class="line"><span class="comment"># 删除列</span></span><br><span class="line">df.drop(<span class="string">'rate'</span>,<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 新增列</span></span><br><span class="line">df[<span class="string">'比赛地点'</span>] = <span class="string">'东京'</span></span><br><span class="line"><span class="comment"># 新增一列 最多奖牌数量 列，值为该国 金、银、铜 牌数量中最多的一个奖牌数量 例如美国银牌最多，则为41，中国为38 bfill默认跨行填充</span></span><br><span class="line">df[<span class="string">'最多奖牌数量'</span>] = df.bfill(<span class="number">1</span>)[[<span class="string">"金牌数"</span>, <span class="string">"银牌数"</span>,<span class="string">'铜牌数'</span>]].max(<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 如果一个国家的金牌数大于 30 则值为 是，反之为 否</span></span><br><span class="line">df[<span class="string">'金牌大于30'</span>]  = np.where(df[<span class="string">'金牌数'</span>] &gt; <span class="number">30</span>, <span class="string">'是'</span>, <span class="string">'否'</span>)</span><br><span class="line"><span class="comment"># 删除 df 的 7、8、9、10 列</span></span><br><span class="line">df.drop(df.columns[[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]], axis=<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 提取第1，2，3，4列</span></span><br><span class="line">df.iloc[:,<span class="number">0</span>:<span class="number">4</span>] </span><br><span class="line">df.iloc[:,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]]</span><br><span class="line"><span class="comment"># 提取 金牌数、银牌数、铜牌数 三列</span></span><br><span class="line">df[[<span class="string">'金牌数'</span>,<span class="string">'银牌数'</span>,<span class="string">'铜牌数'</span>]]</span><br><span class="line"><span class="comment"># 提取全部列名中以 “数” 结尾的列</span></span><br><span class="line">df.loc[:, df.columns.str.endswith(<span class="string">'数'</span>)]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="行操作">行操作</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 插入行 先切分再插入</span></span><br><span class="line">df1 = df.iloc[:<span class="number">1</span>, :]</span><br><span class="line">df2 = df.iloc[<span class="number">1</span>:, :]</span><br><span class="line">df3 = pd.DataFrame([[i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(df.columns))]], columns=df.columns)</span><br><span class="line">df_new = pd.concat([df1, df3, df2], ignore_index=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 删除第一行</span></span><br><span class="line">df.drop(<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 条件删除</span></span><br><span class="line">df.drop(df[df.金牌数&lt;<span class="number">20</span>].index)</span><br><span class="line"><span class="comment"># 提取倒数后三列的10-20行</span></span><br><span class="line">df.iloc[<span class="number">10</span>:<span class="number">20</span>,<span class="number">-3</span>:]</span><br><span class="line">df.loc[<span class="number">10</span>:<span class="number">20</span>, <span class="string">'总分'</span>:] </span><br><span class="line"><span class="comment"># 提取第 10 行 </span></span><br><span class="line"><span class="comment"># DataFrame格式</span></span><br><span class="line">a = df.loc[<span class="number">9</span>:<span class="number">9</span>]</span><br><span class="line"><span class="comment"># Series格式</span></span><br><span class="line">a = df.loc[<span class="number">9</span>,:]</span><br><span class="line"><span class="comment"># 提取第 10 行之后的全部行</span></span><br><span class="line">df.iloc[<span class="number">9</span>:,]</span><br><span class="line">df.iloc[<span class="number">9</span>:]</span><br><span class="line">df.loc[<span class="number">9</span>:]</span><br><span class="line"><span class="comment"># 提取 0-50 行，间隔为 3</span></span><br><span class="line">df[:<span class="number">50</span>:<span class="number">3</span>]</span><br><span class="line"><span class="comment"># 提取 金牌数 不等于 10 的行</span></span><br><span class="line">df.loc[~(df[<span class="string">'金牌数'</span>] == <span class="number">10</span>)]</span><br><span class="line"><span class="comment"># 提取奇数行</span></span><br><span class="line">df[[i%<span class="number">2</span>==<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(df.index))]]</span><br><span class="line"><span class="comment"># 提取 中国、美国、英国、日本、巴西 五行数据 且 金牌数小于30</span></span><br><span class="line">df.loc[(df[<span class="string">'金牌数'</span>] &lt; <span class="number">30</span>) &amp; (df[<span class="string">'国家奥委会'</span>].isin([<span class="string">'中国'</span>,<span class="string">'美国'</span>,<span class="string">'英国'</span>,<span class="string">'日本'</span>,<span class="string">'巴西'</span>]))]</span><br><span class="line"><span class="comment"># 包含某个字的行</span></span><br><span class="line">df[df.国家奥委会.str.contains(<span class="string">'国'</span>)]</span><br><span class="line"><span class="comment"># 提取 第 0-2 行第 0-2 列</span></span><br><span class="line">df.iloc[<span class="number">0</span>:<span class="number">2</span>,<span class="number">0</span>:<span class="number">2</span>]</span><br><span class="line">df.iloc[<span class="number">0</span>:<span class="number">2</span>,[<span class="number">0</span>,<span class="number">1</span>]]</span><br><span class="line"><span class="comment"># 使用 query 提取 金牌数 + 银牌数 大于 15 的国家</span></span><br><span class="line">df.query(<span class="string">'金牌数+银牌数 &gt; 15'</span>)</span><br><span class="line"><span class="comment"># 使用 query 提取 金牌数 大于 金牌均值的国家</span></span><br><span class="line">gold_mean = df[<span class="string">'金牌数'</span>].mean()</span><br><span class="line">df.query(<span class="string">f'金牌数 &gt; <span class="subst">&#123;gold_mean&#125;</span>'</span>)</span><br><span class="line"><span class="comment"># 指定位置插入行</span></span><br><span class="line">df1 = df.iloc[:<span class="number">1</span>, :]</span><br><span class="line">df2 = df.iloc[<span class="number">1</span>:, :]</span><br><span class="line">df3 = pd.DataFrame([[i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(df.columns))]], columns=df.columns)</span><br><span class="line">df_new = pd.concat([df1, df3, df2], ignore_index=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 调整 顺序</span></span><br><span class="line">q4_df = q4_df.reindex([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">22</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>, <span class="number">15</span>, <span class="number">16</span>, <span class="number">17</span>, <span class="number">18</span>, <span class="number">19</span>, <span class="number">20</span>, <span class="number">21</span>]).reset_index()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3><span id="pivot与groupby">pivot与groupby</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pd.pivot_table(df2,values = [<span class="string">'奖牌类型'</span>],index = [<span class="string">'国家'</span>,<span class="string">'运动类别'</span>],aggfunc = <span class="string">'count'</span>)</span><br><span class="line"><span class="comment"># 等价于</span></span><br><span class="line">pd.DataFrame(df2.groupby([<span class="string">'国家'</span>,<span class="string">'运动类别'</span>]).count()[<span class="string">'奖牌类型'</span>])</span><br><span class="line"><span class="comment"># 等价于</span></span><br><span class="line">df2.groupby([<span class="string">'国家'</span>,<span class="string">'运动类别'</span>]).count()[[<span class="string">'奖牌类型'</span>]]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="unstack">unstack</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算前十名各国每日奖牌数量合计</span></span><br><span class="line"><span class="comment"># 注意：对于第一天没有数据的国家用0填充，其余时间的缺失值用上一日数据填充</span></span><br><span class="line">countries = df2.groupby(<span class="string">'国家'</span>).count().sort_values(<span class="string">'奖牌类型'</span>,ascending=<span class="literal">False</span>).head(<span class="number">10</span>).index.tolist()</span><br><span class="line">tmp = df2[df2[<span class="string">'国家'</span>].isin(countries)]</span><br><span class="line">tmp.groupby([<span class="string">'获奖时间'</span>,<span class="string">'国家'</span>]).count()[<span class="string">'奖牌类型'</span>].unstack().cumsum().fillna(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3><span id="数据聚合">数据聚合</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 分组，但不作为索引</span></span><br><span class="line">df.groupby(<span class="string">"district"</span>, as_index=<span class="literal">False</span>)[<span class="string">'salary'</span>].mean()</span><br><span class="line"><span class="comment"># 分组统计</span></span><br><span class="line">df.groupby(<span class="string">"district"</span>)[<span class="string">'companySize'</span>].value_counts()</span><br><span class="line"><span class="comment"># 或者groupby两个</span></span><br><span class="line">df.groupby([<span class="string">'district'</span>,<span class="string">'companySize'</span>])[<span class="string">'companySize'</span>].count()</span><br><span class="line"><span class="comment"># 查看group的结果</span></span><br><span class="line">df.groupby([<span class="string">"district"</span>,<span class="string">'salary'</span>]).groups</span><br><span class="line"><span class="comment"># 将数据按照 district、salary 进行分组，并查看西湖区薪资为 30000 的工作</span></span><br><span class="line">df.groupby([<span class="string">"district"</span>,<span class="string">'salary'</span>]).get_group((<span class="string">"西湖区"</span>,<span class="number">30000</span>))</span><br><span class="line"><span class="comment"># 计算不同行政区(district)，不同规模公司(companySize)出现的次数</span></span><br><span class="line">pd.DataFrame(df.groupby(<span class="string">"district"</span>)[<span class="string">'companySize'</span>].value_counts()) <span class="comment">#使用value_counts的方式，有时候比两个groupby好用</span></span><br><span class="line">df.groupby([<span class="string">'district'</span>,<span class="string">'companySize'</span>]).count().iloc[:,<span class="number">0</span>:<span class="number">1</span>]</span><br><span class="line"><span class="comment"># 分组</span></span><br><span class="line">df[<span class="string">'salary'</span>].groupby([df[<span class="string">'workYear'</span>], df[<span class="string">'education'</span>]]).mean()</span><br><span class="line">df.groupby([<span class="string">'workYear'</span>, <span class="string">'education'</span>]).mean()[<span class="string">'salary'</span>]</span><br><span class="line"><span class="comment"># 在原数据框 df 新增一列，数值为该区的平均薪资水平</span></span><br><span class="line">df[<span class="string">'该区平均工资'</span>] = df[[<span class="string">'district'</span>,<span class="string">'salary'</span>]].groupby(by=<span class="string">'district'</span>).transform(<span class="string">'mean'</span>)</span><br><span class="line"><span class="comment"># 通过匿名函数分组 根据 createTime 列，计算每天不同 行政区 新增的岗位数量</span></span><br><span class="line">pd.DataFrame(df.groupby([df.createTime.apply(<span class="keyword">lambda</span> x:x.day)])[</span><br><span class="line">             <span class="string">'district'</span>].value_counts()).rename_axis([<span class="string">"发布日"</span>, <span class="string">"行政区"</span>])</span><br><span class="line"><span class="comment"># 计算各行政区的企业领域（industryField）包含电商的总数</span></span><br><span class="line">df.groupby(<span class="string">'district'</span>)[<span class="string">"industryField"</span>].apply(<span class="keyword">lambda</span> x: x.str.contains(<span class="string">'电商'</span>).sum())</span><br><span class="line"><span class="comment"># 计算各行政区的企业领域（industryField）包含电商的总数</span></span><br><span class="line">df.groupby(<span class="string">"district"</span>, sort=<span class="literal">False</span>)[<span class="string">"industryField"</span>].apply(</span><br><span class="line"><span class="keyword">lambda</span> x: x.str.contains(<span class="string">"电商"</span>).sum())</span><br><span class="line"><span class="comment">#通过 positionName 的长度进行分组，并计算不同长度岗位名称的薪资均值</span></span><br><span class="line">df.set_index(<span class="string">"positionName"</span>).groupby(len)[<span class="string">'salary'</span>].mean()</span><br><span class="line">df.groupby(df.positionName.apply(<span class="keyword">lambda</span> x:len(x)))[<span class="string">'salary'</span>].mean()</span><br><span class="line"><span class="comment"># groupby 直接改名</span></span><br><span class="line">df.groupby(&#123;<span class="string">'salary'</span>:<span class="string">'薪资'</span>,<span class="string">'score'</span>:<span class="string">'总分'</span>,<span class="string">'matchScore'</span>:<span class="string">'总分'</span>&#125;, axis=<span class="number">1</span>).sum()</span><br><span class="line"><span class="comment"># groupby 用字典</span></span><br><span class="line"><span class="comment">#将 score 和 matchScore 的和记为总分，与 salary 列同时进行分组，并查看结果</span></span><br><span class="line">df.groupby(&#123;<span class="string">'salary'</span>:<span class="string">'薪资'</span>,<span class="string">'score'</span>:<span class="string">'总分'</span>,<span class="string">'matchScore'</span>:<span class="string">'总分'</span>&#125;, axis=<span class="number">1</span>).sum()</span><br><span class="line"><span class="comment"># 聚合</span></span><br><span class="line">df[<span class="string">'salary'</span>].groupby(df[<span class="string">'district'</span>]).mean() </span><br><span class="line"><span class="comment"># 等价</span></span><br><span class="line">df[[<span class="string">'district'</span>,<span class="string">'salary'</span>]].groupby(<span class="string">'district'</span>).mean()</span><br><span class="line"><span class="comment"># 在原数据框 df 新增一列，数值为该区的平均薪资水平</span></span><br><span class="line">df[<span class="string">'该区平均工资'</span>] = df[[<span class="string">'district'</span>,<span class="string">'salary'</span>]].groupby(by=<span class="string">'district'</span>).transform(<span class="string">'mean'</span>)</span><br><span class="line"><span class="comment"># 提取平均工资小于 30000 的行政区的全部数据</span></span><br><span class="line">df.groupby(<span class="string">'district'</span>).filter(<span class="keyword">lambda</span> x: x[<span class="string">'salary'</span>].mean() &lt; <span class="number">30000</span>)</span><br><span class="line"><span class="comment"># 分组计算不同行政区，薪水的最小值、最大值和平均值</span></span><br><span class="line">df.groupby(<span class="string">'district'</span>)[<span class="string">'salary'</span>].agg([min, max, np.mean])</span><br><span class="line"><span class="comment"># 对不同行政区进行分组，并统计薪水的均值、中位数、方差，以及得分的均值</span></span><br><span class="line">df.groupby(<span class="string">'district'</span>).agg(</span><br><span class="line">    &#123;<span class="string">'salary'</span>: [np.mean, np.median, np.std], <span class="string">'score'</span>: np.mean&#125;)</span><br><span class="line"><span class="comment"># 通过 df2 计算获得奖牌最多的运动员</span></span><br><span class="line">df2[<span class="string">'运动员'</span>].value_counts().sort_values(ascending=<span class="literal">False</span>).head(<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 查看各国在不同项目上的获奖牌情况</span></span><br><span class="line">df2[<span class="string">'总奖牌数'</span>].groupby([df2[<span class="string">'国家'</span>],df2[<span class="string">'运动类别'</span>]]).count().to_frame()</span><br><span class="line">df2.groupby([<span class="string">'国家'</span>,<span class="string">'运动类别'</span>]).count()[<span class="string">'总奖牌数'</span>].to_frame()</span><br><span class="line">pd.pivot_table(df2,values = [<span class="string">'奖牌类型'</span>],index = [<span class="string">'国家'</span>,<span class="string">'运动类别'</span>],aggfunc = <span class="string">'count'</span>)</span><br><span class="line"><span class="comment"># 按照行计算平均值</span></span><br><span class="line">df.mean(axis=<span class="string">'columns'</span>)</span><br><span class="line">df.mean(axis=<span class="number">1</span>) <span class="comment">#不是0，1是算每列的均值然后然后合并为一行</span></span><br><span class="line"><span class="comment"># 提取平均工资小于 30000 的行政区的全部数据</span></span><br><span class="line">df.groupby(<span class="string">'district'</span>).filter(<span class="keyword">lambda</span> x: x[<span class="string">'salary'</span>].mean() &lt; <span class="number">30000</span>)</span><br><span class="line"><span class="comment"># 聚合统计</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">df.groupby(<span class="string">'district'</span>)[<span class="string">'salary'</span>].agg([min, max, np.mean])</span><br><span class="line"><span class="comment">#查看缺失值比例，并排序  不是count！！！</span></span><br><span class="line">data = df.isna().sum()/df.shape[<span class="number">0</span>]</span><br><span class="line">data.sort_values().map(<span class="keyword">lambda</span> x:<span class="string">"&#123;:.2%&#125;"</span>.format(x))</span><br><span class="line"><span class="comment">#对不同岗位(positionName)进行分组，并统计其薪水(salary)中位数和得分(score)均值</span></span><br><span class="line">df.groupby(<span class="string">'positionName'</span>).agg(&#123;<span class="string">'salary'</span>: np.median, <span class="string">'score'</span>: np.mean&#125;)</span><br><span class="line"><span class="comment"># 自定义函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myfunc</span><span class="params">(x)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> x.max()-x.mean()</span><br><span class="line"></span><br><span class="line">df.groupby(<span class="string">'district'</span>).agg(最低工资=(<span class="string">'salary'</span>, <span class="string">'min'</span>), 最高工资=(</span><br><span class="line">    <span class="string">'salary'</span>, <span class="string">'max'</span>), 平均工资=(<span class="string">'salary'</span>, <span class="string">'mean'</span>), 最大值与均值差值=(<span class="string">'salary'</span>, myfunc)).rename_axis([<span class="string">"行政区"</span>])</span><br></pre></td></tr></table></figure>
+
+<h3><span id="数据查询">数据查询</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询某列的值为x时，即使该列为坐标</span></span><br><span class="line"><span class="comment">#查询中国队的获奖牌</span></span><br><span class="line">df3.query(<span class="string">"国家 == ['中国']"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#计算中国每日总奖牌数量 累计</span></span><br><span class="line">df2.groupby([<span class="string">'获奖时间'</span>,<span class="string">'国家'</span>]).count()[<span class="string">'奖牌类型'</span>].to_frame().query(<span class="string">'国家==["中国"]'</span>).cumsum()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#查询空值所在行</span></span><br><span class="line">df[df.isnull().T.any() == <span class="literal">True</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看重复的</span></span><br><span class="line">df[df.duplicated()]</span><br><span class="line"></span><br><span class="line"><span class="comment">#查询条件</span></span><br><span class="line">df_01.loc[df_01[<span class="string">'行业（按行业大类）'</span>].isin([<span class="string">'工业'</span>,<span class="string">'建筑业'</span>])]</span><br><span class="line">df_01.loc[(df_01[<span class="string">'行业（按行业大类）'</span>]==<span class="string">'工业'</span>)|(df_01[<span class="string">'行业（按行业大类）'</span>]==<span class="string">'建筑业'</span>)]</span><br><span class="line">df_01[df_01[<span class="string">'行业（按行业大类）'</span>].str.contains(<span class="string">'工业|建筑业'</span>)]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="数据汇总">数据汇总</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算 总分、高端人才得分、办学层次得分的最大最小值、中位数、均值</span></span><br><span class="line">df.agg(&#123;</span><br><span class="line">        <span class="string">"总分"</span>: [<span class="string">"min"</span>, <span class="string">"max"</span>, <span class="string">"median"</span>, <span class="string">"mean"</span>],</span><br><span class="line">        <span class="string">"高端人才得分"</span>: [<span class="string">"min"</span>, <span class="string">"max"</span>, <span class="string">"median"</span>, <span class="string">"mean"</span>],</span><br><span class="line">        <span class="string">"办学层次得分"</span>:[<span class="string">"min"</span>, <span class="string">"max"</span>, <span class="string">"median"</span>, <span class="string">"mean"</span>]&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3><span id="数据合并">数据合并</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 垂直拼接 df1、df2、df3，效果如下图所示</span></span><br><span class="line">pd.concat([df1, df2, df3])</span><br><span class="line"><span class="comment"># 垂直拼接 df1 和 df4，并按顺序重新生成索引，</span></span><br><span class="line">df = pd.concat([df1,df4]).reset_index()</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">df = pd.concat([df1, df4], ignore_index=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 横向拼接</span></span><br><span class="line">pd.concat([df1,df4],axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 在上一题的基础上，只取结果的交集</span></span><br><span class="line">pd.concat([df1,df4],axis=<span class="number">1</span>,join=<span class="string">'inner'</span>)</span><br><span class="line"><span class="comment"># 只取包含 df1 索引的部分</span></span><br><span class="line">pd.concat([df1, df4], axis=<span class="number">1</span>).reindex(df1.index)</span><br><span class="line"><span class="comment"># 拼接 df1、df2、df3，同时新增一个索引（x、y、z）来区分不同的表数据来源</span></span><br><span class="line">pd.concat([df1, df2, df3], keys=[<span class="string">'x'</span>, <span class="string">'y'</span>, <span class="string">'z'</span>])</span><br><span class="line"><span class="comment"># 根据 key 连接 left 和 right</span></span><br><span class="line">pd.merge(left, right, on=<span class="string">'key'</span>)</span><br><span class="line"><span class="comment"># 根据 key1 和 key2 连接 left 和 right</span></span><br><span class="line">pd.merge(left, right, on=[<span class="string">'key1'</span>, <span class="string">'key2'</span>])</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">how 可以设置</span></span><br><span class="line"><span class="string">	right、left: 左外，右外</span></span><br><span class="line"><span class="string">	outer、inner: 全外连接，内连接</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">pd.merge(left, right, how=<span class="string">'left'</span>, on=[<span class="string">'key1'</span>, <span class="string">'key2'</span>])</span><br><span class="line"><span class="comment"># 重新产生数据</span></span><br><span class="line">left.join(right, on=[<span class="string">'key1'</span>, <span class="string">'key2'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3><span id="多个df画一起">多个DF画一起</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">16</span>,<span class="number">10</span>))   </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_percent</span><span class="params">(temp, position)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%1.0f'</span>%(<span class="number">100</span>*temp) + <span class="string">'%'</span></span><br><span class="line">plt.gca().yaxis.set_major_formatter(FuncFormatter(to_percent))</span><br><span class="line">ax.plot(max_data,label=<span class="string">'first one'</span>)</span><br><span class="line">ax.plot(min_data,label=<span class="string">'last one'</span>)</span><br><span class="line">ax.plot(q3_df,label=<span class="string">'mean'</span>)</span><br><span class="line">ax.set_title(<span class="string">'Daily Empty Rate Comparison For Village Y'</span>)</span><br><span class="line">plt.legend(loc=<span class="string">'best'</span>)</span><br><span class="line">plt.savefig(<span class="string">'C-4.png'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="分析和排序">分析和排序</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将空置率从低到高排序</span></span><br><span class="line">q1_df=q1_df.sort_values(<span class="string">'AT_HOME'</span>)</span><br><span class="line"><span class="comment"># 参数by可以忽略</span></span><br><span class="line">df.sort_values(by=<span class="string">'总分'</span>, ascending=<span class="literal">True</span>).head(<span class="number">20</span>)</span><br><span class="line"><span class="comment"># 查看各项得分最高的学校名称</span></span><br><span class="line">df.iloc[:,<span class="number">3</span>:].idxmax()</span><br><span class="line"><span class="comment"># 统计 总分 列的均值</span></span><br><span class="line">df[<span class="string">'总分'</span>].mean()</span><br><span class="line">df.总分.mean()</span><br><span class="line"><span class="comment"># 计算总分列的中位数</span></span><br><span class="line">df.总分.median()</span><br><span class="line"><span class="comment"># 计算总分列的众数</span></span><br><span class="line">df.总分.mode()</span><br><span class="line"><span class="comment"># 查看数值型数据的统计信息（均值、分位数等），并保留两位小数</span></span><br><span class="line">df.describe().round(<span class="number">2</span>).T</span><br></pre></td></tr></table></figure>
+
+<h3><span id="双纵坐标轴">双纵坐标轴</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入data.csv</span></span><br><span class="line">df = pd.read_csv(<span class="string">'data.csv'</span>)</span><br><span class="line"><span class="comment"># 将Date转为日期格式</span></span><br><span class="line">df[<span class="string">'Date'</span>] = pd.to_datetime(df[<span class="string">'Date'</span>])</span><br><span class="line"><span class="comment"># 优化df的结构</span></span><br><span class="line">df=df.reset_index(drop=<span class="literal">True</span>).set_index(<span class="string">'Date'</span>)</span><br><span class="line"><span class="comment"># 选择数据范围 2014年1月1日至2018年7月31日</span></span><br><span class="line">q1_df = df[<span class="string">'2014-01-01'</span>:<span class="string">'2018-07-31'</span>]</span><br><span class="line"><span class="comment"># 构建画图使用的dataframe 每天的日电量、最高温度、最低温度</span></span><br><span class="line">q1_plot_df = q1_df[[<span class="string">'DailyElectricity'</span>,<span class="string">'MaxTemperature'</span>,<span class="string">'MinTemperature'</span>]]</span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">fig,ax = plt.subplots(figsize=(<span class="number">10</span>,<span class="number">8</span>))</span><br><span class="line">ax.plot(df[<span class="string">'DailyElectricity'</span>],color=<span class="string">'r'</span>,label=<span class="string">'DailyElectricity'</span>)</span><br><span class="line"><span class="comment"># 镜像x轴</span></span><br><span class="line">ax2 = ax.twinx()</span><br><span class="line">ax2.plot(df[<span class="string">'MaxTemperature'</span>],color=<span class="string">'b'</span>,label=<span class="string">'MaxTemperature'</span>)</span><br><span class="line">ax2.plot(df[<span class="string">'MinTemperature'</span>],color=<span class="string">'g'</span>,label=<span class="string">'MinTemperature'</span>)</span><br><span class="line"><span class="comment"># 添加图例</span></span><br><span class="line">ax.legend(loc=<span class="string">'best'</span>)</span><br><span class="line">ax2.legend(loc=<span class="string">'best'</span>)</span><br><span class="line">ax.set_title(<span class="string">'Daily Usage and Temperature'</span>)</span><br><span class="line">plt.savefig(<span class="string">'F-1.png'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="构建空df">构建空DF</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">max_data = pd.DataFrame(columns=&#123;<span class="string">'DATA_DATE'</span>,<span class="string">'empty_ratio'</span>&#125;)</span><br><span class="line">min_data = pd.DataFrame(columns=&#123;<span class="string">'DATA_DATE'</span>,<span class="string">'empty_ratio'</span>&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(q4_df)):</span><br><span class="line">    indx = q4_df.index[i][<span class="number">1</span>]</span><br><span class="line">    </span><br><span class="line">    val = q4_df.iloc[i][<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">if</span> indx == <span class="string">'Street A'</span>:</span><br><span class="line">        max_data = max_data.append([&#123;<span class="string">'DATA_DATE'</span>:q4_df.index[i][<span class="number">0</span>],<span class="string">'empty_ratio'</span>:val&#125;],ignore_index=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">if</span> indx == <span class="string">'Street G'</span>:</span><br><span class="line">        min_data = min_data.append(&#123;<span class="string">'DATA_DATE'</span>:q4_df.index[i][<span class="number">0</span>],<span class="string">'empty_ratio'</span>:val&#125;,ignore_index=<span class="literal">True</span>)</span><br><span class="line">        </span><br><span class="line">max_data=max_data.reset_index(drop=<span class="literal">True</span>).set_index(max_data[<span class="string">'DATA_DATE'</span>]).drop(<span class="string">'DATA_DATE'</span>,<span class="number">1</span>)</span><br><span class="line">min_data=min_data.reset_index(drop=<span class="literal">True</span>).set_index(min_data[<span class="string">'DATA_DATE'</span>]).drop(<span class="string">'DATA_DATE'</span>,<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 新建df 方法一</span></span><br><span class="line"></span><br><span class="line">cols_q3=[<span class="string">'类别'</span>,<span class="string">'本周电量'</span>,<span class="string">'上周周电量'</span>,<span class="string">'环比提升'</span>,<span class="string">'农历同期周电量'</span>,<span class="string">'同比提升'</span>]</span><br><span class="line">q3_df = pd.DataFrame(columns=cols_q3)</span><br><span class="line">q3_df.loc[<span class="number">0</span>]=np.nan <span class="comment">#先新建一列</span></span><br><span class="line">q3_df.iloc[<span class="number">0</span>,<span class="number">0</span>] = <span class="string">'软件园一期'</span> <span class="comment"># 第一次要iloc</span></span><br><span class="line">q3_df.loc[<span class="number">1</span>] = <span class="string">'软件园二期'</span>   <span class="comment"># 后面可以用iloc来做</span></span><br><span class="line">q3_df.loc[<span class="number">2</span>] = <span class="string">'软件园三期'</span></span><br><span class="line">q3_df.loc[<span class="number">3</span>] = <span class="string">'医药制造'</span>q3_df.iloc[<span class="number">0</span>,<span class="number">1</span>] = bz_factory.iloc[<span class="number">1</span>,<span class="number">1</span>].round(<span class="number">2</span>)</span><br><span class="line">q3_df.iloc[<span class="number">0</span>,<span class="number">2</span>] = sz_factory[<span class="string">'上周周电量'</span>][<span class="number">0</span>].round(<span class="number">2</span>)</span><br><span class="line">q3_df.iloc[<span class="number">0</span>,<span class="number">3</span>] = (bz_factory.iloc[<span class="number">1</span>,<span class="number">1</span>]-sz_factory[<span class="string">'上周周电量'</span>][<span class="number">0</span>])/sz_factory[<span class="string">'上周周电量'</span>][<span class="number">0</span>]</span><br><span class="line">q3_df.iloc[<span class="number">0</span>,<span class="number">4</span>] = nl_factory.iloc[<span class="number">1</span>,<span class="number">1</span>].round(<span class="number">2</span>)</span><br><span class="line">q3_df.iloc[<span class="number">0</span>,<span class="number">5</span>] = (bz_factory.iloc[<span class="number">1</span>,<span class="number">1</span>]-nl_factory.iloc[<span class="number">1</span>,<span class="number">1</span>])/nl_factory.iloc[<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line"><span class="comment"># 新建df 方法二直接concat</span></span><br><span class="line">q1_df.loc[<span class="number">0</span>]=np.nan</span><br><span class="line">tmp_df.loc[<span class="number">0</span>]=np.nan</span><br><span class="line"></span><br><span class="line">q1_df.iloc[<span class="number">0</span>,<span class="number">0</span>] = <span class="string">'工业'</span></span><br><span class="line">tmp_df.iloc[<span class="number">0</span>,<span class="number">0</span>] = <span class="string">'建筑业'</span></span><br><span class="line"></span><br><span class="line">q1_df.iloc[<span class="number">0</span>,<span class="number">1</span>]=bz_gy[<span class="string">'开工指数'</span>].round(<span class="number">2</span>)</span><br><span class="line">tmp_df.iloc[<span class="number">0</span>,<span class="number">1</span>]=bz_jz[<span class="string">'开工指数'</span>].round(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">q1_df = pd.concat([q1_df,tmp_df],axis=<span class="number">0</span>)</span><br><span class="line">q1_df.to_csv(<span class="string">'Q2-1.csv'</span>,index=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将一列添加到一个新的df里面，需要保证！！！index一致！！！ 否则加不进去</span></span><br><span class="line"><span class="comment"># q2_df</span></span><br><span class="line">cols_q2 = [<span class="string">'类别'</span>,<span class="string">'本周电量'</span>,<span class="string">'上周周电量'</span>,<span class="string">'环比提升'</span>,<span class="string">'农历同期周电量'</span>,<span class="string">'同比提升'</span>]</span><br><span class="line">q2_df = pd.DataFrame(columns=cols_q2)</span><br><span class="line">q2_df[<span class="string">'类别'</span>]=usage_bz.T.index</span><br><span class="line">q2_df[<span class="string">'本周电量'</span>]=usage_bz.T.reset_index()[<span class="string">'厦门市'</span>] <span class="comment">#要先reset_index</span></span><br><span class="line">q2_df</span><br></pre></td></tr></table></figure>
+
+<h3><span id="更改日期间隔">更改日期间隔</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更改日期间隔</span></span><br><span class="line">plt.xticks(pd.date_range(<span class="string">'2021-01-01'</span>,<span class="string">'2021-03-31'</span>,freq=<span class="string">'20D'</span>))</span><br></pre></td></tr></table></figure>
+
+<h3><span id="查看统计数据">查看统计数据</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看数据行列数</span></span><br><span class="line">df.shape</span><br><span class="line"><span class="comment"># 查看数据量</span></span><br><span class="line">df.size</span><br><span class="line"><span class="comment"># 查看 数值型 列的统计信息，计数、均值什么的</span></span><br><span class="line">df.describe()</span><br><span class="line"><span class="comment"># 查看 离散型 列的统计信息，计数、频率什么</span></span><br><span class="line">df.describe(include=[<span class="string">'O'</span>])</span><br><span class="line"><span class="comment"># 查看 全部 列的统计信息</span></span><br><span class="line">df.describe(include=<span class="string">'all'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="保存文件">保存文件</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不保存索引</span></span><br><span class="line">data.to_csv(<span class="string">"out.csv"</span>,encoding = <span class="string">'utf_8_sig'</span>,index = <span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 保存指定列</span></span><br><span class="line">data.to_csv(<span class="string">"out.csv"</span>,encoding = <span class="string">'utf_8_sig'</span>,columns=[<span class="string">'positionName'</span>,<span class="string">'salary'</span>])</span><br><span class="line"><span class="comment"># 小数点</span></span><br><span class="line">mar.to_csv(<span class="string">"2-1.csv"</span>, index=<span class="literal">False</span>, float_format=<span class="string">'%.3f'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="数据预处理">数据预处理</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># isnull() is an alias for isna </span></span><br><span class="line"><span class="comment"># 计算缺失值</span></span><br><span class="line">df.isna().sum().sum()</span><br><span class="line"><span class="comment"># 每列有多少缺失值</span></span><br><span class="line">df.isnull().sum()</span><br><span class="line"><span class="comment"># 查看缺失值</span></span><br><span class="line">df[df.isnull().T.any() == <span class="literal">True</span>]</span><br><span class="line"><span class="comment"># 将评价人数列的缺失值，用整列的均值进行填充</span></span><br><span class="line">df[<span class="string">'评价人数'</span>] = df[<span class="string">'评价人数'</span>].fillna(df[<span class="string">'评价人数'</span>].mean())</span><br><span class="line"><span class="comment"># 现在将评分列的缺失值，替换为上一个电影的评分</span></span><br><span class="line">df[<span class="string">'评分'</span>] = df[<span class="string">'评分'</span>].fillna(axis=<span class="number">0</span>,method=<span class="string">'ffill'</span>)</span><br><span class="line"><span class="comment"># 将评价人数列的缺失值，用上下数字的均值进行填充</span></span><br><span class="line">df[<span class="string">'评价人数'</span>] = df[<span class="string">'评价人数'</span>].fillna(df[<span class="string">'评价人数'</span>].interpolate())</span><br><span class="line"><span class="comment"># 在填充 “语言” 列的缺失值，要求根据 “国家/地区” 列的值进行填充</span></span><br><span class="line">df[<span class="string">'语言'</span>]=df.groupby(<span class="string">'国家/地区'</span>).语言.bfill()</span><br><span class="line"><span class="comment"># 查找重复值</span></span><br><span class="line">df[df.duplicated()]</span><br><span class="line"><span class="comment"># 查找指定列的重复值</span></span><br><span class="line">df[df.duplicated([<span class="string">'片名'</span>])]</span><br><span class="line"><span class="comment"># 删除全部的重复值</span></span><br><span class="line">df = df.drop_duplicates()</span><br><span class="line"><span class="comment"># 删除全部的重复值，但保留最后一次出现的值first/last/false</span></span><br><span class="line">df = df.drop_duplicates(keep = <span class="string">'last'</span>)</span><br><span class="line"><span class="comment"># 计算各省市出现的次数</span></span><br><span class="line">df.省市.value_counts()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 都可以用inplace=True来代替赋值</span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="删除空行">删除空行</span></h3><p><strong>1.函数详解</strong></p>
+<p>函数形式：dropna(axis=0, how=’any’, thresh=None, subset=None, inplace=False)</p>
+<p>参数：</p>
+<p><strong>axis</strong>：轴。0或’index’，表示按行删除；1或’columns’，表示按列删除。</p>
+<p><strong>how</strong>：筛选方式。‘any’，表示该行/列只要有一个以上的空值，就删除该行/列；‘all’，表示该行/列全部都为空值，就删除该行/列。</p>
+<p><strong>thresh</strong>：非空元素最低数量。int型，默认为None。如果该行/列中，非空元素数量小于这个值，就删除该行/列。</p>
+<p><strong>subset</strong>：子集。列表，元素为行或者列的索引。如果axis=0或者‘index’，subset中元素为列的索引；如果axis=1或者‘column’，subset中元素为行的索引。由subset限制的子区域，是判断是否删除该行/列的条件判断区域。</p>
+<p><strong>inplace</strong>：是否原地替换。布尔值，默认为False。如果为True，则在原DataFrame上进行操作，返回值为None。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除整行缺失的数据，剩余缺失数据按0值进行填充</span></span><br><span class="line">df2 = df2.dropna(how=<span class="string">'all'</span>).fillna(<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 删除某列为空的行</span></span><br><span class="line">df_initial.dropna(axis = <span class="number">0</span>, subset = [<span class="string">'客户ID'</span>], inplace = <span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="替换">替换</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将金牌数列的数字 0 替换为 无</span></span><br><span class="line">df[<span class="string">'金牌数'</span>].replace(<span class="number">0</span>,<span class="string">'无'</span>,inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment">#同时替换 1将 无 替换为 缺失值 2将 0 替换为 None</span></span><br><span class="line">df.replace([<span class="string">'无'</span>,<span class="number">0</span>],[np.nan,<span class="string">'None'</span>],inplace = <span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 将 `金牌数` 列类型修改为 `int`</span></span><br><span class="line">df[<span class="string">'金牌数'</span>] = df[<span class="string">'金牌数'</span>].fillna(<span class="string">'0'</span>).astype(int)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2><span id="算法总结">算法总结</span></h2><table>
+<thead>
+<tr>
+<th>分类</th>
+<th>回归</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>分类树<strong>tree.DecisionTreeClassififier</strong></td>
+<td>回归树<strong>tree.DecisionTreeRegressor</strong></td>
+</tr>
+<tr>
+<td>随机森林<strong>ensemble.RandomForestClassifier</strong></td>
+<td>回归森林<strong>ensemble.RandomForestRegressor</strong></td>
+</tr>
+<tr>
+<td>逻辑回归<strong>linear_model.LogisticRegression</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>KNN <strong>neighbors .KNeighborsClassifier</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Naive Bayes</td>
+<td></td>
+</tr>
+<tr>
+<td>梯度提升树木<strong>ensemble.GradientBoostingRegressor</strong></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3><span id="决策树">决策树</span></h3><p><strong>决策树优点</strong></p>
+<ol>
+<li><p>易于理解和解释，因为树木可以画出来被看见</p>
+</li>
+<li><p>需要很少的数据准备。其他很多算法通常都需要数据规范化，需要创建虚拟变量并删除空值等。但请注意，sklearn中的决策树模块不支持对缺失值的处理。</p>
+</li>
+<li><p>使用树的成本（比如说，在预测数据的时候）是用于训练树的数据点的数量的对数，相比于其他算法，这是一个很低的成本。</p>
+</li>
+<li><p>能够同时处理数字和分类数据，既可以做回归又可以做分类。其他技术通常专门用于分析仅具有一种变量类型的数据集。</p>
+</li>
+<li><p>能够处理多输出问题，即含有多个标签的问题，注意与一个标签中含有多种标签分类的问题区别开</p>
+</li>
+<li><p>是一个白盒模型，结果很容易能够被解释。如果在模型中可以观察到给定的情况，则可以通过布尔逻辑轻松解释条件。相反，在黑盒模型中（例如，在人工神经网络中），结果可能更难以解释。</p>
+</li>
+<li><p>可以使用统计测试验证模型，这让我们可以考虑模型的可靠性。</p>
+</li>
+<li><p>即使其假设在某种程度上违反了生成数据的真实模型，也能够表现良好。</p>
+</li>
+</ol>
+<p><strong>决策树的缺点</strong></p>
+<ol>
+<li><p>决策树学习者可能创建过于复杂的树，这些树不能很好地推广数据。这称为过度拟合。修剪，设置叶节点所需的最小样本数或设置树的最大深度等机制是避免此问题所必需的，而这些参数的整合和调整对初学者来说会比较晦涩</p>
+</li>
+<li><p>决策树可能不稳定，数据中微小的变化可能导致生成完全不同的树，这个问题需要通过集成算法来解决。</p>
+</li>
+<li><p>决策树的学习是基于贪婪算法，它靠优化局部最优（每个节点的最优）来试图达到整体的最优，但这种做法不能保证返回全局最优决策树。这个问题也可以由集成算法来解决，在随机森林中，特征和样本会在分枝过程中被随机采样。</p>
+</li>
+<li><p>有些概念很难学习，因为决策树不容易表达它们，例如XOR，奇偶校验或多路复用器问题。</p>
+</li>
+<li><p>如果标签中的某些类占主导地位，决策树学习者会创建偏向主导类的树。因此，建议在拟合决策树之前平衡数据集。</p>
+</li>
+</ol>
+</div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: 'd154fff64901622afbb6',
+  clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
+  repo: 'Disda-coding.github.io',
+  owner: 'Disda-coding',
+  admin: ['Disda-coding'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div><div class="pure-u-1 pure-u-md-4-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Disda.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> </a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Disda.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

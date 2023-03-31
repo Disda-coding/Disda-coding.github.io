@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Redis基础知识点 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Redis基础知识点</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Redis基础知识点</h1><div class="post-content"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>盘点了常考的Redis基础知识点</p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#缓存中间件memcache和redis的区别">缓存中间件——Memcache和Redis的区别 √</a><ul>
+<li><a href="#memcache代码层次类似hash">Memcache：代码层次类似Hash</a></li>
+<li><a href="#redis">Redis</a></li>
+</ul>
+</li>
+<li><a href="#为什么redis能那么快">为什么Redis能那么快 √</a><ul>
+<li><a href="#100000qpsqps即query-per-second每秒查询次数">100000+QPS（QPS即query per second，每秒查询次数）</a></li>
+<li><a href="#多路io复用模型">多路I/O复用模型</a><ul>
+<li><a href="#fdfile-descriptor文件描述符">FD：File Descriptor，文件描述符</a></li>
+<li><a href="#传统的阻塞io模型">传统的阻塞I/O模型</a></li>
+<li><a href="#select系统调用">Select系统调用</a></li>
+<li><a href="#redis采用的io多路复用函数epollkqueueevportselect">Redis采用的I/O多路复用函数：epoll/kqueue/evport/select</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#redis数据类型">Redis数据类型：√</a><ul>
+<li><a href="#供用户使用的数据类型">供用户使用的数据类型</a></li>
+<li><a href="#底层数据类型基础了解">底层数据类型基础（了解）</a></li>
+</ul>
+</li>
+<li><a href="#从海量数据里查询某一固定前缀的key">从海量数据里查询某一固定前缀的key √</a><ul>
+<li><a href="#使用keys对线上的业务的影响">使用keys对线上的业务的影响 √</a><ul>
+<li><a href="#keys-pattern查找所有符合给定模式pattern的key">KEYS pattern：查找所有符合给定模式pattern的key</a></li>
+</ul>
+</li>
+<li><a href="#从海量key里查询出某一固定前缀的key">从海量Key里查询出某一固定前缀的Key √</a></li>
+</ul>
+</li>
+<li><a href="#如何通过redis实现分布式锁">如何通过Redis实现分布式锁</a><ul>
+<li><a href="#分布式锁需要解决的问题">分布式锁需要解决的问题 ×</a></li>
+<li><a href="#setnx-key-value-如果key不存在则创建并赋值">SETNX key value: 如果key不存在，则创建并赋值 √</a></li>
+<li><a href="#set-key-value-ex-seconds-px-milliseconds-nxxx">SET key value [EX seconds] [PX milliseconds] [NX|XX] √</a></li>
+<li><a href="#大量key同时过期的注意事项">大量key同时过期的注意事项</a><ul>
+<li><a href="#集中过期由于清除大量key很耗时会出现短暂卡顿现象">集中过期，由于清除大量key很耗时，会出现短暂卡顿现象 √</a></li>
+</ul>
+</li>
+<li><a href="#使用list作为队列rpush生产消息lpop消费消息">使用List作为队列，RPUSH生产消息，LPOP消费消息 √</a></li>
+<li><a href="#blpop-key-key-timeout-阻塞直到队列有消息或者超时">BLPOP key [key …] timeout: 阻塞直到队列有消息或者超时 √</a></li>
+<li><a href="#pubsub-主题订阅者模式">pub/sub: 主题订阅者模式 √</a><ul>
+<li><a href="#pubsub的缺点">pub/sub的缺点 √</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#redis如何持久化">Redis如何持久化</a><ul>
+<li><a href="#rdb快照持久化保存某个时间点的全量数据快照">Rdb（快照）持久化：保存某个时间点的全量数据快照</a><ul>
+<li><a href="#rdb快照持久化保存某个时间点的全量数据快照">RDB（快照）持久化：保存某个时间点的全量数据快照</a></li>
+<li><a href="#自动化触发rdb持久化的方式">自动化触发RDB持久化的方式 ×</a></li>
+<li><a href="#copy-on-write">Copy-on-Write</a></li>
+<li><a href="#rdb持久化的缺点">RDB持久化的缺点 √</a></li>
+</ul>
+</li>
+<li><a href="#aofappend-only-file持久化保持写状态">AOF（Append-Only-File）持久化：保持写状态</a><ul>
+<li><a href="#日志重写解决aof文件大小不断增大的问题原理如下-">日志重写解决AOF文件大小不断增大的问题，原理如下 -</a></li>
+</ul>
+</li>
+<li><a href="#redis数据的恢复">Redis数据的恢复</a><ul>
+<li><a href="#rdb和aof文件共存情况下的恢复流程">RDB和AOF文件共存情况下的恢复流程 √</a></li>
+<li><a href="#rdb和aof的优缺点">RDB和AOF的优缺点 √</a></li>
+<li><a href="#rdb-aof混合持久化的方式-">RDB-AOF混合持久化的方式 -</a><ul>
+<li><a href="#数据备份">数据备份</a></li>
+<li><a href="#数据恢复">数据恢复</a></li>
+</ul>
+</li>
+<li><a href="#使用pipline的好处-">使用Pipline的好处 -</a></li>
+</ul>
+</li>
+<li><a href="#redis的同步机制">Redis的同步机制</a><ul>
+<li><a href="#主从同步原理">主从同步原理</a><ul>
+<li><a href="#全同步流程">全同步流程：</a></li>
+<li><a href="#增量同步过程">增量同步过程</a></li>
+</ul>
+</li>
+<li><a href="#哨兵同步redis-sentinel">哨兵同步Redis Sentinel</a><ul>
+<li><a href="#流言协议gossip">流言协议Gossip</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#redis的集群原理">Redis的集群原理</a></li>
+<li><a href="#集群可用性">集群可用性</a><ul>
+<li><a href="#如何从海量数据里快速找到所需">如何从海量数据里快速找到所需？</a></li>
+<li><a href="#一致性哈希算法对232取模将哈希值空间组织成虚拟的圆环">一致性哈希算法：对2^32取模，将哈希值空间组织成虚拟的圆环</a></li>
+<li><a href="#将数据key使用相同的函数hash计算出哈希值">将数据key使用相同的函数Hash计算出哈希值</a></li>
+<li><a href="#新增服务器node-x">新增服务器Node X</a></li>
+<li><a href="#hash环的数据倾斜问题">Hash环的数据倾斜问题</a></li>
+<li><a href="#引入虚拟节点解决数据倾斜的问题">引入虚拟节点解决数据倾斜的问题</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<p><img src="image-20200325150748001.png" alt></p>
+<h2><span id="缓存中间件memcache和redis的区别">缓存中间件——Memcache和Redis的区别 √</span></h2><h3><span id="memcache代码层次类似hash">Memcache：代码层次类似Hash</span></h3><p>Ø 支持简单数据类型</p>
+<p>Ø 不支持数据持久化存储</p>
+<p>Ø 不支持主从</p>
+<p>Ø 不支持分片</p>
+<h3><span id="redis">Redis</span></h3><p>Ø 数据类型丰富</p>
+<p>Ø 支持数据磁盘持久化存储</p>
+<p>Ø 支持主从</p>
+<p>Ø 支持分片</p>
+<h2><span id="为什么redis能那么快">为什么Redis能那么快 √</span></h2><h3><span id="100000qpsqps即query-per-second每秒查询次数">100000+QPS（QPS即query per second，每秒查询次数）</span></h3><p>Ø 完全基于内存，绝大部分请求是纯粹的内存操作，执行效率高</p>
+<p>Ø 数据结构简单，对数据操作也简单</p>
+<p>Ø 采用单线程，不会有上下文切换开销，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</p>
+<p>Ø 使用多路I/O复用模型，非阻塞IO</p>
+<h3><span id="多路io复用模型">多路I/O复用模型</span></h3><h4><span id="fdfile-descriptor文件描述符">FD：File Descriptor，文件描述符</span></h4><p>一个打开的文件通过唯一的描述符进行引用，该描述符是打开文件的元数据到文件本身的映射 </p>
+<h4><span id="传统的阻塞io模型">传统的阻塞I/O模型</span></h4><p>   <img src="image-20200325150854778.png" alt="BIO"></p>
+<h4><span id="select系统调用">Select系统调用</span></h4><p> <img src="image-20200325150908349.png" alt></p>
+<p>Selector同时监控多个FD的可读可写情况，返回可读可写FD个数 </p>
+<p>可达到在<font color="red">同一个线程内同时处理多个I/O请求的目的</font>。而在同步阻塞模型中，必须通过多线程的方式才能达到这个目的。</p>
+<h4><span id="redis采用的io多路复用函数epollkqueueevportselect">Redis采用的I/O多路复用函数：epoll/kqueue/evport/select</span></h4><p>Ø 因地制宜</p>
+<p>Ø 优先选择时间复杂度为O(1)的I/O多路复用函数作为底层实现</p>
+<p>Ø 以时间复杂度为O(n)的select作为保底</p>
+<p>Ø请求/响应模型监听I/O事件</p>
+<h2><span id="redis数据类型">Redis数据类型：√</span></h2><h3><span id="供用户使用的数据类型">供用户使用的数据类型</span></h3><p>Ø String：最基本的数据类型，二进制安全 </p>
+<p><strong>二进制指的是可以是图片或者序列化对象，等等二进制表示的文件，最多512M。</strong></p>
+<p>Ø Hash：String元素组成的字典，适合用于存储对象</p>
+<p>Ø List：列表，按照String元素插入顺序排序</p>
+<p><strong>List是Stack结构的 先入后出</strong> </p>
+<p>Ø Set：String元素组成的无序集合，通过哈希表实现，不允许重复（整数集合或字典）</p>
+<p>Ø Sorted Set：通过分数来为集合中的成员进行从小到大的排序 (压缩列表或跳表)</p>
+<p><strong>分数重复 值不同没有问题</strong></p>
+<h3><span id="底层数据类型基础了解">底层数据类型基础（了解）</span></h3><ol>
+<li><p>简单动态字符串</p>
+</li>
+<li><p>链表</p>
+</li>
+<li><p>字典</p>
+</li>
+<li><p>跳跃表</p>
+</li>
+<li><p>整数集合</p>
+</li>
+<li><p>压缩列表</p>
+</li>
+<li><p>对象</p>
+</li>
+</ol>
+<h2><span id="从海量数据里查询某一固定前缀的key">从海量数据里查询某一固定前缀的key √</span></h2><p><strong>留意细节</strong></p>
+<p>Ø 摸清数据规模，即问清楚边界</p>
+<h3><span id="使用keys对线上的业务的影响">使用keys对线上的业务的影响 √</span></h3><h4><span id="keys-pattern查找所有符合给定模式pattern的key">KEYS pattern：查找所有符合给定模式pattern的key</span></h4><p>Ø KEYS指令一次性返回所有匹配的key</p>
+<p>Ø 键的数量过大会使服务卡顿</p>
+<h3><span id="从海量key里查询出某一固定前缀的key">从海量Key里查询出某一固定前缀的Key √</span></h3><p><strong>SCAN cursor [MATCH pattern] [COUNT count]</strong></p>
+<p>Ø 基于游标的迭代器，需要基于上一次的游标延续之前的迭代过程</p>
+<p>Ø 以0作为游标开始一次新的迭代，直到命令返回游标0完成一次遍历</p>
+<p>Ø 不保证每次执行都返回某个给定数量的元素，支持模糊查询</p>
+<p>Ø 一次返回的数量不可控，只能是大概率符合count参数</p>
+<p> <img src="image-20200325153817291.png" alt></p>
+<p><strong>第一个返回值是游标，第二个返回值是结果集，虽然写count=10但是不一定返回10个</strong></p>
+<p> <img src="image-20200325153826137.png" alt></p>
+<p><strong>Cursor</strong>并不一定是递增的，可能比前一次还小，可能会获取重复key</p>
+<h2><span id="如何通过redis实现分布式锁">如何通过Redis实现分布式锁</span></h2><h3><span id="分布式锁需要解决的问题">分布式锁需要解决的问题 ×</span></h3><p>Ø 互斥性</p>
+<p>Ø 安全性</p>
+<p>Ø 死锁</p>
+<p>Ø 容错</p>
+<h3><span id="setnx-key-value-如果key不存在则创建并赋值">SETNX key value: 如果key不存在，则创建并赋值 √</span></h3><p>Ø 时间复杂度：O(1)</p>
+<p>Ø 返回值：设置成功，返回1；设置失败，返回0。</p>
+<p><img src="image-20200325154323739.png" alt></p>
+<p>因此我们可以通过该命令来实现锁，但是由于setnx长期存在，我们还需要设置过期的时间。 </p>
+<p><strong>EXPIRE key seconds</strong></p>
+<p>设置key的生存时间，当key过期时（生存时间为0），会被自动删除</p>
+<p><img src="image-20200325154427112.png" alt></p>
+<p><img src="image-20200325154432805.png" alt></p>
+<p>但是还是有风险，如果执行设置成功后，来不及设置expire就挂掉</p>
+<p>违背了操作原子性的初衷</p>
+<p>解决方案：</p>
+<h3><span id="set-key-value-ex-seconds-px-milliseconds-nxxx">SET key value [EX seconds] [PX milliseconds] [NX|XX] √</span></h3><p>Ø EX second: 设置键的过期时间为second秒</p>
+<p>Ø PX millisecond： 设置键的过期时间为millisecond毫秒</p>
+<p>Ø NX：只在键不存在时，才对键进行设置操作</p>
+<p>Ø XX：只在键已经存在时，才对键进行设置操作</p>
+<p>Ø Set操作成功完成时，返回OK，否则返回nil</p>
+<p><img src="image-20200325154604297.png" alt></p>
+<p><img src="image-20200325154627847.png" alt></p>
+<h3><span id="大量key同时过期的注意事项">大量key同时过期的注意事项</span></h3><h4><span id="集中过期由于清除大量key很耗时会出现短暂卡顿现象">集中过期，由于清除大量key很耗时，会出现短暂卡顿现象 √</span></h4><p>Ø 解决方案：在设置key的过期时间的时候，给每个key加上随机值</p>
+<h3><span id="使用list作为队列rpush生产消息lpop消费消息">使用List作为队列，RPUSH生产消息，LPOP消费消息 √</span></h3><p>Ø 缺点：没有等待队列里有值就直接消费</p>
+<p>Ø 弥补：可以通过在应用层引入Sleep机制去调用LPOP重试</p>
+<p> <img src="image-20200325154827138.png" alt></p>
+<p>如果不用Sleep呢？</p>
+<h3><span id="blpop-key-key-timeout-阻塞直到队列有消息或者超时">BLPOP key [key …] timeout: 阻塞直到队列有消息或者超时 √</span></h3><p>Ø 缺点：只能供一个消费者消费</p>
+<p><img src="image-20200325154926990.png" alt></p>
+<h3><span id="pubsub-主题订阅者模式">pub/sub: 主题订阅者模式 √</span></h3><p>Ø 发送者（pub）发送消息，订阅者（sub）接收消息</p>
+<p>Ø 订阅者可以订阅任意数量的频道</p>
+<p><img src="image-20200325160641778.png" alt></p>
+<p><img src="image-20200325160722559.png" alt></p>
+<h4><span id="pubsub的缺点">pub/sub的缺点 √</span></h4><p>消息的发布是无状态的，无法保证可达</p>
+<h2><span id="redis如何持久化">Redis如何持久化</span></h2><h3><span id="rdb快照持久化保存某个时间点的全量数据快照">Rdb（快照）持久化：保存某个时间点的全量数据快照</span></h3><p><img src="image-20200325160753346.png" alt></p>
+<p>如果900s 内有1条修改就保存</p>
+<p>如下同理</p>
+<p><img src="image-20200325160804011.png" alt></p>
+<p>当备份进程出错，主进程停止写入操作</p>
+<p><img src="image-20200325160815627.png" alt></p>
+<p>尽量不开启，因为redis是cpu密集型的，开启增加cpu消耗</p>
+<p><strong>关闭rdb的命令：</strong>config set save “”</p>
+<p>或者在配置文件中save都注释掉后再加上 save “”就禁用了rdb方式</p>
+<h4><span id="rdb快照持久化保存某个时间点的全量数据快照">RDB（快照）持久化：保存某个时间点的全量数据快照</span></h4><p>Ø SAVE：阻塞Redis的服务器进程，直到RDB文件被创建完毕</p>
+<p>Ø BGSAVE：Fork出一个子进程来创建RDB文件，不阻塞服务器进程</p>
+<p><img src="image-20200325160856961.png" alt></p>
+<p>上次执行save指令的时间</p>
+<p><img src="image-20200325160907700.png" alt></p>
+<h4><span id="自动化触发rdb持久化的方式">自动化触发RDB持久化的方式 ×</span></h4><p>Ø 根据redis.conf配置里的SAVE m n定时触发（用的是BGSAVE）</p>
+<p>Ø 主从复制时，主节点自动触发</p>
+<p>Ø 执行Debug Reload</p>
+<p>Ø 执行Shutdown且没有开启AOF持久化</p>
+<p><img src="image-20200325161010058.png" alt></p>
+<h4><span id="copy-on-write">Copy-on-Write</span></h4><ul>
+<li>系统调用fork（）：创建进程，实现了Copy-on-Write </li>
+</ul>
+<p>如果有多个调用者同时要求相同资源（如内存或磁盘上的数据存储），他们会共同获取相同的指针指向相同的资源，直到某个调用者试图修改资源的内容时，系统才会真正复制一份专用副本给该调用者，而其他调用者所见到的最初的资源仍然保持不变。</p>
+<p><img src="image-20200325161054664.png" alt></p>
+<h4><span id="rdb持久化的缺点">RDB持久化的缺点 √</span></h4><p>Ø 内存数据的全量同步，数据量大会由于I/O而严重影响性能</p>
+<p>Ø 可能会因为Redis挂掉而丢失从当前至最近一次快照期间的数据</p>
+<h3><span id="aofappend-only-file持久化保持写状态">AOF（Append-Only-File）持久化：保持写状态</span></h3><p>Ø 记录下除了查询以外的所有变更数据库状态的指令</p>
+<p>Ø 以append的形式追加保存到AOF文件中（增量） </p>
+<p>默认关闭，修改redis.conf</p>
+<p><img src="image-20200325161330713.png" alt></p>
+<p>改成yes</p>
+<p><img src="image-20200325161341662.png" alt></p>
+<p>然后在redis client里面输入config set appendonly yes使其生效</p>
+<p><img src="image-20200325161651580.png" alt></p>
+<p>fork子线程将内存里面的数据更改转换成对应指令然后同时也记录新的变动到原aof。</p>
+<h4><span id="日志重写解决aof文件大小不断增大的问题原理如下-">日志重写解决AOF文件大小不断增大的问题，原理如下 -</span></h4><p>Ø 调用fork(), 创建一个子进程</p>
+<p>Ø 子进程把新的AOF写到一个临时文件里，不依赖原来的AOF文件</p>
+<p>Ø 主进程持续将新的变动同时写到内存和原来的AOF里</p>
+<p>Ø 主进程获取子进程重写AOF的完成信号，往新AOF同步增量变动</p>
+<p>Ø 使用新的AOF文件替换掉旧的AOF文件</p>
+<p>redis在载入AOF文件的时候，会创建一个虚拟的client，把AOF中每一条命令都执行一遍，最终还原回数据库的状态，它的载入也是自动的。在RDB和AOF备份文件都有的情况下，redis会优先载入AOF备份文件</p>
+<p>AOF文件可能会随着服务器运行的时间越来越大，可以利用AOF重写的功能，来控制AOF文件的大小。AOF重写功能会首先读取数据库中现有的键值对状态，然后根据类型使用一条命令来替代前的键值对多条命令。</p>
+<h3><span id="redis数据的恢复">Redis数据的恢复</span></h3><h4><span id="rdb和aof文件共存情况下的恢复流程">RDB和AOF文件共存情况下的恢复流程 √</span></h4><p><img src="image-20200325161951548.png" alt></p>
+<p>有AOF就用AOF没有就用RDB</p>
+<h4><span id="rdb和aof的优缺点">RDB和AOF的优缺点 √</span></h4><p>Ø RDB优点:全量数据快照,文件小,恢复快</p>
+<p>Ø RDB缺点:无法保存最近一次快照后的数据</p>
+<p>Ø AOF优点:可读性高,适合保存增量数据,数据不易丢失</p>
+<p>Ø AOF缺点:文件体积大,恢复时间长</p>
+<h4><span id="rdb-aof混合持久化的方式-">RDB-AOF混合持久化的方式 -</span></h4><p><img src="image-20200325162349761.png" alt></p>
+<h5><span id="数据备份">数据备份</span></h5><p>Ø 先使用RDB全量持久化,AOF做增量持久化</p>
+<p>Ø AOF文件的前半段是RDB格式的全量数据后半段是redis命令格式的增量数据</p>
+<h5><span id="数据恢复">数据恢复</span></h5><p>当我们开启了混合持久化时，启动redis依然优先加载aof文件，aof文件加载可能有两种情况如下：</p>
+<p>aof文件开头是rdb的格式, 先加载 rdb内容再加载剩余的 aof。</p>
+<p>aof文件开头不是rdb的格式，直接以aof格式加载整个文件。</p>
+<h4><span id="使用pipline的好处-">使用Pipline的好处  -</span></h4><p>Ø Pipeline和Linux的管道类似</p>
+<p>Ø Redis基于请求/响应模型，单个请求处理需要一一应答</p>
+<p>Ø Pipeline批量执行指令，节省多次IO往返的时间</p>
+<p>Ø 有顺序依赖的指令建议分批发送</p>
+<h3><span id="redis的同步机制">Redis的同步机制</span></h3><p>Ø 主从</p>
+<p>Ø 哨兵</p>
+<p>Ø 集群</p>
+<h4><span id="主从同步原理">主从同步原理</span></h4><p>Master节点用于写操作</p>
+<p>Slaver节点用于读操作</p>
+<p><img src="image-20200325162444666.png" alt></p>
+<p>定期备份工作也是单独选择一个slaver实现的，</p>
+<h5><span id="全同步流程">全同步流程：</span></h5><p>Ø Salver发送sync命令到Master</p>
+<p>Ø Master启动一个后台进程，将Redis中的数据快照保存到文件中</p>
+<p>Ø Master将保存数据快照期间接收到的写命令缓存起来</p>
+<p>Ø Master在完成写文件操作后，将该文件发送给Salver</p>
+<p>Ø 使用新的AOF文件替换掉旧的AOF文件</p>
+<p>Ø Master将这期间收集的增量写命令发送给Salver端</p>
+<h5><span id="增量同步过程">增量同步过程</span></h5><p>Ø Master接收到用户的操作指令，判断是否需要传播到Slave</p>
+<p>Ø 将操作记录追加到AOF文件</p>
+<p>Ø 将操作传播到其他Slave：1、对齐主从库；2、往响应缓存写入指令</p>
+<p>Ø 将缓存中的数据发送给Slave</p>
+<p>弊端是，不具备高可用性。当Master节点挂掉后，redis将无法提供写入服务</p>
+<h4><span id="哨兵同步redis-sentinel">哨兵同步Redis Sentinel</span></h4><p><strong>解决主从同步Master宕机后的主从切换问题：</strong></p>
+<p>Ø 监控：检查主从服务器是否运行正常</p>
+<p>Ø 提醒：通过API向管理员或者其他应用程序发送故障通知</p>
+<p>Ø 自动故障迁移：主从切换</p>
+<p>投票决定是否故障迁移，和谁作为新的主服务器</p>
+<p>流言协议接收主服务器是否下线的信息</p>
+<h5><span id="流言协议gossip">流言协议Gossip</span></h5><p><strong>在杂乱无章中寻求一致</strong></p>
+<p>Ø 每个节点都随机地和对方通信，最终所有节点的状态达成一致</p>
+<p>Ø 种子节点定期随机向其他节点发送节点列表以及需要传播的消息</p>
+<p>Ø 不保证信息一定会传递给所有节点，但是最终会趋于一致</p>
+<p>Redis 集群是去中心化的，彼此之间状态同步靠 gossip 协议通信，集群的消息有以下几种类型：</p>
+<ul>
+<li><strong>Meet</strong> 通过「cluster meet ip port」命令，已有集群的节点会向新的节点发送邀请，加入现有集群。</li>
+<li><strong>Ping</strong> 节点每秒会向集群中其他节点发送 ping 消息，消息中带有自己已知的两个节点的地址、槽、状态信息、最后一次通信时间等。</li>
+<li><strong>Pong</strong> 节点收到 ping 消息后会回复 pong 消息，消息中同样带有自己已知的两个节点信息。</li>
+<li><strong>Fail</strong> 节点 ping 不通某节点后，会向集群所有节点广播该节点挂掉的消息。其他节点收到消息后标记已下线。</li>
+</ul>
+<p>由于去中心化和通信机制，Redis Cluster 选择了最终一致性和基本可用。</p>
+<h2><span id="redis的集群原理">Redis的集群原理</span></h2><h2><span id="集群可用性">集群可用性</span></h2><p>如果集群任意master挂掉,且当前master没有slave.集群进入fail状态,也可以理解成集群的slot映射[0-16383]不完整时进入fail状态.。</p>
+<h3><span id="如何从海量数据里快速找到所需">如何从海量数据里快速找到所需？</span></h3><p>Ø 分片：按照某种规则去划分数据，分散存储在多个节点上</p>
+<p>Ø 常规的按照哈希划分无法实现节点的动态增减</p>
+<h3><span id="一致性哈希算法对232取模将哈希值空间组织成虚拟的圆环">一致性哈希算法：对2^32取模，将哈希值空间组织成虚拟的圆环</span></h3><p><img src="image-20200325162559040.png" alt></p>
+<p>顺时针递增</p>
+<h3><span id="将数据key使用相同的函数hash计算出哈希值">将数据key使用相同的函数Hash计算出哈希值</span></h3><p><img src="image-20200325162616613.png" alt></p>
+<p>使用服务器主机名或者ip地址哈希</p>
+<p>对数据同样进行hash算法，确定位置，然后根据环顺时针行走，第一个遇到的服务器就是目标存储服务器。</p>
+<p><img src="image-20200325162628890.png" alt></p>
+<p>假设nodeC宕机，只有NodeB到nodeC之间的数据受影响，新来的数据都会沿顺时针存入nodeD，因此可以做到最小化有损服务。</p>
+<h3><span id="新增服务器node-x">新增服务器Node X</span></h3><p><img src="image-20200325162654114.png" alt></p>
+<p>受影响的数据也只是nodeX到NodeB之间的数据。</p>
+<p>受影响的数据是新服务器到其环空间中前一台服务器之间的数据</p>
+<h3><span id="hash环的数据倾斜问题">Hash环的数据倾斜问题</span></h3><p><img src="image-20200325162709515.png" alt></p>
+<h3><span id="引入虚拟节点解决数据倾斜的问题">引入虚拟节点解决数据倾斜的问题</span></h3><p><img src="image-20200325162823050.png" alt></p>
+<p>对每个节点都计算多个哈希，服务器ip或者主机名后面加编号实现</p>
+</div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: 'd154fff64901622afbb6',
+  clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
+  repo: 'Disda-coding.github.io',
+  owner: 'Disda-coding',
+  admin: ['Disda-coding'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div><div class="pure-u-1 pure-u-md-4-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Disda.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> </a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Disda.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

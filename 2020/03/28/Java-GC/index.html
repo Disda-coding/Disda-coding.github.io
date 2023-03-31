@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Java GC | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Java GC</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Java GC</h1><div class="post-content"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>盘点了常考的Java GC</p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#自动化解决了">自动化解决了：√</a></li>
+<li><a href="#对象被判定为垃圾的标准">对象被判定为垃圾的标准： √</a></li>
+<li><a href="#判定方法">判定方法</a><ul>
+<li><a href="#引用计数法">引用计数法 √</a></li>
+<li><a href="#可达性分析算法主流">可达性分析算法（主流）√</a><ul>
+<li><a href="#可以作为gc-root的对象-">可以作为GC Root的对象 -</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#垃圾回收算法">垃圾回收算法</a><ul>
+<li><a href="#标记-清除算法mark-and-sweep-">标记-清除算法（Mark and Sweep）-</a><ul>
+<li><a href="#缺点">缺点：</a></li>
+</ul>
+</li>
+<li><a href="#复制算法copying-">复制算法（Copying）-</a><ul>
+<li><a href="#优点">优点：</a></li>
+<li><a href="#缺点-1">缺点：</a></li>
+</ul>
+</li>
+<li><a href="#标记-整理算法compacting比较适用于老年代的垃圾回收-">标记-整理算法（Compacting）比较适用于老年代的垃圾回收 -</a><ul>
+<li><a href="#特点">特点</a></li>
+</ul>
+</li>
+<li><a href="#分代收集算法generational-collector">分代收集算法（Generational Collector）√</a><ul>
+<li><a href="#gc的分类">GC的分类</a><ul>
+<li><a href="#minor-gc">Minor GC √</a></li>
+<li><a href="#full-gc">Full GC √</a></li>
+</ul>
+</li>
+<li><a href="#年轻代尽可能快速地收集掉那些生命周期短的对象">年轻代：尽可能快速地收集掉那些生命周期短的对象 √</a></li>
+<li><a href="#对象如何晋升到老年代">对象如何晋升到老年代 √</a></li>
+<li><a href="#常用的调优参数">常用的调优参数</a></li>
+<li><a href="#触发full-gc的条件3点即可">触发Full GC的条件（3点即可） √</a></li>
+<li><a href="#触发minor-gc的条件-">触发Minor GC的条件 -</a></li>
+<li><a href="#stop-the-world">Stop-the-World √</a></li>
+<li><a href="#safepoint-">Safepoint -</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#常见的垃圾收集器">常见的垃圾收集器</a><ul>
+<li><a href="#jvm的运行模式">JVM的运行模式：√</a></li>
+<li><a href="#垃圾收集器之间的联系">垃圾收集器之间的联系</a></li>
+<li><a href="#年轻代常见垃圾收集器">年轻代常见垃圾收集器</a><ul>
+<li><a href="#serial收集器">Serial收集器 √</a></li>
+<li><a href="#parnew收集器">ParNew收集器 √</a></li>
+<li><a href="#parallel-scavenge收集器">Parallel Scavenge收集器 √</a></li>
+</ul>
+</li>
+<li><a href="#老年代常见垃圾收集器">老年代常见垃圾收集器</a><ul>
+<li><a href="#serial-old收集器">Serial Old收集器 √</a></li>
+<li><a href="#parallel-old收集器-">Parallel Old收集器 -</a></li>
+<li><a href="#cms收集器-">CMS收集器 -</a></li>
+</ul>
+</li>
+<li><a href="#g1收集器-">G1收集器 -</a><ul>
+<li><a href="#garbage-first收集器的特点">Garbage First收集器的特点</a></li>
+</ul>
+<ul>
+<li><a href="#object的finalize方法是否与c的析构函数作用相同-">Object的finalize（）方法是否与C++的析构函数作用相同 -</a></li>
+<li><a href="#java中的强引用软引用弱引用虚引用有什么用">Java中的强引用，软引用，弱引用，虚引用有什么用</a></li>
+</ul>
+</li>
+<li><a href="#强引用strong-reference">强引用（Strong Reference）√</a></li>
+<li><a href="#软引用soft-reference">软引用（Soft Reference）√</a></li>
+<li><a href="#弱引用weak-reference">弱引用（Weak Reference）√</a></li>
+<li><a href="#虚引用phantomreference-">虚引用（PhantomReference）-</a><ul>
+<li><a href="#引用队列referencequeue-">引用队列ReferenceQueue -</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<p><img src="image-20200328164459719.png" alt="知识图谱"></p>
+<h2><span id="自动化解决了">自动化解决了：√</span></h2><p>第一个对象内存分配的问题。</p>
+<p>第二个回收分配给对象的内存的问题</p>
+<p><strong>活动于Java 堆</strong></p>
+<h2><span id="对象被判定为垃圾的标准">对象被判定为垃圾的标准： √</span></h2><p>没有被其他对象引用</p>
+<h2><span id="判定方法">判定方法</span></h2><h3><span id="引用计数法">引用计数法 √</span></h3><p>Ø 通过判断对象的引用数量来决定对象是否可以被回收</p>
+<p>Ø 每个对象实例都有一个引用计数器，被引用则+1，完成引用则-1</p>
+<p>Ø 任何引用计数为0的对象实例都可以被当作垃圾收集</p>
+<p>Ø <strong>优点</strong>：执行效率高，程序执行受影响较小</p>
+<p>Ø <strong>缺点</strong>：无法检测出循环引用的情况，导致内存泄漏</p>
+<p>实例：</p>
+<p><img src="clip_image001.png" alt="循环引用"></p>
+<p><img src="clip_image002.png" alt="循环引用"></p>
+<h3><span id="可达性分析算法主流">可达性分析算法（主流）√</span></h3><p>通过判断对象的引用链是否可达来决定对象是否可以被回收</p>
+<p><img src="clip_image003.png" alt="GCroot"></p>
+<h4><span id="可以作为gc-root的对象-">可以作为GC Root的对象 -</span></h4><p>Ø 虚拟机栈中引用的对象（栈帧中的本地变量表）</p>
+<p>Ø 方法区中的常量引用的对象</p>
+<p>Ø 方法区中的类静态属性引用的对象</p>
+<p>Ø 本地方法栈中JNI（Native方法）的引用对象</p>
+<p>Ø 活跃线程的引用对象</p>
+<h2><span id="垃圾回收算法">垃圾回收算法</span></h2><h3><span id="标记-清除算法mark-and-sweep-">标记-清除算法（Mark and Sweep）-</span></h3><p>Ø 标记：<font color="red">从根集合进行扫描</font>，对存活的对象进行标记</p>
+<p>Ø 清除：对堆内存从头到尾进行线性遍历，回收不可达对象内存</p>
+<p><img src="clip_image001-1585385927983.png" alt></p>
+<h4><span id="缺点">缺点：</span></h4><p>Ø <strong>碎片化</strong></p>
+<p>由于标记清除不需要进行对象的移动并且仅对不存活的对象进行处理，因此标记清除后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行中需要分配较大的对象时无法找到足够的连续内存而不得不提前触发另一次垃圾回收工作。</p>
+<h3><span id="复制算法copying-">复制算法（Copying）-</span></h3><p>Ø 分为对象面和空闲面</p>
+<p>Ø 对象在对象面创建</p>
+<p>Ø 存活的对象被从对象面复制到空闲面</p>
+<p>Ø 将对象面所有对象内存清除 </p>
+<h4><span id="优点">优点：</span></h4><p>Ø 解决碎片化问题</p>
+<p>Ø 顺序分配内存，简单高效</p>
+<p>Ø 适用于对象存活率低的场景 </p>
+<p><img src="clip_image003.jpg" alt></p>
+<h4><span id="缺点">缺点：</span></h4><p>复制收集算法在应对对象存活率较高的情况时，要进行较多的复制操作，效率将会变低。如果不想浪费百分之50的空间，就要有额外空间分配担保以应对被使用的内存中所有对象都存活的极端情况。（在老年代不能直接使用这种算法） </p>
+<h3><span id="标记-整理算法compacting比较适用于老年代的垃圾回收-">标记-整理算法（Compacting）比较适用于老年代的垃圾回收 -</span></h3><p>Ø 标记：从根集合进行扫描，对存活的对象进行标记</p>
+<p>Ø 清除：移动所有存活的对象，且按照内存地址次序依次排列，然后将末端内存地址以后的内存全部回收。 </p>
+<h4><span id="特点">特点</span></h4><p>Ø 避免内存的不连续行</p>
+<p>Ø 不用设置两块内存交换</p>
+<p>Ø 适用于存活率高的场景 </p>
+<p><img src="clip_image005.jpg" alt></p>
+<h3><span id="分代收集算法generational-collector">分代收集算法（Generational Collector）√</span></h3><p>Ø 垃圾回收算法的组合拳</p>
+<p>Ø 按照对象生命周期的不同划分区域以采用不同的垃圾回收算法</p>
+<p>Ø 目的：提高JVM的回收效率</p>
+<p><img src="image-20200328171210066.png" alt></p>
+<p><img src="image-20200328171218664.png" alt></p>
+<h4><span id="gc的分类">GC的分类</span></h4><h5><span id="minor-gc">Minor GC √</span></h5><p>发生在年轻代中的垃圾收集工作，所采用的是<strong>复制算法</strong>，年轻代几乎是所有java对象出生的地方（即java内存的申请和存放都是在这个地方），java中的大部分对象通常不需要长久的存活，因此新生代是GC收集垃圾的频繁区域。</p>
+<h5><span id="full-gc">Full GC √</span></h5><p>由于老年代的垃圾的回收一般会伴随着年轻代的垃圾收集，因此称为Full GC</p>
+<h4><span id="年轻代尽可能快速地收集掉那些生命周期短的对象">年轻代：尽可能快速地收集掉那些生命周期短的对象 √</span></h4><p>Ø Eden区（新的对象首先放入Eden区，如果放不下可能放到survivor甚至是老年代中）</p>
+<p>Ø 两个Survivor区（分为From区和To区）</p>
+<p><img src="image-20200328171413003.png" alt></p>
+<p><img src="image-20200328171420212.png" alt></p>
+<p><img src="image-20200328171426946.png" alt></p>
+<p>如果对象在Eden出生，并且被挤满：</p>
+<p>会触发一次Minor GC，如果此时对象存活，就会被复制到一块survivor区中</p>
+<p>我们假设复制到s0中，称s0为from区域，清理所有使用过的Eden区域，并将存活对象的年龄设置成1.</p>
+<p><img src="image-20200328171437728.png" alt></p>
+<p>假设Eden区再次填满</p>
+<p><img src="image-20200328171447785.png" alt></p>
+<p>再次触发Minor GC，然后将Eden中和S0中的存活对象拷贝到s1中并将年龄+1</p>
+<p>此时s1从to区变成了from区，s0从from区变成了to区。拷贝完成后Eden和s0均被清空，这样便完成了第二次Minor GC</p>
+<p><img src="image-20200328171458250.png" alt></p>
+<p>假设此时Eden区又满了，触发了第三次Minor GC。</p>
+<p><img src="image-20200328171510652.png" alt></p>
+<p>当对象年龄达到某个值时这些对象会成为老年代（默认是15岁），也可以用-XX:MaxTenuringThreshold来调整。这也不是一定的，对于一些较大的对象即需分配一块较大的连续空间的对象就会进入到老年代。</p>
+<h4><span id="对象如何晋升到老年代">对象如何晋升到老年代 √</span></h4><p>Ø 经历一定Minor次数依然存活的对象</p>
+<p>Ø Survivor区中存放不下的对象</p>
+<p>Ø 新生成的大对象（-XX：+PretenuerSizeThreshold）</p>
+<h4><span id="常用的调优参数">常用的调优参数</span></h4><p>Ø -XX:SurvivorRatio: Eden和Survivor的比值，默认8:1</p>
+<p>Ø -XX：NewRatio：老年代年轻代内存大小的比例 1:2</p>
+<p>Ø -XX：MaxTenuringThreshold：对象从年轻代晋升到老年代经过GC次数的最大阈值</p>
+<p><strong>使用-Xms和-Xmx来设置老年代和年轻代内存大小</strong></p>
+<p><img src="image-20200328172048512.png" alt></p>
+<p>Full GC和Major GC（单指老年代或者等价于Full GC 看其他人怎么定义）</p>
+<p>Full GC比Minor GC慢得多，但是执行频率低</p>
+<h4><span id="触发full-gc的条件3点即可">触发Full GC的条件（3点即可） √</span></h4><p>Ø 老年代空间不足</p>
+<p>Ø 永久代空间不足</p>
+<p>Ø CMS GC时出现promotion failed, concurrent mode failure</p>
+<p>Ø Minor GC晋升老年代的平均大小大于老年代的剩余空间</p>
+<p>Ø 调用System.gc();</p>
+<p>Ø 使用RMI来进行RPC或管理的JDK应用，每小时执行一次Full GC</p>
+<p>Promotion failed是在进行minor GC的时候Survivor space放不下，对象只能放入老年代，但是此时老年代也放不下。</p>
+<p>Concurrent mode failure是在进行CMS GC的时候同时有对象要放入老年代中，而此时老年代空间不足。</p>
+<h4><span id="触发minor-gc的条件-">触发Minor GC的条件 -</span></h4><p>当eden区满了</p>
+<h4><span id="stop-the-world">Stop-the-World √</span></h4><p>Ø JVM由于要执行GC而停止了应用程序的执行</p>
+<p>Ø 任何一种GC算法中都会发生</p>
+<p>Ø 多数GC优化通过减少Stop-the-world发生的时间来提高程序性能</p>
+<h4><span id="safepoint-">Safepoint -</span></h4><p>安全点就是指，当线程运行到这类位置时，堆对象状态是确定一致的，JVM可以安全地进行操作，如GC，偏向锁解除等。</p>
+<p>Ø 分析过程中对象引用关系不会发生变化的点</p>
+<p>Ø 产生Safepoint的地方：方法调用；循环跳转；异常跳转等</p>
+<p>Ø 安全点数量得适中</p>
+<h2><span id="常见的垃圾收集器">常见的垃圾收集器</span></h2><p>除了CMS都是 年轻代复制， 老年代标记整理</p>
+<h4><span id="jvm的运行模式">JVM的运行模式：√</span></h4><p>Ø Server</p>
+<p>Ø Client </p>
+<p>Server启动慢，稳定后运行块</p>
+<p>Client启动快。</p>
+<p>使用java –version就能看到运行在哪个模式下</p>
+<h4><span id="垃圾收集器之间的联系">垃圾收集器之间的联系</span></h4><p><img src="clip_image001-1585387688405.png" alt></p>
+<p>有连线代表可以结合使用。</p>
+<h4><span id="年轻代常见垃圾收集器">年轻代常见垃圾收集器</span></h4><h5><span id="serial收集器">Serial收集器 √</span></h5><p><img src="image-20200328172855756.png" alt></p>
+<h5><span id="parnew收集器">ParNew收集器 √</span></h5><p><img src="image-20200328172935139.png" alt></p>
+<h5><span id="parallel-scavenge收集器">Parallel Scavenge收集器 √</span></h5><p><img src="clip_image002.jpg" alt></p>
+<p><strong>吞吐量=（运行用户代码时间）/（垃圾收集时间+运行用户代码时间）</strong></p>
+<h4><span id="老年代常见垃圾收集器">老年代常见垃圾收集器</span></h4><h5><span id="serial-old收集器">Serial Old收集器 √</span></h5><p><img src="clip_image002-1585388023328.jpg" alt></p>
+<h5><span id="parallel-old收集器-">Parallel Old收集器 -</span></h5><p><img src="clip_image004.jpg" alt></p>
+<h5><span id="cms收集器-">CMS收集器 -</span></h5><p>资源消耗大，尽可能缩短停顿时间，适用于存活时间长的对象。</p>
+<p><img src="clip_image006.jpg" alt></p>
+<p> <img src="clip_image008.jpg" alt></p>
+<h4><span id="g1收集器-">G1收集器 -</span></h4><p><strong>使用 –XX:+UseG1GC</strong></p>
+<p><strong>使用：复制+标记-整理算法</strong></p>
+<h5><span id="garbage-first收集器的特点">Garbage First收集器的特点</span></h5><p>Ø 并行和并发</p>
+<p>Ø 分代收集</p>
+<p>Ø 空间整合</p>
+<p>Ø 可预测的停顿 </p>
+<p><img src="clip_image010.jpg" alt></p>
+<p>G1收集器的运作大致可划分为以下几个步骤：</p>
+<p>1、初始标记（Initial Making）</p>
+<p>2、并发标记（Concurrent Marking）</p>
+<p>3、最终标记（Final Marking）</p>
+<p>4、筛选回收（Live Data Counting and Evacuation）</p>
+<p>G1和Parallel Scavenge都没用传统的GC框架而是独立实现的。</p>
+<h3><span id="object的finalize方法是否与c的析构函数作用相同-">Object的finalize（）方法是否与C++的析构函数作用相同 -</span></h3><p>Ø 与C++的析构函数不同，析构函数调用确定，而它的是不确定的</p>
+<p>Ø <font color="red">将未被引用的对象放置于F-Queue队列</font></p>
+<p>Ø 方法执行随时可能被终止</p>
+<p>Ø 给予对象最后一次重生的机会</p>
+<p><img src="clip_image002-1585388167455.jpg" alt></p>
+<p>其实是不符合预期的（还没有执行finalization=this的操作）因此加上sleep </p>
+<p><img src="clip_image004-1585388167455.jpg" alt></p>
+<p>为对象创造一次重生的机会。但是不确定性较大，无法保证各对象的调用顺序，同时运行代价相当高昂，不建议使用finalize方法。</p>
+<p>F已经是空指针了，但是f指向的对象还是有finalization指向的。</p>
+<p><img src="clip_image006-1585388167455.jpg" alt></p>
+<h3><span id="java中的强引用软引用弱引用虚引用有什么用">Java中的强引用，软引用，弱引用，虚引用有什么用</span></h3><h4><span id="强引用strong-reference">强引用（Strong Reference）√</span></h4><p>Ø 最普遍的引用：Object obj=new Object()</p>
+<p>Ø 抛出OutOfMemoryError终止程序也不会回收具有强引用的对象</p>
+<p>Ø 通过将对象设置成null来弱化引用，使其被回收</p>
+<h4><span id="软引用soft-reference">软引用（Soft Reference）√</span></h4><p>Ø 对象处在有用但非必须的状态</p>
+<p>Ø 只有当内存空间不足时，GC会回收该引用的对象的内存</p>
+<p>Ø 可以用来实现高速缓存</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);<span class="comment">// 强引用</span></span><br><span class="line">SoftReference&lt;String&gt; softReference = <span class="keyword">new</span> SoftReference&lt;&gt;(str);<span class="comment">//软引用</span></span><br></pre></td></tr></table></figure>
+
+<p>还可以配合引用队列使用</p>
+<h4><span id="弱引用weak-reference">弱引用（Weak Reference）√</span></h4><p>Ø 非必须的对象，比软引用更弱一些</p>
+<p>Ø GC时会被回收</p>
+<p>Ø 被回收的概率也不大，因为GC线程优先级比较低</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);<span class="comment">// 强引用</span></span><br><span class="line">WeakReference&lt;String&gt; weakReference = <span class="keyword">new</span> WeakReference&lt;&gt;(str);<span class="comment">//弱引用</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4><span id="虚引用phantomreference-">虚引用（PhantomReference）-</span></h4><p>Ø 不会决定对象的生命周期</p>
+<p>Ø 任何时候都可能被垃圾收集器回收</p>
+<p>Ø 跟踪对象被垃圾收集器回收的活动，起哨兵作用</p>
+<p>Ø 必须和引用队列ReferenceQueue联合使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);<span class="comment">// 强引用</span></span><br><span class="line">ReferenceQueue queue = <span class="keyword">new</span> ReferenceQueue();</span><br><span class="line">PhantomReference&lt;String&gt; ref = <span class="keyword">new</span> PhantomReference&lt;&gt;(str,queue);<span class="comment">//弱引用</span></span><br></pre></td></tr></table></figure>
+
+<p> <img src="clip_image008-1585388167455.jpg" alt></p>
+<p> <img src="clip_image010-1585388167455.jpg" alt></p>
+<h3><span id="引用队列referencequeue-">引用队列ReferenceQueue -</span></h3><p>Ø 无实际存储结构，储存逻辑依赖于内部节点之间的关系来表达</p>
+<p>Ø 存储关联的且被GC的软引用，弱引用和虚引用</p>
+<p>节点是reference本身，queue是类似链表的结构</p>
+<p><img src="clip_image012.jpg" alt></p>
+<p><img src="clip_image014.jpg" alt></p>
+<p><img src="clip_image016.jpg" alt></p>
+<p><img src="clip_image018.jpg" alt></p>
+<p><img src="clip_image020.jpg" alt></p>
+</div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: 'd154fff64901622afbb6',
+  clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
+  repo: 'Disda-coding.github.io',
+  owner: 'Disda-coding',
+  admin: ['Disda-coding'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div><div class="pure-u-1 pure-u-md-4-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Disda.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> </a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Disda.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>中间件 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">中间件</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">中间件</h1><div class="post-content"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>适用于面试回答</p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#redis">Redis</a></li>
+<li><a href="#mq">MQ</a><ul>
+<li><a href="#消息队列优缺点">消息队列优缺点</a></li>
+<li><a href="#为什么用rocketmq">为什么用RocketMQ</a></li>
+<li><a href="#rocketmq如何保证高可用性">RocketMQ如何保证高可用性</a></li>
+<li><a href="#rocketmq如何保证消息不被重复消费">RocketMQ如何保证消息不被重复消费</a></li>
+<li><a href="#如何保证消息可靠性">如何保证消息可靠性</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="redis">Redis</span></h1><h1><span id="mq">MQ</span></h1><h2><span id="消息队列优缺点">消息队列优缺点</span></h2><p><strong>优点</strong></p>
+<p>​    解耦、削峰和异步</p>
+<p><strong>缺点</strong></p>
+<p>​    提升了系统的复杂度、系统可用性降低以及存在一致性的问题。</p>
+<h2><span id="为什么用rocketmq">为什么用RocketMQ</span></h2><ul>
+<li>吞吐量：ActiveMQ和RabbitMQ是万级，而RocketMQ和Kafka是十万级。</li>
+<li>Topic： RocketMQ可以支持成百上千，而Kafka几十几百吞吐量大幅下降</li>
+<li>时效性： 除了Rabbit都是ms级别</li>
+<li>可用性：RocketMQ和Kafka都非常高</li>
+<li>可靠性：RockMQ和Kafka可以做到不丢</li>
+</ul>
+<h2><span id="rocketmq如何保证高可用性">RocketMQ如何保证高可用性</span></h2><p>一个最基本的架构认识：由多个 broker 组成，每个 broker 是一个节点；你创建一个 topic，这个 topic 可以划分为多个 partition，每个 partition 可以存在于不同的 broker 上，每个 partition 就放一部分数据。</p>
+<p>副本机制，每个 partition 的数据都会同步到其它机器上，形成自己的多个 replica 副本。所有副本会选取一个leader用来读写数据。如果leader down了，就重新选择leader。</p>
+<p><strong>写数据</strong>的时候，生产者就写 leader，然后 leader 将数据落地写本地磁盘，接着其他 follower 自己主动从 leader 来 pull 数据。一旦所有 follower 同步好数据了，就会发送 ack 给 leader，leader 收到所有 follower 的 ack 之后，就会返回写成功的消息给生产者。</p>
+<h2><span id="rocketmq如何保证消息不被重复消费">RocketMQ如何保证消息不被重复消费</span></h2><p>每个消息写进去，都有一个 offset，代表消息的序号，然后 消费者消费了数据之后，<strong>每隔一段时间</strong>就会提交 offset 。</p>
+<p>如果重启怎么办？</p>
+<ul>
+<li>比如你拿个数据要写库，你先根据主键查一下，如果这数据都有了，你就别插入了，update 一下好吧。</li>
+<li>比如你是写 Redis，那没问题了，反正每次都是 set，天然幂等性。</li>
+<li>比如你不是上面两个场景，那做的稍微复杂一点，你需要让生产者发送每条数据的时候，里面加一个全局唯一的 id，消费到了之后，先根据这个 id 去比如 Redis 里查一下，之前消费过吗？如果没有消费过，你就处理，然后这个 id 写 Redis。如果消费过了，那你就别处理了，保证别重复处理相同的消息即可。</li>
+<li>比如基于数据库的唯一键来保证重复数据不会重复插入多条。因为有唯一键约束了，重复数据插入只会报错，不会导致数据库中出现脏数据。</li>
+</ul>
+<h2><span id="如何保证消息可靠性">如何保证消息可靠性</span></h2></div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: 'd154fff64901622afbb6',
+  clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
+  repo: 'Disda-coding.github.io',
+  owner: 'Disda-coding',
+  admin: ['Disda-coding'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div><div class="pure-u-1 pure-u-md-4-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Disda.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> </a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Disda.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

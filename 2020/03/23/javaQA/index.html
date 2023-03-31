@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Java基础面试题 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Java基础面试题</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Java基础面试题</h1><div class="post-content"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>整理了网上的基础的Java面试题，对于一些题目有所删改，因为可能和之后写的文章重复。</p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#面向对象的特点有哪些">面向对象的特点有哪些？</a></li>
+<li><a href="#接口和抽象类有什么联系和区别">接口和抽象类有什么联系和区别</a></li>
+<li><a href="#重载和重写有什么区别">重载和重写有什么区别</a></li>
+<li><a href="#java有哪些基本数据类型">java有哪些基本数据类型？</a></li>
+<li><a href="#int和integer有什么区别">int和Integer有什么区别</a></li>
+<li><a href="#什么是自动拆装箱">什么是自动拆装箱</a></li>
+<li><a href="#数组有没有length方法string有没有length方法">数组有没有length()方法？String有没有length()方法？</a></li>
+<li><a href="#string和stringbuilder-stringbuffer的区别">String和StringBuilder、StringBuffer的区别？</a></li>
+<li><a href="#string能被继承吗为什么">String能被继承吗？为什么？</a></li>
+<li><a href="#什么是值传递和引用传递">什么是值传递和引用传递</a></li>
+<li><a href="#java类的实例化顺序">Java类的实例化顺序</a></li>
+<li><a href="#java中符号和有什么区别">Java中符号&gt;&gt;和&gt;&gt;&gt;有什么区别？</a></li>
+<li><a href="#java集合框架的基础接口有哪些">Java集合框架的基础接口有哪些？</a></li>
+<li><a href="#arraylist-和-linkedlist-有什么区别">ArrayList 和 LinkedList 有什么区别?</a></li>
+<li><a href="#hashmap-与hashtable有什么区别">HashMap 与HashTable有什么区别</a><ul>
+<li><a href="#hashtable"><strong>HashTable</strong></a></li>
+<li><a href="#hashmap"><strong>HashMap</strong></a></li>
+</ul>
+</li>
+<li><a href="#final-finally-finalize有什么区别">final, finally, finalize有什么区别</a></li>
+<li><a href="#java中的throw-和-throws关键字有什么区别">java中的throw 和 throws关键字有什么区别？</a></li>
+<li><a href="#oom原因有哪些如何解决">OOM原因有哪些，如何解决？</a></li>
+<li><a href="#jdk8-新特性">JDK8 新特性</a></li>
+<li><a href="#jvmjdk和jre有什么区别与联系">JVM，JDK和JRE有什么区别与联系</a></li>
+<li><a href="#分别写出堆内存溢出与栈内存溢出的程序">分别写出堆内存溢出与栈内存溢出的程序</a></li>
+<li><a href="#dump文件的作用是什么如何获取线程的dump文件">dump文件的作用是什么？如何获取线程的dump文件?</a></li>
+<li><a href="#synchronized什么情况下会释放锁">synchronized什么情况下会释放锁</a></li>
+<li><a href="#解释一下锁的一些基本概念可重入锁-可中断锁-公平锁-读写锁">解释一下锁的一些基本概念：可重入锁、可中断锁、公平锁、读写锁</a></li>
+<li><a href="#java线程同步的方式有哪些">Java线程同步的方式有哪些</a></li>
+<li><a href="#什么是线程安全">什么是线程安全？</a></li>
+<li><a href="#java编写一个会导致死锁的程序">Java编写一个会导致死锁的程序？</a></li>
+<li><a href="#简单介绍一下runnable和callable的区别和用法">简单介绍一下Runnable和Callable的区别和用法</a></li>
+<li><a href="#java有哪几种创建多线程的方式">Java有哪几种创建多线程的方式？</a></li>
+<li><a href="#cyclibarriar和countdownlatch有什么区别">CycliBarriar和CountdownLatch有什么区别?</a></li>
+<li><a href="#线程池的作用有哪些">线程池的作用有哪些？</a></li>
+<li><a href="#java-反射机制的作用">Java 反射机制的作用</a></li>
+<li><a href="#反射机制有哪些优点和缺点">反射机制有哪些优点和缺点</a></li>
+<li><a href="#反射创建类实例的三种方式">反射创建类实例的三种方式</a></li>
+<li><a href="#jdk自带了哪些注解有什么作用">jdk自带了哪些注解，有什么作用</a></li>
+<li><a href="#构造器constructor是否可被重写override">构造器（constructor）是否可被重写（override）</a></li>
+<li><a href="#两个对象值相同xequalsy-true但却可有不同的hash-code这句话对不对">两个对象值相同(x.equals(y) == true)，但却可有不同的hash code，这句话对不对？</a></li>
+<li><a href="#char-型变量中能不能存贮一个中文汉字为什么">char 型变量中能不能存贮一个中文汉字，为什么？</a></li>
+<li><a href="#介绍一下g1垃圾回收集器的特点及垃圾回收过程">介绍一下G1垃圾回收集器的特点，及垃圾回收过程</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="面向对象的特点有哪些">面向对象的特点有哪些？</span></h2><p>1.封装</p>
+<p>在一个类的内部，某些属性和方法是私有的，不能被外界所访问。通过这种方式，对象对内部数据进行了不同级别的访问控制，就避免了程序中的无关部分的意外改变或错误改变了对象的私有部分。</p>
+<p>2.继承</p>
+<p>  继承实现了 IS-A 关系，例如 Cat 和 Animal 就是一种 IS-A 关系，因此 Cat 可以继承自 Animal，从而获得 Animal 非 private 的属性和方法。<br>继承应该遵循里氏替换原则，子类对象必须能够替换掉所有父类对象。</p>
+<p>3.多态</p>
+<p> 多态分为编译时多态和运行时多态：<br>•    编译时多态主要指方法的重载（每个方法具有不同的参数的类型或参数的个数）<br>•    运行时多态指程序中定义的对象引用所指向的具体类型在运行期间才确定<br>运行时多态有三个条件：<br>•    继承<br>•    覆盖（重写）<br>•    向上转型</p>
+<p>4.抽象</p>
+<p>提取现实世界中某事物的关键特性，为该事物构建模型的过程。得到的抽象模型中一般包含：属性（数据）和方法（行为）。这个抽象模型我们称之为类。对类进行实例化得到对象。</p>
+<h2><span id="接口和抽象类有什么联系和区别">接口和抽象类有什么联系和区别</span></h2><p><strong>相同点：</strong></p>
+<p>（1）都不能被实例化</p>
+<p>（2）接口的实现类或抽象类的子类都只有实现了接口或抽象类中的方法后才能实例化。</p>
+<p><strong>不同点：</strong></p>
+<p>（1） 接口里只能包含抽象方法，静态方法和默认方法，不能为普通方法提供方法实现，抽象类则完全可以包含普通方法。</p>
+<p>（2） 接口里只能定义静态常量，不能定义普通成员变量，抽象类里则既可以定义普通成员变量，也可以定义静态常量。</p>
+<p>（3） 接口不能包含构造器，抽象类可以包含构造器，抽象类里的构造器并不是用于创建对象，而是让其子类调用这些构造器来完成属于抽象类的初始化操作。</p>
+<p>（4） 接口里不能包含初始化块，但抽象类里完全可以包含初始化块。</p>
+<p>（5） 一个类最多只能有一个直接父类，但一个类可以直接实现多个接口。</p>
+<h2><span id="重载和重写有什么区别">重载和重写有什么区别</span></h2><p><strong>override（重写）</strong></p>
+<ol>
+<li><p>方法名、参数、返回值相同。</p>
+</li>
+<li><p>子类方法不能缩小父类方法的访问权限。</p>
+</li>
+<li><p>子类方法不能抛出比父类方法更多的异常(但子类方法可以不抛出异常)。</p>
+</li>
+<li><p>存在于父类和子类之间。</p>
+</li>
+<li><p>方法被定义为final不能被重写。</p>
+</li>
+</ol>
+<p><strong>overload（重载）</strong></p>
+<ol>
+<li><p>参数类型、个数、顺序至少有一个不相同。</p>
+</li>
+<li><p>不能重载只有返回值不同的方法名。</p>
+</li>
+<li><p>存在于父类和子类、同类中。</p>
+</li>
+</ol>
+<h2><span id="java有哪些基本数据类型">java有哪些基本数据类型？</span></h2><p>整数类型：</p>
+<p>byte（1B） short（2B）int（4B）long（8B）</p>
+<p>浮点类型：</p>
+<p>float（4B）double（8B）</p>
+<p>字符类型：</p>
+<p>char（2B）</p>
+<p>布尔类型：</p>
+<p>boolean</p>
+<h2><span id="int和integer有什么区别">int和Integer有什么区别</span></h2><p>int 是基本数据类型<br>Integer是其包装类，注意是一个类。<br>为什么要提供包装类呢？？？<br>一是为了在各种类型间转化，通过各种方法的调用。否则 你无法直接通过变量转化。<br>比如，现在int要转为String</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">0</span>;</span><br><span class="line">String result=Integer.toString(a);</span><br></pre></td></tr></table></figure>
+
+
+<p>在java中包装类，比较多的用途是用在于各种数据类型的转化中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/通过包装类来实现转化的</span><br><span class="line"><span class="keyword">int</span> num=Integer.valueOf(<span class="string">"12"</span>);</span><br><span class="line"><span class="keyword">int</span> num2=Integer.parseInt(<span class="string">"12"</span>);</span><br><span class="line"><span class="keyword">double</span> num3=Double.valueOf(<span class="string">"12.2"</span>);</span><br><span class="line"><span class="keyword">double</span> num4=Double.parseDouble(<span class="string">"12.2"</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">//其他的类似。通过基本数据类型的包装来的valueOf和parseXX来实现String转为XX</span></span><br><span class="line">String a=String.valueOf(<span class="string">"1234"</span>);<span class="comment">//这里括号中几乎可以是任何类型</span></span><br><span class="line">String b=String.valueOf(<span class="keyword">true</span>);</span><br><span class="line">String c=<span class="keyword">new</span> Integer(<span class="number">12</span>).toString();<span class="comment">//通过包装类的toString()也可以</span></span><br><span class="line">String d=<span class="keyword">new</span> Double(<span class="number">2.3</span>).toString();</span><br></pre></td></tr></table></figure>
+
+<h2><span id="什么是自动拆装箱">什么是自动拆装箱</span></h2><p>首先知道String是引用类型不是基本类型，引用类型声明的变量是指该变量在内存中实际存储的是一个引用地址，实体在堆中。引用类型包括类、接口、数组等。String类还是final修饰的。</p>
+<p>而包装类就属于引用类型，<font color="red">自动装箱和拆箱就是基本类型和引用类型之间的转换</font>，至于为什么要转换，因为基本类型转换为引用类型后，就可以new对象，从而<font color="blue">调用包装类中封装好的方法</font>进行基本类型之间的转换或者toString（当然用类名直接调用也可以，便于一眼看出该方法是静态的），还有就是如果集合中想存放基本类型，<font color="orange">泛型的限定类型只能是对应的包装类型</font>。</p>
+<h2><span id="数组有没有length方法string有没有length方法">数组有没有length()方法？String有没有length()方法？</span></h2><p>1、数组没有length()方法，但有length属性</p>
+<p>2、String类有length() 方法</p>
+<h2><span id="string和stringbuilder-stringbuffer的区别">String和StringBuilder、StringBuffer的区别？</span></h2><p>1、String 字符串常量(final修饰，不可被继承)，String是常量，当创建之后即不能更改。(可以通过StringBuffer和StringBuilder创建String对象(常用的两个字符串操作类)。)</p>
+<p>2、StringBuffer 字符串变量（线程安全）,其也是final类别的，不允许被继承，其中的绝大多数方法都进行了同步处理，包括常用的Append方法也做了同步处理(synchronized修饰)。其自jdk1.0起就已经出现。其toString方法会进行对象缓存，以减少元素复制开销。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">if</span> (toStringCache == <span class="keyword">null</span>) &#123;        </span><br><span class="line">        toStringCache = Arrays.copyOfRange(value, <span class="number">0</span>, count);    </span><br><span class="line">    &#125;     </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(toStringCache, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、StringBuilder 字符串变量（非线程安全）其自jdk1.5起开始出现。与StringBuffer一样都继承和实现了同样的接口和类，方法除了没使用synch修饰以外基本一致，不同之处在于最后toString的时候，会直接返回一个新对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;<span class="comment">// Create a copy, don’t share the arrayreturn new String(value, 0, count);&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="string能被继承吗为什么">String能被继承吗？为什么？</span></h2><p>不可以，因为String类有final修饰符，而final修饰的类是不能被继承的，实现细节不允许改变。平常我们定义的String str=”a”;其实和String str=new String(“a”)还是有差异的。</p>
+<p>前者默认调用的是String.valueOf来返回String实例对象，至于调用哪个则取决于你的赋值，比如String num=1,调用的是</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;<span class="keyword">return</span> Integer.toString(i);&#125;</span><br></pre></td></tr></table></figure>
+
+<p>后者则是调用如下部分：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span> </span>&#123;<span class="keyword">this</span>.value = original.value;<span class="keyword">this</span>.hash = original.hash;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后我们的变量都存储在一个char数组中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br></pre></td></tr></table></figure>
+
+<h2><span id="什么是值传递和引用传递">什么是值传递和引用传递</span></h2><p>值传递是对基本型变量而言的,传递的是该变量的一个副本,改变副本不影响原变量.<br>引用传递一般是对于对象型变量而言的,传递的是该对象地址的一个副本, 并不是原对象本身 。<br>一般认为,java内基本类型的传递都是值传递. java中实例对象的传递是引用传递 。</p>
+<h2><span id="java类的实例化顺序">Java类的实例化顺序</span></h2><p>1． 父类静态成员和静态初始化块 ，按在代码中出现的顺序依次执行<br>2． 子类静态成员和静态初始化块 ，按在代码中出现的顺序依次执行<br>3． 父类实例成员和实例初始化块 ，按在代码中出现的顺序依次执行<br>4． 父类构造方法<br>5． 子类实例成员和实例初始化块 ，按在代码中出现的顺序依次执行<br>6． 子类构造方法</p>
+<p>结论：对象初始化的顺序，先静态方法，再构造方法，每个又是先基类后子类。</p>
+<h2><span id="java中符号gtgt和gtgtgt有什么区别">Java中符号&gt;&gt;和&gt;&gt;&gt;有什么区别？</span></h2><p>&gt;&gt;：带符号右移。正数右移高位补0，负数右移高位补1。比如：</p>
+<p>4 &gt;&gt; 1，结果是2；-4 &gt;&gt; 1，结果是-2。-2 &gt;&gt; 1，结果是-1。</p>
+<p>&gt;&gt;&gt;：无符号右移。无论是正数还是负数，高位通通补0。</p>
+<p>对于正数而言，&gt;&gt;和&gt;&gt;&gt;没区别。</p>
+<p>对于负数而言，-2 &gt;&gt;&gt; 1，结果是2147483647（Integer.MAX_VALUE），-1 &gt;&gt;&gt; 1，结果是2147483647（Integer.MAX_VALUE）。</p>
+<h2><span id="java集合框架的基础接口有哪些">Java集合框架的基础接口有哪些？</span></h2><p>Collection：</p>
+<p>为集合层级的根接口。一个集合代表一组对象，这些对象即为它的元素。Java平台不提供这个接口任何直接的实现。</p>
+<p>Set：</p>
+<p>是一个不能包含重复元素的集合。这个接口对数学集合抽象进行建模，被用来代表集合，就如一副牌。</p>
+<p>List：</p>
+<p>是一个有序集合，可以包含重复元素。你可以通过它的索引来访问任何元素。List更像长度动态变换的数组。</p>
+<p>Map：</p>
+<p>是一个将key映射到value的对象.一个Map不能包含重复的key：每个key最多只能映射一个value。</p>
+<p>一些其它的接口有Queue、Dequeue、SortedSet、SortedMap和ListIterator。</p>
+<h2><span id="arraylist-和-linkedlist-有什么区别">ArrayList 和 LinkedList 有什么区别?</span></h2><p>ArrayList和LinkedList都实现了List接口，有以下的不同点：</p>
+<p>1、ArrayList是基于索引的数据接口，它的底层是数组。它可以以O(1)时间复杂度对元素进行随机访问。与此对应，LinkedList是以元素列表的形式存储它的数据，每一个元素都和它的前一个和后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。</p>
+<p>2、相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索引。</p>
+<p>3、LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用，一个指向前一个元素，一个指向下一个元素。</p>
+<h2><span id="hashmap-与hashtable有什么区别">HashMap 与HashTable有什么区别</span></h2><h3><span id="hashtable"><strong>HashTable</strong></span></h3><ul>
+<li>底层数组+链表实现，无论key还是value都<strong>不能为null</strong>，线程<strong>安全</strong>，实现线程安全的方式是在修改数据时锁住整个HashTable，效率低，ConcurrentHashMap做了相关优化</li>
+<li>初始size为<strong>11</strong>，扩容：newsize = olesize*2+1</li>
+<li>计算index的方法：index = (hash &amp; 0x7FFFFFFF) % tab.length</li>
+</ul>
+<h3><span id="hashmap"><strong>HashMap</strong></span></h3><ul>
+<li>底层数组+链表+红黑树实现，可<strong>以存储null键和null值</strong>，线程<strong>不安全</strong></li>
+<li>初始size为<strong>16</strong>，扩容：newsize = oldsize*2，size一定为2的n次幂</li>
+<li>扩容针对整个Map，每次扩容时，原来数组中的元素依次重新计算存放位置，并重新插入</li>
+<li>当Map中元素总数超过Entry数组的75%，触发扩容操作，为了减少链表长度，元素分配更均匀</li>
+<li>当链表长度超过8就会转换为红黑树，红黑树个数低于6就会转换成链表</li>
+<li>计算index方法：index = hash &amp; (tab.length – 1)</li>
+</ul>
+<h2><span id="final-finally-finalize有什么区别">final, finally, finalize有什么区别</span></h2><p><strong>final</strong></p>
+<p>修饰符（关键字）如果一个类被声明为final，意味着它不能再派生出新的子类，不能作为父类被继承。因此一个类不能既被声明为 abstract的，又被声明为final的。将变量或方法声明为final，可以保证它们在使用中不被改变。被声明为final的变量必须在声明时给定初值，而在以后的引用中只能读取，不可修改。被声明为final的方法也同样只能使用，不能重载 。</p>
+<p><strong>finally</strong></p>
+<p>在异常处理时提供 finally 块来执行任何清除操作。如果抛出一个异常，那么相匹配的 catch 子句就会执行，然后控制就会进入 finally 块（如果有的话）。 </p>
+<p><strong>finalize</strong></p>
+<p>方法名。Java 技术允许使用 finalize() 方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。这个方法是由垃圾收集器在确定这个对象没有被引用时对这个对象调用的。它是在 Object类中定义的，因此所有的类都继承了它。子类覆盖 finalize() 方法以整理系统资源或者执行其他清理工作。finalize() 方法是在垃圾收集器删除对象之前对这个对象调用的。</p>
+<h2><span id="java中的throw-和-throws关键字有什么区别">java中的throw 和 throws关键字有什么区别？</span></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;        </span><br><span class="line">        <span class="keyword">try</span> &#123;            </span><br><span class="line">            test(args);        </span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;            </span><br><span class="line">            e.printStackTrace();        </span><br><span class="line">        &#125;    </span><br><span class="line">    &#125;     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;        </span><br><span class="line">        <span class="keyword">if</span> (args == <span class="keyword">null</span> || args.length != <span class="number">1</span> || !<span class="string">"true"</span>.equals(args[<span class="number">0</span>])) &#123;            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Invalid argument!"</span>);        </span><br><span class="line">         &#125;    	</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>区别：</p>
+<p>throw是语句抛出一个异常，一般是在代码块的内部，当程序出现某种逻辑错误时由程序员主动抛出某种特定类型的异常</p>
+<p>throws是方法可能抛出异常的声明。(用在声明方法时，表示该方法可能要抛出异常)</p>
+<h2><span id="oom原因有哪些如何解决">OOM原因有哪些，如何解决？</span></h2><p>首先，OOM 如果通俗点儿说，就是 JVM 内存不够用了。没有空闲内存，而且垃圾回收器也无法提供更多内存。</p>
+<p>隐含的意思是在抛出OutOfMemoryError之前，通常垃圾回收器会被触发，尽其所能去清理出空间。</p>
+<p>当然也不是在任何情况下垃圾回收器都会触发。比如我们分配一个超大对象，类似一个超大数组超过堆的最大值，JVM会判断垃圾回收并不能解决这个问题，所以直接抛出OutOfMemoryError。</p>
+<p>除了程序计数器，其他区域都有可能会因为可能的空间不足产生OutOfMemoryError。总结如下：</p>
+<ul>
+<li><p>堆内存不足是常见的OOM原因之一OutOfMemoryError：Java heap space原因有很多，比如内存泄漏、堆大小设置不足、JVM处理不及时、内存无法释放</p>
+</li>
+<li><p>Java 虚拟机栈和本地方法栈。比如写一段递归没有跳出条件。会不断压栈。导致StackOverFlowError</p>
+<h2><span id="jdk8-新特性">JDK8 新特性</span></h2></li>
+<li><p>Lambda表达式和函数式接口</p>
+</li>
+<li><p>接口的默认方法和静态方法</p>
+</li>
+<li><p>重复注解</p>
+</li>
+<li><p>Streams</p>
+</li>
+<li><p>使用元空间代替永久代</p>
+</li>
+</ul>
+<h2><span id="jvmjdk和jre有什么区别与联系">JVM，JDK和JRE有什么区别与联系</span></h2><p><strong>1、JVM</strong></p>
+<p>JVM是JavaVirtual Machine（Java虚拟机）的缩写，它是整个java实现跨平台的最核心的部分，所有的java程序会首先被编译为.class的类文件，这种类文件可以在虚拟机上执行，也就是说class并不直接与机器的操作系统相对应，而是经过虚拟机间接与操作系统交互，由虚拟机将程序解释给本地系统执行。JVM是Java平台的基础，和实际的机器一样，它也有自己的指令集，并且在运行时操作不同的内存区域。 JVM通过抽象操作系统和CPU结构，提供了一种与平台无关的代码执行方法，即与特殊的实现方法、主机硬件、主机操作系统无关。JVM的主要工作是解释自己的指令集（即字节码）到CPU的指令集或对应的系统调用，保护用户免被恶意程序骚扰。 JVM对上层的Java源文件是不关心的，它关注的只是由源文件生成的类文件（.class文件）。</p>
+<p><strong>2、JRE</strong></p>
+<p>JRE是java runtime environment（java运行环境）的缩写。光有JVM还不能让class文件执行，因为在解释class的时候JVM需要调用解释所需要的类库lib。在JDK的安装目录里你可以找到jre目录，里面有两个文件夹bin和lib,在这里可以认为bin里的就是jvm，<font color="red">lib中则是jvm工作所需要的类库，而jvm和lib和起来就称为jre</font>。所以，在你写完java程序编译成.class之后，你可以把这个.class文件和jre一起打包发给朋友，这样你的朋友就可以运行你写程序了（jre里有运行.class的java.exe）。JRE是Sun公司发布的一个更大的系统，它里面就有一个JVM。JRE就与具体的CPU结构和操作系统有关，是运行Java程序必不可少的（除非用其他一些编译环境编译成.exe可执行文件……），JRE的地位就象一台PC机一样，我们写好的Win32应用程序需要操作系统帮我们运行，同样的，我们编写的Java程序也必须要JRE才能运行。 也可以说JRE是提供给业余的人来直接使用运行编译后java程序的。</p>
+<p><strong>3、JDK</strong></p>
+<p>JDK是java development kit（java开发工具包）的缩写。每个做java开发的人都会先在机器上装一个JDK，那 让我们看一下JDK的安装目录。在目录下面有六个文件夹、一个src类库源码压缩包、和其他几个声明文件。其中，真正在运行java时起作用的是以下四个文件夹：bin、include、lib、jre。现在我们可以看出这样一个关系，JDK包含JRE，而JRE包含JVM。</p>
+<p>bin: 最主要的是编译器(javac.exe)</p>
+<p>include: java和JVM交互用的头文件</p>
+<p>lib：类库 （java开发需要的类库）  </p>
+<p>jre: java运行环境 </p>
+<p><font color="red">（注意：这里的bin、lib文件夹和jre里的bin、lib是不同的）总的来说JDK是用于java程序的开发,而jre则是只能运行class而没有编译的功能。eclipse、idea等其他IDE有自己的编译器而不是用JDK bin目录中自带的，所以在安装时你会发现他们只要求你选jre路径就ok了。</font></p>
+<h2><span id="分别写出堆内存溢出与栈内存溢出的程序">分别写出堆内存溢出与栈内存溢出的程序</span></h2><p>栈内存溢出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    f();    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>堆内存溢出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testd</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Listlist = <span class="keyword">new</span> ArrayList&lt;&gt;();         </span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;         </span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;            </span><br><span class="line">        list.add(<span class="keyword">new</span> String(i + <span class="string">""</span>));            </span><br><span class="line">        i++;        </span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2><span id="dump文件的作用是什么如何获取线程的dump文件">dump文件的作用是什么？如何获取线程的dump文件?</span></h2><p>dump文件的作用：</p>
+<p>死循环、死锁、阻塞、页面打开慢等问题，打线程dump是最好的解决问题的途径。因此，线程dump也就是线程堆栈。</p>
+<p>获取到线程堆栈dump文件内容分两步：</p>
+<p>（1）第一步：获取到线程的pid，Linux环境下可以使用ps -ef | grep java</p>
+<p>（2）第二步：打印线程堆栈，可以通过使用jstack pid命令</p>
+<h2><span id="synchronized什么情况下会释放锁">synchronized什么情况下会释放锁</span></h2><p>1）获取锁的线程执行完了该代码块，然后线程释放对锁的占有；</p>
+<p>2）线程执行发生异常，此时JVM会让线程自动释放锁。</p>
+<p>3)   调用wait方法,在等待的时候立即释放锁,方便其他的线程使用锁.</p>
+<h2><span id="解释一下锁的一些基本概念可重入锁-可中断锁-公平锁-读写锁">解释一下锁的一些基本概念：可重入锁、可中断锁、公平锁、读写锁</span></h2><p><strong>1.可重入锁</strong></p>
+<p>如果锁具备可重入性，则称作为可重入锁。像synchronized和ReentrantLock都是可重入锁，可重入性在我看来实际上表明了锁的分配机制：基于线程的分配，而不是基于方法调用的分配。举个简单的例子，当一个线程执行到某个synchronized方法时，比如说method1，而在method1中会调用另外一个synchronized方法method2，此时线程不必重新去申请锁，而是可以直接执行方法method2。</p>
+<p>看下面这段代码就明白了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> </span>&#123;        </span><br><span class="line">        method2();    </span><br><span class="line">    &#125;         </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span> </span>&#123;             </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中的两个方法method1和method2都用synchronized修饰了，假如某一时刻，线程A执行到了method1，此时线程A获取了这个对象的锁，而由于method2也是synchronized方法，假如synchronized不具备可重入性，此时线程A需要重新申请锁。但是这就会造成一个问题，因为线程A已经持有了该对象的锁，而又在申请获取该对象的锁，这样就会线程A一直等待永远不会获取到的锁。</p>
+<p>而由于synchronized和Lock都具备可重入性，所以不会发生上述现象。</p>
+<p><strong>2.可中断锁</strong></p>
+<p>可中断锁：顾名思义，就是可以相应中断的锁。</p>
+<p>在Java中，synchronized就不是可中断锁，而Lock是可中断锁。如果某一线程A正在执行锁中的代码，另一线程B正在等待获取该锁，可能由于等待时间过长，线程B不想等待了，想先处理其他事情，我们可以让它中断自己或者在别的线程中中断它，这种就是可中断锁。在前面演示lockInterruptibly()的用法时已经体现了Lock的可中断性。</p>
+<p><strong>3.公平锁</strong></p>
+<p>公平锁：即尽量以请求锁的顺序来获取锁。比如同是有多个线程在等待一个锁，当这个锁被释放时，等待时间最久的线程（最先请求的线程）会获得该所，这种就是公平锁。</p>
+<p>非公平锁：即无法保证锁的获取是按照请求锁的顺序进行的。这样就可能导致某个或者一些线程永远获取不到锁。</p>
+<p>在Java中，synchronized就是非公平锁，它无法保证等待的线程获取锁的顺序。</p>
+<p>而对于ReentrantLock和ReentrantReadWriteLock，它默认情况下是非公平锁，但是可以设置为公平锁。</p>
+<p>我们可以在创建ReentrantLock对象时，通过以下方式来设置锁的公平性：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReentrantLock lock =newReentrantLock(<span class="keyword">true</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果参数为true表示为公平锁，为false为非公平锁。默认情况下，如果使用无参构造器，则是非公平锁。</p>
+<p><strong>4.读写锁</strong></p>
+<p>读写锁将对一个资源（比如文件）的访问分成了2个锁，一个读锁和一个写锁。</p>
+<p>正因为有了读写锁，才使得多个线程之间的读操作不会发生冲突。</p>
+<p>ReadWriteLock就是读写锁，它是一个接口，ReentrantReadWriteLock实现了这个接口。</p>
+<p>可以通过readLock()获取读锁，通过writeLock()获取写锁。</p>
+<h2><span id="java线程同步的方式有哪些">Java线程同步的方式有哪些</span></h2><ul>
+<li><p>使用synchronized修饰的同步方法</p>
+</li>
+<li><p>使用同步代码块synchronize{}</p>
+</li>
+<li><p>使用volatile变量</p>
+</li>
+<li><p>使用ThreadLocal</p>
+</li>
+<li><p>使用重入锁实现线程同步</p>
+</li>
+</ul>
+<h2><span id="什么是线程安全">什么是线程安全？</span></h2><p>线程安全是一个多线程环境下正确性的概念，也就是保证多线程环境下共享的、可修改的状态的正确性。<br>换句话说，如果状态不共享、不可修改，那么也就不存在线程安全问题。进而引出确保线程安全的两个方法</p>
+<ul>
+<li>封装：把对象内部状态隐藏、保护起来</li>
+<li>不可变：比如final、immutable等</li>
+</ul>
+<p>线程安全需要确保几个基本特性：</p>
+<ul>
+<li>原子性：相关操作不会中途被其他线程干扰，一般通过同步机制实现</li>
+<li>可见性：一个线程修改了某个共享变量，其状态能够被其他线程知晓。解释为将线程本地状态反映到主内存上去。volatile就是用来保证可见性的</li>
+<li>有序性：保证线程内串行语义，避免指令重排</li>
+</ul>
+<h2><span id="java编写一个会导致死锁的程序">Java编写一个会导致死锁的程序？</span></h2><p>死锁现象描述：</p>
+<p>线程A和线程B相互等待对方持有的锁导致程序无限死循环下去。</p>
+<p>死锁的实现步骤：</p>
+<p>（1）两个线程里面分别持有两个Object对象：lock1和lock2。这两个lock作为同步代码块的锁；</p>
+<p>（2）线程1的run()方法中同步代码块先获取lock1的对象锁，Thread.sleep(xxx)，时间不需要太多，100毫秒差不多了，然后接着获取lock2的对象锁。这么做主要是为了防止线程1启动一下子就连续获得了lock1和lock2两个对象的对象锁</p>
+<p>（3）线程2的run)(方法中同步代码块先获取lock2的对象锁，接着获取lock1的对象锁，当然这时lock1的对象锁已经被线程1锁持有，线程2肯定是要等待线程1释放lock1的对象锁的</p>
+<p>这样，线程1″睡觉”睡完，线程2已经获取了lock2的对象锁了，线程1此时尝试获取lock2的对象锁，便被阻塞，此时一个死锁就形成了。</p>
+<p>死锁的实现代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeadLockDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Object lockA = <span class="keyword">new</span> Object();</span><br><span class="line">        Object lockB = <span class="keyword">new</span> Object();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                String name = Thread.currentThread().getName();</span><br><span class="line">                <span class="keyword">synchronized</span> (lockA) &#123;</span><br><span class="line">                    System.out.println(name + <span class="string">" got lockA,  want LockB"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line"></span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">synchronized</span> (lockB) &#123;</span><br><span class="line">                        System.out.println(name + <span class="string">" got lockB"</span>);</span><br><span class="line">                        System.out.println(name + <span class="string">": say Hello!"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">"线程-A"</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                String name = Thread.currentThread().getName();</span><br><span class="line">                <span class="keyword">synchronized</span> (lockB) &#123;</span><br><span class="line">                    System.out.println(name + <span class="string">" got lockB, want LockA"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line"></span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">synchronized</span> (lockA) &#123;</span><br><span class="line">                        System.out.println(name + <span class="string">" got lockA"</span>);</span><br><span class="line">                        System.out.println(name + <span class="string">": say Hello!"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">"线程-B"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果是：</p>
+<p>线程-A got lockA, want LockB</p>
+<p>线程-B got lockB, want LockA</p>
+<h2><span id="简单介绍一下runnable和callable的区别和用法">简单介绍一下Runnable和Callable的区别和用法</span></h2><p>区别：</p>
+<ol>
+<li>Runnable执行方法是run(),Callable是call()</li>
+<li>实现Runnable接口的任务线程无返回值；实现Callable接口的任务线程能返回执行结果</li>
+<li>call方法可以抛出异常，run方法若有异常只能在内部消化</li>
+</ol>
+<p>Future提供了三种功能：</p>
+<p>　　1）判断任务是否完成；</p>
+<p>　　2）能够中断任务；</p>
+<p>　　3）能够获取任务执行结果。</p>
+<h2><span id="java有哪几种创建多线程的方式">Java有哪几种创建多线程的方式？</span></h2><ul>
+<li>继承Thread类</li>
+<li>实现Runnable接口</li>
+<li>实现Callable接口通过FutureTask包装器来创建Thread线程</li>
+<li>使用ExecutorService、Callable、Future实现有返回结果的多线程。</li>
+</ul>
+<h2><span id="cyclibarriar和countdownlatch有什么区别">CycliBarriar和CountdownLatch有什么区别?</span></h2><p>cyclibarriar 就是栅栏，顾名思义：就是一个拦截的装置。多个线程start后，在栅栏处阻塞住，一般定义栅栏的时候会定义有多少个线程。比如定义为4个，那么有三个线程到栅栏处，就阻塞住，如果没有第四个，就会一直阻塞，知道启动第四个线程到栅栏处，所有的线程开始全部进行工作。有点像赛马的例子。所有的赛马一个一个到起点，然后到齐了，在开始跑。</p>
+<p>countdownlatch：初始化定义一个数字（整型），比如定义2，一个线程启动后在await处停止下来阻塞，调用一次countDown，会减一，知道countDown后变为0时的时候，线程才会继续进行工作，否则会一直阻塞。</p>
+<h2><span id="线程池的作用有哪些">线程池的作用有哪些？</span></h2><p>线程池的作用： 在程序启动的时候就创建若干线程来响应处理，它们被称为线程池，里面的线程叫工作线程<br>第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。<br>第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。<br>第三：提高线程的可管理性。</p>
+<p>常用线程池：ExecutorService 是主要的实现类，其中常用的有</p>
+<ol>
+<li>Executors.newSingleThreadPool(),</li>
+<li>newFixedThreadPool(),</li>
+<li>newCachedTheadPool(), </li>
+<li>newScheduledThreadPool()。</li>
+</ol>
+<h2><span id="java-反射机制的作用">Java 反射机制的作用</span></h2><p>java反射机制的作用:</p>
+<p>（1）在运行时判断任意一个对象所属的类</p>
+<p>（2）在运行时构造任意一个类的对象</p>
+<p>（3）在运行时判断任意一个类所具有的成员变量和方法</p>
+<p>（4）在运行时调用任意一个对象的方法</p>
+<p>反射就是动态加载对象，并对对象进行剖析。在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法，这种动态获取信息以及动态调用对象方法的功能成为Java反射机制。</p>
+<p><strong>优点：</strong><br>可以动态的创建对象和编译，最大限度发挥了java的灵活性。</p>
+<p><strong>缺点：</strong><br>对性能有影响。使用反射基本上一种解释操作，告诉JVM我们要做什么并且满足我们的要求，这类操作总是慢于直接执行java代码。</p>
+<h2><span id="反射机制有哪些优点和缺点">反射机制有哪些优点和缺点</span></h2><p><strong>1、优点：</strong></p>
+<p>静态编译：</p>
+<p>在编译时确定类型，绑定对象，即通过。</p>
+<p>动态编译：</p>
+<p>运行时确定类型，绑定对象。动态编译最大限度的发挥了java的灵活性，体现了多态的应用，有利于降低类之间的耦合性。</p>
+<p>一句话，反射机制的优点就是可以实现动态创建对象和编译，体现出很大的灵活性，特别是在J2EE的开发中它的灵活性就表现的十分明显。比如，一个大型的软件，不可能一次就把把它设计的很完美，当这个程序编译后，发布了，当发现需要更新某些功能时，我们不可能要用户把以前的卸载，再重新安装新的版本，假如这样的话，这个软件肯定是没有多少人用的。采用静态的话，需要把整个程序重新编译一次才可以实现功能的更新，而采用反射机制的话，它就可以不用卸载，只需要在运行时才动态的创建和编译，就可以实现该功能。</p>
+<p><strong>2、缺点：</strong></p>
+<p>是对性能有影响。使用反射基本上是一种解释操作，我们可以告诉JVM，我们希望做什么并且它满足我们的要求。这类操作总是慢于只直接执行相同的操作。</p>
+<h2><span id="反射创建类实例的三种方式">反射创建类实例的三种方式</span></h2><p>1、通过一个全限类名创建一个对象 </p>
+<p>（1） Class.forName(“全限类名”); 例如：com.mysql.jdbc.Driver Driver类已经被加载到 jvm中，并且完成了类的初始化工作就行了 </p>
+<p>（2）类名.class; 获取Class&lt;？&gt; clz 对象  </p>
+<p>（3）对象.getClass(); </p>
+<p>2、 获取构造器对象，通过构造器new出一个对象   </p>
+<p>（1）Clazz.getConstructor([String.class]);   </p>
+<p>（2）Con.newInstance([参数]);</p>
+<p>3、通过class对象创建一个实例对象（就相当与new类名（）无参构造器)   </p>
+<p>1）Clazz.newInstance();</p>
+<h2><span id="jdk自带了哪些注解有什么作用">jdk自带了哪些注解，有什么作用</span></h2><p>@Overried</p>
+<p>告诉编译器要检查该方法是重写父类的方法</p>
+<p>@Deprecated</p>
+<p>标记某个类或方法等已经废弃，不推荐使用，保留仅为兼容以前的程序</p>
+<p>@SuppressWarnings</p>
+<p>抑制编译器警告</p>
+<p>@SafeVarargs</p>
+<p>@FunctionalInterface</p>
+<p>用来指定该接口是函数式接口</p>
+<p>元注解位于JDK的java.lang.annotation包下：</p>
+<p>1、@Retention</p>
+<p>定义注解的保留策略，包括以下3种策略：</p>
+<p>@Retention(RetentionPolicy.SOURCE)  //注解仅存在于源码中，在class字节码文件中不包含<br>@Retention(RetentionPolicy.CLASS)   // 默认的保留策略，注解会在class字节码文件中存在，但运行时无法获得，<br>@Retention(RetentionPolicy.RUNTIME) // 注解会在class字节码文件中存在，在运行时可以通过反射获取到</p>
+<p>2、@Target</p>
+<p>定义注解的使用对象，注解可以用在类上、方法上、属性上等，由ElementType枚举类定义：</p>
+<p>3、@Inherited</p>
+<p>子类可以继承父类中的注解</p>
+<p>4、@Documented</p>
+<p>javadoc工具会使用该注解生成文档</p>
+<h2><span id="构造器constructor是否可被重写override">构造器（constructor）是否可被重写（override）</span></h2><p>构造器不能被继承，因此不能被重写，但可以被重载。</p>
+<h2><span id="两个对象值相同xequalsy-true但却可有不同的hash-code这句话对不对">两个对象值相同(x.equals(y) == true)，但却可有不同的hash code，这句话对不对？</span></h2><p>不对，如果两个对象x和y满足x.equals(y) == true，它们的哈希码（hash code）应当相同。Java对于eqauls方法和hashCode方法是这样规定的：(1)如果两个对象相同（equals方法返回true），那么它们的hashCode值一定要相同；(2)如果两个对象的hashCode相同，它们并不一定相同。当然，你未必要按照要求去做，但是如果你违背了上述原则就会发现在使用容器时，相同的对象可以出现在Set集合中，同时增加新元素的效率会大大下降（对于使用哈希存储的系统，如果哈希码频繁的冲突将会造成存取性能急剧下降）。</p>
+<p>补充：关于equals和hashCode方法，很多Java程序都知道，但很多人也就是仅仅知道而已，在Joshua Bloch的大作《Effective Java》（很多软件公司，《Effective Java》、《Java编程思想》以及《重构：改善既有代码质量》是Java程序员必看书籍，如果你还没看过，那就赶紧去亚马逊买一本吧）中是这样介绍equals方法的：首先equals方法必须满足自反性（x.equals(x)必须返回true）、对称性（x.equals(y)返回true时，y.equals(x)也必须返回true）、传递性（x.equals(y)和y.equals(z)都返回true时，x.equals(z)也必须返回true）和一致性（当x和y引用的对象信息没有被修改时，多次调用x.equals(y)应该得到同样的返回值），而且对于任何非null值的引用x，x.equals(null)必须返回false。实现高质量的equals方法的诀窍包括：1. 使用==操作符检查”参数是否为这个对象的引用”；2. 使用instanceof操作符检查”参数是否为正确的类型”；3. 对于类中的关键属性，检查参数传入对象的属性是否与之相匹配；4. 编写完equals方法后，问自己它是否满足对称性、传递性、一致性；5. 重写equals时总是要重写hashCode；6. 不要将equals方法参数中的Object对象替换为其他的类型，在重写时不要忘掉@Override注解。</p>
+<h2><span id="char-型变量中能不能存贮一个中文汉字为什么">char 型变量中能不能存贮一个中文汉字，为什么？</span></h2><p>char类型可以存储一个中文汉字，因为Java中使用的编码是Unicode（不选择任何特定的编码，直接使用字符在字符集中的编号，这是统一的唯一方法），一个char类型占2个字节（16比特），所以放一个中文是没问题的。</p>
+<p>补充：使用Unicode意味着字符在JVM内部和外部有不同的表现形式，在JVM内部都是Unicode，当这个字符被从JVM内部转移到外部时（例如存入文件系统中），需要进行编码转换。所以Java中有字节流和字符流，以及在字符流和字节流之间进行转换的转换流，如InputStreamReader和OutputStreamReader，这两个类是字节流和字符流之间的适配器类，承担了编码转换的任务；对于C程序员来说，要完成这样的编码转换恐怕要依赖于union（联合体/共用体）共享内存的特征来实现了。</p>
+<h2><span id="介绍一下g1垃圾回收集器的特点及垃圾回收过程">介绍一下G1垃圾回收集器的特点，及垃圾回收过程</span></h2><p>G1：是一款面向服务端应用的垃圾收集器</p>
+<p>特点：</p>
+<p>1、并行和并发：G1能充分利用CPU、多核环境下的硬件优势，使用多个CPU（CPU或者CPU核心）来缩短stop-The-World停顿时间。部分其他收集器原本需要停顿Java线程执行的GC动作，G1收集器仍然可以通过并发的方式让java程序继续执行。</p>
+<p>2、分代收集：分代概念在G1中依然得以保留。虽然G1可以不需要其它收集器配合就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果。也就是说G1可以自己管理新生代和老年代了。</p>
+<p>3、空间整合：由于G1使用了独立区域（Region）概念，G1从整体来看是基于“标记-整理”算法实现收集，从局部（两个Region）上来看是基于“复制”算法实现的，但无论如何，这两种算法都意味着G1运作期间不会产生内存空间碎片。</p>
+<p>4、可预测的停顿：这是G1相对于CMS的另一大优势，降低停顿时间是G1和CMS共同的关注点，但G1除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用这明确指定一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒。</p>
+<p>与其它收集器相比，G1变化较大的是它将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留了新生代和来年代的概念，但新生代和老年代不再是物理隔离的了它们都是一部分Region（不需要连续）的集合。同时，为了避免全堆扫描，G1使用了Remembered Set来管理相关的对象引用信息。当进行内存回收时，在GC根节点的枚举范围中加入Remembered Set即可保证不对全堆扫描也不会有遗漏了。</p>
+<p>如果不计算维护Remembered Set的操作，G1收集器的运作大致可划分为以下几个步骤：</p>
+<p>1、初始标记（Initial Making）</p>
+<p>2、并发标记（Concurrent Marking）</p>
+<p>3、最终标记（Final Marking）</p>
+<p>4、筛选回收（Live Data Counting and Evacuation）</p>
+<p>看上去跟CMS收集器的运作过程有几分相似，不过确实也这样。初始阶段仅仅只是标记一下GC Roots能直接关联到的对象，并且修改TAMS（Next Top Mark Start）的值，让下一阶段用户程序并发运行时，能在正确可以用的Region中创建新对象，这个阶段需要停顿线程，但耗时很短。并发标记阶段是从GC Roots开始对堆中对象进行可达性分析，找出存活对象，这一阶段耗时较长但能与用户线程并发运行。而最终标记阶段需要吧Remembered Set Logs的数据合并到Remembered Set中，这阶段需要停顿线程，但可并行执行。最后筛选回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划，这一过程同样是需要停顿线程的，但Sun公司透露这个阶段其实也可以做到并发，但考虑到停顿线程将大幅度提高收集效率，所以选择停顿。</p>
+</div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: 'd154fff64901622afbb6',
+  clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
+  repo: 'Disda-coding.github.io',
+  owner: 'Disda-coding',
+  admin: ['Disda-coding'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div><div class="pure-u-1 pure-u-md-4-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Disda.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> </a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Disda.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

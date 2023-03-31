@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>操作系统 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">操作系统</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">操作系统</h1><div class="post-content"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>整理了操作系统的常考知识点</p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#什么是死锁死锁产生的条件">什么是死锁？死锁产生的条件？</a></li>
+<li><a href="#分页和分段有什么区别">分页和分段有什么区别？</a></li>
+<li><a href="#什么是缓冲区溢出有什么危害">什么是缓冲区溢出？有什么危害？</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="什么是死锁死锁产生的条件">什么是死锁？死锁产生的条件？</span></h1><p><strong>什么是死锁：</strong></p>
+<p>两个或多个进程无限期的阻塞、相互等待的一种状态。</p>
+<p><strong>死锁产生的四个必要条件：</strong></p>
+<p>（有一个条件不成立，则不会产生死锁）</p>
+<p>1、互斥条件：一个资源一次只能被一个进程使用</p>
+<p>2、请求与保持条件：一个进程因请求资源而阻塞时，对已获得资源保持不放</p>
+<p>3、不剥夺条件：进程获得的资源，在未完全使用完之前，不能强行剥夺</p>
+<p>4、循环等待条件：若干进程之间形成一种头尾相接的环形等待资源关系</p>
+<p><strong>解决死锁的方法有：</strong></p>
+<p>预防死锁、避免死锁、检测死锁、解除死锁</p>
+<p><strong>解决死锁的策略有：</strong></p>
+<p>鸵鸟策略、预防策略、避免策略、检测与解除死锁</p>
+<h1><span id="分页和分段有什么区别">分页和分段有什么区别？</span></h1><p>1、段是信息的逻辑单位，它是根据用户的需要划分的，因此段对用户是可见的 ；页是信息的物理单位，是为了管理主存的方便而划分的，对用户是透明的。</p>
+<p>2、段的大小不固定，有它所完成的功能决定；页大大小固定，由系统决定</p>
+<p>3、段向用户提供二维地址空间；页向用户提供的是一维地址空间</p>
+<p>4、段是信息的逻辑单位，便于存储保护和信息的共享，页的保护和共享受到限制。</p>
+<h1><span id="什么是缓冲区溢出有什么危害">什么是缓冲区溢出？有什么危害？</span></h1><p>缓冲区溢出是指当计算机向缓冲区填充数据时超出了缓冲区本身的容量，溢出的数据覆盖在合法数据上。</p>
+<p>危害有以下两点：</p>
+<p>（1）程序崩溃，导致拒绝服务</p>
+<p>（2）跳转并且执行一段恶意代码</p>
+<p>造成缓冲区溢出的主要原因是程序中没有仔细检查用户输入。</p>
+</div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: 'd154fff64901622afbb6',
+  clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
+  repo: 'Disda-coding.github.io',
+  owner: 'Disda-coding',
+  admin: ['Disda-coding'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div><div class="pure-u-1 pure-u-md-4-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Disda.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> </a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Disda.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

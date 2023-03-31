@@ -1,0 +1,488 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Java多线程与并发原理 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Java多线程与并发原理</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Java多线程与并发原理</h1><div class="post-content"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>盘点了常考的Java多线程与并发原理</p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#线程安全问题的主要诱因">线程安全问题的主要诱因</a><ul>
+<li><a href="#解决问题的根本方法">解决问题的根本方法</a></li>
+</ul>
+</li>
+<li><a href="#互斥锁">互斥锁</a><ul>
+<li><a href="#互斥锁的特性">互斥锁的特性</a><ul>
+<li><a href="#互斥性">互斥性</a></li>
+<li><a href="#可见性">可见性</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#获取对象">获取对象</a><ul>
+<li><a href="#根据获取的锁的分类获取对象锁和获取类锁">根据获取的锁的分类：获取对象锁和获取类锁</a><ul>
+<li><a href="#获取对象锁的两种用法">获取对象锁的两种用法</a></li>
+<li><a href="#获取类锁的两种用法">获取类锁的两种用法</a></li>
+<li><a href="#对象锁和类锁的总结">对象锁和类锁的总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#对象在内存中的布局">对象在内存中的布局</a><ul>
+<li><a href="#对象头的结构">对象头的结构</a></li>
+<li><a href="#mark-word">Mark Word</a></li>
+</ul>
+</li>
+<li><a href="#monitor每个java对象天生自带了一把看不见的锁c实现">Monitor：每个Java对象天生自带了一把看不见的锁（C++实现）</a></li>
+<li><a href="#什么是从重入">什么是从重入</a></li>
+<li><a href="#为什么会对synchronized嗤之以鼻">为什么会对synchronized嗤之以鼻</a></li>
+<li><a href="#java6以后synchronized性能得到了很大的提升">Java6以后，synchronized性能得到了很大的提升</a></li>
+<li><a href="#自旋锁与自适应自旋锁">自旋锁与自适应自旋锁</a><ul>
+<li><a href="#自旋锁">自旋锁</a></li>
+<li><a href="#自适应自旋锁">自适应自旋锁</a></li>
+</ul>
+</li>
+<li><a href="#锁消除">锁消除</a><ul>
+<li><a href="#更彻底的优化">更彻底的优化</a></li>
+</ul>
+</li>
+<li><a href="#锁粗化">锁粗化</a><ul>
+<li><a href="#另一种极端">另一种极端</a></li>
+</ul>
+</li>
+<li><a href="#synchronized的四种状态">Synchronized的四种状态</a><ul>
+<li><a href="#偏向锁减少同一线程获取锁的代价-cascompare-and-swap-">偏向锁：减少同一线程获取锁的代价 CAS（Compare and Swap）【-】</a></li>
+<li><a href="#轻量级锁">轻量级锁</a><ul>
+<li><a href="#加锁过程">加锁过程</a></li>
+<li><a href="#解锁过程">解锁过程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#锁的内存语义">锁的内存语义</a></li>
+<li><a href="#偏向锁-轻量级锁-重量级锁的汇总">偏向锁、轻量级锁、重量级锁的汇总</a></li>
+<li><a href="#synchronized和reentrantlock">Synchronized和ReentrantLock</a><ul>
+<li><a href="#reentrantlock再入锁">ReentrantLock（再入锁）</a><ul>
+<li><a href="#reentrantlock公平性的设置">ReentrantLock公平性的设置</a></li>
+<li><a href="#reentrantlock将锁对象化">ReentrantLock将锁对象化</a></li>
+<li><a href="#能将waitnotifynotifyall对象化">能将wait\notify\notifyAll对象化</a></li>
+<li><a href="#synchronized和reentrantlock的区别总结">Synchronized和ReentrantLock的区别总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#什么是java内存模型中的happens-before">什么是Java内存模型中的happens-before</a><ul>
+<li><a href="#java内存模型jmm">Java内存模型JMM</a></li>
+<li><a href="#jmm中的主内存">JMM中的主内存</a></li>
+<li><a href="#jmm中的工作内存">JMM中的工作内存</a></li>
+<li><a href="#jmm与java内存区域划分是不同的概念层次">JMM与Java内存区域划分是不同的概念层次</a></li>
+<li><a href="#主内存与工作内存的数据存储类型以及操作方式归纳">主内存与工作内存的数据存储类型以及操作方式归纳</a></li>
+<li><a href="#指令重排序需要满足的条件">指令重排序需要满足的条件</a><ul>
+<li><a href="#a操作的结果需要对b操作可见则a与b存在happens-before关系">A操作的结果需要对B操作可见，则A与B存在happens-before关系</a></li>
+<li><a href="#happens-before的八大原则">Happens-before的八大原则</a></li>
+<li><a href="#happens-before的概念">Happens-before的概念</a></li>
+<li><a href="#final重排序">final重排序</a></li>
+<li><a href="#volatilejvm提供的轻量级同步机制">Volatile：JVM提供的轻量级同步机制</a></li>
+<li><a href="#volatile不保证原子性">Volatile不保证原子性</a></li>
+<li><a href="#volatile变量为何立即可见">Volatile变量为何立即可见？</a></li>
+<li><a href="#volatile如何禁止重排优化">Volatile如何禁止重排优化</a></li>
+<li><a href="#实现线程安全的单例写法错误示范">实现线程安全的单例写法（错误示范）</a></li>
+<li><a href="#volatile和synchronized的区别">Volatile和synchronized的区别</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#cascompare-and-swap">CAS（compare and swap）</a><ul>
+<li><a href="#乐观锁和悲观锁">乐观锁和悲观锁</a></li>
+<li><a href="#一种高效实现线程安全性的方法">一种高效实现线程安全性的方法</a></li>
+<li><a href="#cas思想">CAS思想</a></li>
+<li><a href="#cas多数情况下对开发者来说是透明的">CAS多数情况下对开发者来说是透明的</a></li>
+<li><a href="#缺点">缺点</a></li>
+</ul>
+</li>
+<li><a href="#java线程池">Java线程池</a><ul>
+<li><a href="#利用executors创建不同的线程池满足不同场景的需求">利用Executors创建不同的线程池满足不同场景的需求</a></li>
+<li><a href="#forkjoin框架">Fork/Join框架</a></li>
+<li><a href="#为什么要使用线程池">为什么要使用线程池</a></li>
+<li><a href="#executor的框架">Executor的框架</a></li>
+<li><a href="#juc的三个executor接口">J.U.C的三个Executor接口</a></li>
+<li><a href="#threadpoolexecutor的构造函数">ThreadPoolExecutor的构造函数</a></li>
+<li><a href="#threadpooleecutor">ThreadPoolEecutor</a></li>
+<li><a href="#handler线程池的饱和策略">Handler:线程池的饱和策略</a></li>
+<li><a href="#新任务提交execute执行后的判断">新任务提交execute执行后的判断</a></li>
+<li><a href="#线程池的状态">线程池的状态</a></li>
+<li><a href="#工作线程的生命周期">工作线程的生命周期</a></li>
+<li><a href="#线程池的大小如何选定">线程池的大小如何选定</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="线程安全问题的主要诱因">线程安全问题的主要诱因</span></h2><p>Ø 存在共享数据（也称临界资源）</p>
+<p>Ø 存在多条线程共同操作这些共享数据</p>
+<h3><span id="解决问题的根本方法">解决问题的根本方法</span></h3><p>同一时刻有且只有一个线程在操作共享数据，其他线程必须等到该线程处理完数据后再对共享数据进行操作。</p>
+<h2><span id="互斥锁">互斥锁</span></h2><h3><span id="互斥锁的特性">互斥锁的特性</span></h3><h4><span id="互斥性">互斥性</span></h4><p><font color="red">即在同一时间只允许一个线程持有某个对象锁</font>，通过这种特性来实现多线程的协调机制，这样在同一时间只有一个线程对需要同步的代码块（复合操作）进行访问。互斥性也称为<font color="orange"><strong>操作的原子性。</strong></font></p>
+<h4><span id="可见性">可见性</span></h4><p><font color="red">必须确保在锁被释放之前，对共享变量所做的修改，对于随后获得该锁的另一个线程是可见的</font>（即在获取锁时应获得最新共享变量的值），否则另一个线程可能是在本地缓存的某个副本上继续操作，从而引起不一致。</p>
+<p><font color="orange"><strong>synchronized锁的不是代码，锁的都是对象</strong></font> </p>
+<h2><span id="获取对象">获取对象</span></h2><h3><span id="根据获取的锁的分类获取对象锁和获取类锁">根据获取的锁的分类：获取对象锁和获取类锁</span></h3><h4><span id="获取对象锁的两种用法">获取对象锁的两种用法</span></h4><ol>
+<li><p>同步代码块（synchronized（this），synchronized（类实例对象）），锁是<font color="orange"><strong>小括号（）中的实例对象</strong></font></p>
+</li>
+<li><p>同步非静态方法（synchronized method），锁是<font color="orange"><strong>当前对象的实例对象</strong></font></p>
+</li>
+</ol>
+<h4><span id="获取类锁的两种用法">获取类锁的两种用法</span></h4><ol>
+<li><p>同步代码块（synchronized（类.class）），锁是小括号（）中的类对象（Class对象）。</p>
+</li>
+<li><p>同步静态方法（synchronized static method），锁是当前对象的<font color="red">类对象</font>（Class对象）</p>
+</li>
+</ol>
+<p><img src="image-20200406094616354.png" alt></p>
+<p>锁和获取类锁</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.interview.javabasic.thread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String threadName = Thread.currentThread().getName();</span><br><span class="line">        <span class="keyword">if</span> (threadName.startsWith(<span class="string">"A"</span>)) &#123;</span><br><span class="line">            async();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (threadName.startsWith(<span class="string">"B"</span>)) &#123;</span><br><span class="line">            syncObjectBlock1();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (threadName.startsWith(<span class="string">"C"</span>)) &#123;</span><br><span class="line">            syncObjectMethod1();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (threadName.startsWith(<span class="string">"D"</span>)) &#123;</span><br><span class="line">            syncClassBlock1();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (threadName.startsWith(<span class="string">"E"</span>)) &#123;</span><br><span class="line">            syncClassMethod1();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 异步方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">async</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"_Async_Start: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"_Async_End: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 方法中有 synchronized(this|object) &#123;&#125; 同步代码块</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">syncObjectBlock1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncObjectBlock1: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncObjectBlock1_Start: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncObjectBlock1_End: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * synchronized 修饰非静态方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">syncObjectMethod1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncObjectMethod1: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncObjectMethod1_Start: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncObjectMethod1_End: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">syncClassBlock1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncClassBlock1: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">        <span class="keyword">synchronized</span> (SyncThread<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncClassBlock1_Start: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncClassBlock1_End: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">syncClassMethod1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncClassMethod1: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncClassMethod1_Start: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"_SyncClassMethod1_End: "</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行 A B C</p>
+<p><img src="image-20200406094654012.png" alt></p>
+<p>结果如下： </p>
+<p><strong><font color="orange">A_thread2_Async_Start: 10:53:42</font></strong></p>
+<p><strong><font color="blue">B_thread2_SyncObjectBlock1: 10:53:42</font></strong></p>
+<p><strong>C_thread1_SyncObjectMethod1: 10:53:42</strong></p>
+<p><strong><font color="blue">B_thread1_SyncObjectBlock1: 10:53:42</font></strong></p>
+<p><strong><font color="orange">A_thread1_Async_Start: 10:53:42</font></strong></p>
+<p><strong>C_thread1_SyncObjectMethod1_Start: 10:53:42</strong></p>
+<p><strong><font color="orange">A_thread2_Async_End: 10:53:43</font></strong></p>
+<p><strong><font color="orange">A_thread1_Async_End: 10:53:43</font></strong></p>
+<p><strong>C_thread1_SyncObjectMethod1_End: 10:53:43</strong></p>
+<p><strong><font color="blue">B_thread1_SyncObjectBlock1_Start: 10:53:43</font></strong></p>
+<p><strong><font color="blue">B_thread1_SyncObjectBlock1_End: 10:53:44</font></strong></p>
+<p><strong><font color="blue">B_thread2_SyncObjectBlock1_Start: 10:53:44</font></strong></p>
+<p><strong><font color="blue">B_thread2_SyncObjectBlock1_End: 10:53:45</font></strong></p>
+<p><strong>C_thread2_SyncObjectMethod1: 10:53:45</strong></p>
+<p><strong>C_thread2_SyncObjectMethod1_Start: 10:53:45</strong></p>
+<p><strong>C_thread2_SyncObjectMethod1_End: 10:53:46</strong></p>
+<p>我们分开来看</p>
+<p><strong><font color="orange">A_thread想怎么样就怎么样，因为是异步的。1可能后于2执行但是先于2结束。</font></strong></p>
+<p><strong><font color="blue">B_thread在进入同步块之前和A_thread行为一样，进入后谁先抢占锁谁先执行。</font></strong></p>
+<p><strong>C_thread因为使用synchronized修饰方法，因此一开始就是同步方法。</strong></p>
+<p>然后再合起来看：</p>
+<p>发现线程C和线程B也是同步的，因为synchronized的变量是一样的。</p>
+<p>同步方法和同步块锁的都是同一个对象。</p>
+<p>如果换成不同对象呢？</p>
+<p><img src="image-20200406095434194.png" alt></p>
+<p><font color="blue"><strong>B_thread2_SyncObjectBlock1: 11:05:52</strong></font></p>
+<p><font color="blue"><strong>B_thread1_SyncObjectBlock1: 11:05:52</strong></font></p>
+<p><strong>C_thread1_SyncObjectMethod1: 11:05:52</strong></p>
+<p><strong>C_thread1_SyncObjectMethod1_Start: 11:05:52</strong></p>
+<p><strong><font color="blue">B_thread2_SyncObjectBlock1_Start: 11:05:52</font></strong></p>
+<p><strong>C_thread1_SyncObjectMethod1_End: 11:05:53</strong></p>
+<p><strong>C_thread2_SyncObjectMethod1: 11:05:53</strong></p>
+<p><strong>C_thread2_SyncObjectMethod1_Start: 11:05:53</strong></p>
+<p><strong><font color="blue">B_thread2_SyncObjectBlock1_End: 11:05:53</font></strong></p>
+<p><strong><font color="blue">B_thread1_SyncObjectBlock1_Start: 11:05:53</font></strong></p>
+<p><strong><font color="blue">B_thread1_SyncObjectBlock1_End: 11:05:54</font></strong></p>
+<p><strong>C_thread2_SyncObjectMethod1_End: 11:05:54</strong></p>
+<p>明显看到和上面最大的差别就是B和C变成异步的了。</p>
+<p><img src="image-20200406095626317.png" alt></p>
+<p><strong><font color="blue">D_thread2_SyncClassBlock1: 11:17:10</font></strong></p>
+<p><strong><font color="orange">A_thread1_Async_Start: 11:17:10</font></strong></p>
+<p><strong><font color="blue">D_thread1_SyncClassBlock1: 11:17:10</font></strong></p>
+<p><strong>E_thread1_SyncClassMethod1: 11:17:10</strong></p>
+<p><strong><font color="orange">A_thread2_Async_Start: 11:17:10</font></strong></p>
+<p><strong>E_thread1_SyncClassMethod1_Start: 11:17:10</strong></p>
+<p><strong><font color="orange">A_thread2_Async_End: 11:17:11</font></strong></p>
+<p><strong>E_thread1_SyncClassMethod1_End: 11:17:11</strong></p>
+<p><font color="orange"><strong>D_thread1_SyncClassBlock1: 11:17:10A_thread1_Async_End: 11:17:11</strong></font></p>
+<p><strong><font color="blue">D_thread1_SyncClassBlock1_Start: 11:17:11</font></strong></p>
+<p><strong><font color="blue">D_thread1_SyncClassBlock1_End: 11:17:12</font></strong></p>
+<p><strong><font color="blue">D_thread2_SyncClassBlock1_Start: 11:17:12</font></strong></p>
+<p><strong><font color="blue">D_thread2_SyncClassBlock1_End: 11:17:13</font></strong></p>
+<p><strong>E_thread2_SyncClassMethod1: 11:17:13</strong></p>
+<p><strong>E_thread2_SyncClassMethod1_Start: 11:17:13</strong></p>
+<p><strong>E_thread2_SyncClassMethod1_End: 11:17:14</strong></p>
+<p>其实和第一次的结果一致，同时注意一个细节就是类锁不干扰对象锁。</p>
+<p><img src="image-20200406095920294.png" alt></p>
+<p><font color="red"><strong>类锁和对象锁是互不干扰的</strong></font></p>
+<h4><span id="对象锁和类锁的总结">对象锁和类锁的总结</span></h4><ol>
+<li><p>有线程访问对象的同步代码块时，另外的线程可以访问该对象的非同步代码块；</p>
+</li>
+<li><p>若锁住的是同一对象，一个线程在访问对象的同步代码块时，另一个访问对象的同步代码块的线程会被阻塞；</p>
+</li>
+<li><p>若锁住的是同一个对象，一个线程在访问对象的同步方法时，另一个访问对象同步方法的线程会被阻塞；</p>
+</li>
+<li><p>若锁住的是同一个对象，一个线程在访问对象的同步代码块时，另一个访问对象同步方法的线程会被阻塞，反之亦然；</p>
+</li>
+<li><p>同一个类的不同对象的对象锁互不干扰；</p>
+</li>
+<li><p>类锁由于也是一种特殊的对象锁，因此表现和上述1,2,3,4一致，而由于一个类只有一把对象锁，所以<font color="orange">同一个类</font>的<font color="red">不同对象使用类锁</font>将会是同步的；</p>
+</li>
+<li><p>类锁和对象锁互不干扰</p>
+</li>
+</ol>
+<p><strong><font color="red">一个是类对象，一个是对象。</font></strong></p>
+<h2><span id="对象在内存中的布局">对象在内存中的布局</span></h2><p>Ø 对象头</p>
+<p>Ø 实例数据</p>
+<p>Ø 对齐填充</p>
+<h3><span id="对象头的结构">对象头的结构</span></h3><p><img src="image-20200406100050928.png" alt></p>
+<h3><span id="mark-word">Mark Word</span></h3><p><img src="image-20200406100106418.png" alt></p>
+<h2><span id="monitor每个java对象天生自带了一把看不见的锁c实现">Monitor：每个Java对象天生自带了一把看不见的锁（C++实现）</span></h2><p><img src="image-20200406100119993.png" alt></p>
+<p><img src="image-20200406100127154.png" alt></p>
+<p>我们可以看到同步代码块执行的是monitorenter和monitorexit指令</p>
+<h2><span id="什么是从重入">什么是从重入</span></h2><p>从互斥锁的设计上来说，当一个线程试图操作一个由其他线程持有的对象锁的临界资源时，将会处于阻塞状态，但当一个线程<font color="orange"><strong>再次请求自己持有对象锁的临界资源时</strong></font>，这种情况属于重入。</p>
+<h2><span id="为什么会对synchronized嗤之以鼻">为什么会对synchronized嗤之以鼻</span></h2><p>Ø 早期版本，synchronized属于重量级锁，依赖于Mutex Lock实现</p>
+<p>Ø 线程之间的切换需要从<font color="orange">用户态转换到核心态</font>，开销较大。</p>
+<h2><span id="java6以后synchronized性能得到了很大的提升">Java6以后，synchronized性能得到了很大的提升</span></h2><table>
+<thead>
+<tr>
+<th>Adaptive Spinning</th>
+<th align="center">Lightweight Locking</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lock Eliminate</td>
+<td align="center">Biased Locking</td>
+</tr>
+<tr>
+<td>Lock Coarsening</td>
+<td align="center">…</td>
+</tr>
+</tbody></table>
+<h2><span id="自旋锁与自适应自旋锁">自旋锁与自适应自旋锁</span></h2><h3><span id="自旋锁">自旋锁</span></h3><p>Ø 许多情况下，共享数据的锁定状态持续时间较短，切换线程不值得</p>
+<p>Ø 通过让线程执行忙循环等待锁的释放，不让出CPU</p>
+<p>Ø 缺点：若锁被其它线程长时间占用，会带来许多性能上的开销</p>
+<p>jvm调优可以用-XX:preBlockSpin</p>
+<h3><span id="自适应自旋锁">自适应自旋锁</span></h3><p>Ø 自旋的次数不再固定</p>
+<p>Ø 由前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定</p>
+<h2><span id="锁消除">锁消除</span></h2><h3><span id="更彻底的优化">更彻底的优化</span></h3><p>Ø JIT编译时，对运行上下文进行扫描，去除不可能存在竞争的锁。</p>
+<p><img src="image-20200406102305792.png" alt></p>
+<p>自动消除这个synchronized锁，因为sb属于本地变量并没有return出去，因此不存在被其他线程引用到的风险，因此会自动取消synchronized</p>
+<p><img src="image-20200406102315172.png" alt></p>
+<h2><span id="锁粗化">锁粗化</span></h2><h3><span id="另一种极端">另一种极端</span></h3><p>通过扩大锁的范围，避免重复加锁和解锁</p>
+<p><img src="image-20200406102342630.png" alt></p>
+<p>因为是在循环内部加解锁，虽然可能存在同步竞争，但是在线程内部其实是没有同步竞争的，因此JVM会将锁加到方法上，而不是一个append操作里面。</p>
+<h2><span id="synchronized的四种状态">Synchronized的四种状态</span></h2><p>Ø 无锁、偏向锁、轻量级锁、重量级锁</p>
+<p><strong>锁膨胀方向：无锁→偏向锁→轻量级锁→重量级锁</strong></p>
+<h3><span id="偏向锁减少同一线程获取锁的代价-cascompare-and-swap-">偏向锁：减少同一线程获取锁的代价 CAS（Compare and Swap）【-】</span></h3><p>Ø 大多数情况下，锁不存在多线程竞争，总是由同一线程多次获得</p>
+<p><strong>核心思想：</strong></p>
+<p>如果一个线程获得了锁，<font color="orange">在Mark Word中CAS记录owner，<em>如果成功。</em>那么锁就进入偏向模式，此时Mark Word的结构也变为偏向锁结构</font>，当该线程再次请求锁时，无需再做任何同步操作，即获取锁的过程只需要<font color="orange">检查Mark Word的锁标记位为偏向锁以及当前线程Id等于Mark Word的ThreadID即可</font>，这样就省去了大量有关锁申请的操作。</p>
+<p>如果测试失败，则需要再测试一下Mark Word中偏向锁的标识是否设置成1（表示当前是偏向锁）：如果没有设置，则使用CAS竞争锁；如果设置了，则尝试使用CAS将对象头的偏向锁指向当前线程</p>
+<p>不适用于锁竞争比较激烈的多线程场合</p>
+<h3><span id="轻量级锁">轻量级锁</span></h3><p>轻量级锁是由偏向锁升级来的，偏向锁运行在一个线程同步块的情况下，当第二个线程加入锁争用的时候，偏向锁就会升级为轻量级锁。 </p>
+<p>适应的场景：线程<font color="orange">交替执行</font>同步块 </p>
+<p>若存在同一时间访问同一锁的情况，就会导致轻量级锁膨胀为重量级锁</p>
+<h4><span id="加锁过程">加锁过程</span></h4><p>（1）   在代码进入同步块的时候，如果同步对象锁状态为无锁状态（锁状态位为“01”状态），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间。用于存储锁对象目前的Mark Word的拷贝，官方称之为Displaced Mark Word。这时候线程堆栈与对象头的状态如图所示。</p>
+<p><img src="image-20200406102559772.png" alt>       </p>
+<p>（2）   拷贝对象头中的Mark Word复制到锁记录中。</p>
+<p>（3）   拷贝成功后，虚拟机将使用CAS操作尝试将对象的Mark Word更新为指向Lock Record的指针，并将Lock record里的owner指针指向Object mark word。如果更新成功，则执行步骤（4）否则执行步骤（5）。</p>
+<p>（4）   如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位设置为“00”，即表示此对象处于轻量级锁定状态，这时候线程堆栈和对象头的状态如图所示。</p>
+<p> <img src="image-20200406102622997.png" alt></p>
+<p>（5）   如果这个更新操作失败了，虚拟机首先会检查对象的Mark Word是否指向当前线程的栈帧，如果是就说明当前线程已经拥有了这个对象的锁，那就可以直接进入同步块继续执行。否则说明多个线程竞争锁，轻量级锁就要膨胀为重量级锁，锁标志的状态值变为“10”，Mark Word中存储的就是指向重量级锁（互斥量）的指针，后面等待锁的过程也要进入阻塞状态。而当前线程便尝试使用自旋来获取锁，自旋之前讲过，就是不让线程阻塞，而采用循环去获取锁的过程。 </p>
+<h4><span id="解锁过程">解锁过程</span></h4><p>（1）   通过CAS操作尝试把线程中复制的Displaced Mark Word对象替换当前的Mark Word。</p>
+<p>（2）   如果替换成功，整个同步过程就完成了。</p>
+<p>（3）   如果替换失败，说明有其他线程尝试过获取该锁（此时锁已膨胀），那就要在释放锁的同时，唤醒被挂起的线程。</p>
+<p><strong>加锁</strong></p>
+<p>线程在执行同步块之前，JVM会先在当前线程的栈桢中<strong>创建用于存储锁记录的空间</strong>，并将对象头中的Mark Word复制到锁记录中，官方称为<strong>Displaced Mark Word</strong>。然后线程尝试使用CAS<strong>将对象头中的Mark Word替换为指向锁记录的指针</strong>。如果成功，当前线程获得锁，如果失败，表示其他线程竞争锁，当前线程便尝试使用自旋来获取锁。</p>
+<p><strong>解锁</strong></p>
+<p>轻量级解锁时，会使用原子的CAS操作将Displaced Mark Word替换回到对象头，如果成功，则表示没有竞争发生。如果失败，表示当前锁存在竞争，锁就会膨胀成重量级锁。</p>
+<h2><span id="锁的内存语义">锁的内存语义</span></h2><p>当线程释放锁时，Java内存模型会把该线程对应的本地内存中的共享变量刷新到主内存中；</p>
+<p>而当线程获取锁时，Java内存模型会把该线程对应的本地内存置为无效，从而使得被监控器保护的临界区代码必须从主内存中读取共享变量。</p>
+<p><img src="image-20200406102705063.png" alt></p>
+<h2><span id="偏向锁-轻量级锁-重量级锁的汇总">偏向锁、轻量级锁、重量级锁的汇总</span></h2><p><img src="image-20200406102715189.png" alt></p>
+<h2><span id="synchronized和reentrantlock">Synchronized和ReentrantLock</span></h2><h3><span id="reentrantlock再入锁">ReentrantLock（再入锁）</span></h3><p>Ø 位于java.util.concurrent.locks包</p>
+<p>Ø 和CountDownLatch、FutureTask、Semaphore一样基于AQS实现</p>
+<p>Ø 能够比synchronized更细粒度的控制，如控制fairness</p>
+<p>Ø 调用lock（）之后，必须调用unlock（）释放锁</p>
+<p>Ø 性能未必比synchronized高，并且也是可重入的</p>
+<h4><span id="reentrantlock公平性的设置">ReentrantLock公平性的设置</span></h4><p>Ø ReentrantLock fairLock = new ReentrantLock（true）；</p>
+<p>Ø 参数为true时，倾向于将锁赋予等待时间最久的线程</p>
+<p>Ø 公平锁：获取锁的顺序按先后调用lock方法的顺序（慎用）</p>
+<p>Ø 非公平锁：抢占顺序不一定，看运气</p>
+<p>Ø Synchronized是非公平锁</p>
+<p> <img src="image-20200406102742724.png" alt></p>
+<p><img src="image-20200406102748852.png" alt></p>
+<h4><span id="reentrantlock将锁对象化">ReentrantLock将锁对象化</span></h4><p>Ø 判断是否有线程，或者某个特定线程，在排队等待获取锁</p>
+<p>Ø 带超时的获取锁的尝试</p>
+<p>Ø 感知有没有成功获取锁</p>
+<h4><span id="能将waitnotifynotifyall对象化">能将wait\notify\notifyAll对象化</span></h4><p>Ø Java.util.concurrent.locks.Condition</p>
+<h4><span id="synchronized和reentrantlock的区别总结">Synchronized和ReentrantLock的区别总结</span></h4><p>Ø Synchronized是关键字，ReentrantLock是类</p>
+<p>Ø ReentrantLock可以对获取锁的等待时间进行设置，避免死锁</p>
+<p>Ø ReetrantLock可以获取各种锁的信息</p>
+<p>Ø ReentrantLock可以灵活地实现多路通知</p>
+<p>Ø <font color="red">机制：sync操作Mark Word，lock调用Unsafe类的park（）方法</font></p>
+<h2><span id="什么是java内存模型中的happens-before">什么是Java内存模型中的happens-before</span></h2><h3><span id="java内存模型jmm">Java内存模型JMM</span></h3><p>JMM描述的是一组规则，围绕原子性，有序性、可见性展开，定义了程序中<font color="red">各个变量的访问方式</font> </p>
+<p>JMM处于中间层，包含了两个方面：（1）内存模型；（2）重排序以及happens-before规则。同时，为了禁止特定类型的重排序会对编译器和处理器指令序列加以控制。</p>
+<p><img src="image-20200406102842448.png" alt></p>
+<h3><span id="jmm中的主内存">JMM中的主内存</span></h3><p>Ø 存储Java实例对象</p>
+<p>Ø 包括成员变量、类信息、常量、静态变量等</p>
+<p>Ø 属于数据共享的区域，多线程并发操作时会引发线程安全问题</p>
+<h3><span id="jmm中的工作内存">JMM中的工作内存</span></h3><p>Ø 存储当前方法的所有本地变量信息，本地变量对其他线程不可见</p>
+<p>Ø 字节码行号指示器、Native方法信息</p>
+<p>Ø 属于线程私有数据区域，不存在线程安全问题</p>
+<h3><span id="jmm与java内存区域划分是不同的概念层次">JMM与Java内存区域划分是不同的概念层次</span></h3><p>Ø JMM描述的是一组规则，围绕原子性，有序性、可见性展开</p>
+<p>Ø 相似点：存在共享区域和私有区域</p>
+<h3><span id="主内存与工作内存的数据存储类型以及操作方式归纳">主内存与工作内存的数据存储类型以及操作方式归纳</span></h3><p>Ø 方法里的基本数据类型本地变量将直接存储在工作内存的栈帧结构中</p>
+<p>Ø 引用类型的本地变量：引用储存在工作内存中，实例储存在主内存中</p>
+<p>Ø 成员变量、static变量、类信息均会被存储在主内存中</p>
+<p>Ø 主内存共享的方式是线程各拷贝一份数据到工作内存，操作完成后刷新回主内存</p>
+<p><img src="image-20200406103124125.png" alt></p>
+<h3><span id="指令重排序需要满足的条件">指令重排序需要满足的条件</span></h3><p>Ø 在单线程环境下不能改变程序运行的结果</p>
+<p>Ø 存在数据依赖关系的不允许重排列</p>
+<p><strong>无法通过happens-before原则推导出来的，才能进行指令的重排序</strong></p>
+<h4><span id="a操作的结果需要对b操作可见则a与b存在happens-before关系">A操作的结果需要对B操作可见，则A与B存在happens-before关系</span></h4><p><img src="image-20200406103135759.png" alt></p>
+<h4><span id="happens-before的八大原则">Happens-before的八大原则</span></h4><ol>
+<li><strong>程序次序规则</strong>：一个线程内，按照代码顺序，书写在前面的操作先行发生于书写在后面的操作；</li>
+<li><strong>锁定规则</strong>：一个unLock操作先行发生于后面对同一个锁的lock操作；</li>
+<li><strong>Volatile变量规则</strong>：对一个变量的写操作先行发生于后面对这个变量的读操作；</li>
+<li><strong>传递规则</strong>：如果操作A发生先行于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C</li>
+<li><strong>线程启动规则</strong>：Thread对象的start（）方法先行发生于此线程的每一个动作；</li>
+<li><strong>线程中断规则</strong>：对线程interrupt（）方法的调用先行于被中断线程的代码检测到中断事件的发生</li>
+<li><strong>线程终结规则</strong>：线程中所有操作都先行于线程的终止检测，我们可以通过Thread.join（） 方法结束，Thread.isAlive()的返回值手段检测线程已经终止执行；</li>
+<li><strong>对象终结规则</strong>：一个对象的初始化完成先行发生于他的finalize（）方法的开始；</li>
+</ol>
+<h4><span id="happens-before的概念">Happens-before的概念</span></h4><p>如果两个操作不满足上述任意一个happens-before规则，那么这两个操作就没有顺序的保障，JVM可以对这两个操作进行重排序；</p>
+<p>如果操作A happens-before操作B，那么操作A在内存上所做的操作对操作B都是可见的。 </p>
+<p><img src="image-20200406103324765.png" alt></p>
+<p>无法通过happens-before原则推导出（因此不是线程安全的）</p>
+<p>可以对方法加入synchronized锁或者对变量进行volatile修饰。 </p>
+<h4><span id="final重排序">final重排序</span></h4><p>按照final修饰的数据类型分类：</p>
+<p>基本数据类型:</p>
+<ol>
+<li>final域写：禁止<strong>final</strong>域写<strong>与</strong>构造方法重排序，即禁止final域写重排序到构造方法之外，从而保证该对象对所有线程可见时，该对象的final域全部已经初始化过。</li>
+<li>final域读：禁止初次<strong>读对象的引用</strong>与<strong>读该对象包含的</strong>final域的重排序。</li>
+</ol>
+<p>引用数据类型：</p>
+<p>额外增加约束：禁止在构造函数对<strong>一个</strong>final修饰的对象的成员域的写入<strong>与随后将</strong>这个被构造的对象的引用赋值给引用变量重排序</p>
+<h4><span id="volatilejvm提供的轻量级同步机制">Volatile：JVM提供的轻量级同步机制</span></h4><p>Ø 保证被volatile修饰的共享变量对所有线程总是可见的</p>
+<p>Ø 禁止指令重排序优化</p>
+<h4><span id="volatile不保证原子性">Volatile不保证原子性</span></h4><p><img src="image-20200406103421551.png" alt></p>
+<p>会产生线程安全问题，因为++不是原子性操作 </p>
+<p>因此要用synchronized修饰符，并且volatile可以被省略。</p>
+<p><img src="image-20200406103433641.png" alt></p>
+<p>由于对boolean值shutdown修改是原子性操作，因此可以保证线程安全。</p>
+<p><img src="image-20200406103441676.png" alt></p>
+<h4><span id="volatile变量为何立即可见">Volatile变量为何立即可见？</span></h4><p>当写一个volatile变量时，JMM会把该线程对应的工作内存中的共享变量值刷新到主内存中；</p>
+<p>当读取一个volatile变量时，JMM会把该线程对应的工作内存置为无效。</p>
+<h4><span id="volatile如何禁止重排优化">Volatile如何禁止重排优化</span></h4><p>内存屏障（Memory Barrier）</p>
+<ol>
+<li><p>保证特定操作的执行顺序</p>
+</li>
+<li><p>保证某些变量的内存可见性</p>
+</li>
+</ol>
+<p>通过插入内存屏障指令禁止在内存屏障前后的指令执行重排序优化</p>
+<p>强制刷出各种CPU的缓存数据，因此任何CPU上的线程都能读取到这些数据的最新版本 </p>
+<h4><span id="实现线程安全的单例写法错误示范">实现线程安全的单例写法（错误示范）</span></h4><p><img src="image-20200406103504191.png" alt></p>
+<p>因为步骤2和步骤3不存在数据依赖关系，所以可能被重排序。</p>
+<p>重排序只会保证单线程的语义一致性（串行语义的一致性），不会保证多线程之间的语义一致性。</p>
+<p>因此本例可能会出现线程1重排序后执行到第2步时已经将instance指向了分配的内存，导致线程2返回instance。</p>
+<p><font color="orange"><strong>解决方法：使用volatile修饰instance即可。</strong></font></p>
+<p><img src="image-20200406103549743.png" alt></p>
+<h4><span id="volatile和synchronized的区别">Volatile和synchronized的区别</span></h4><ol>
+<li><p>Volatile本质是在告诉JVM当前变量在寄存器（工作内存）中的值是不确定的，需要从主存中读取；synchronized则是锁定当前变量，只有当前线程可以访问该变量，其他线程被阻塞住直到该线程完成变量操作为止</p>
+</li>
+<li><p>Volatile仅能使用在变量级别；synchronized则可以使用在变量、方法和类级别</p>
+</li>
+<li><p>Volatile仅能实现变量的修改可见性，不能保证原子性；而synchronized则可以保证变量修改的可见性和原子性</p>
+</li>
+<li><p>Volatile不会造成线程的阻塞；synchronized可能会造成线程的阻塞</p>
+</li>
+<li><p>Volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优化</p>
+</li>
+</ol>
+<h2><span id="cascompare-and-swap">CAS（compare and swap）</span></h2><h3><span id="乐观锁和悲观锁">乐观锁和悲观锁</span></h3><p>Synchronized这种独占锁属于悲观锁，悲观锁始终假定会发生并发冲突，因此会屏蔽一切可能会违反数据完整性的操作，除此之外还有乐观锁，它假设不会发生并发冲突，因此只在提交时检查是否违反数据完整性，如果提交失败则会重试 </p>
+<h3><span id="一种高效实现线程安全性的方法">一种高效实现线程安全性的方法</span></h3><p>Ø 支持原子更新操作，适用于计数器，序列发生器等场景</p>
+<p>Ø 属于乐观锁机制，号称lock-free</p>
+<p>Ø CAS操作失败时由开发者决定是继续尝试，还是执行别的操作</p>
+<p>内存位置的值即为主内存里面的值。</p>
+<h3><span id="cas思想">CAS思想</span></h3><p>包含三个操作数——内存位置（V）、预期原值（A）和新值（B） </p>
+<p>不断失败重试，直到成功为止。</p>
+<p> <img src="image-20200406103630627.png" alt></p>
+<p><img src="image-20200406103636135.png" alt></p>
+<p>我们发现value++被拆分成如下的指令</p>
+<p>得到值、操作加一、写回值</p>
+<p><img src="image-20200406103647421.png" alt></p>
+<p>可以使用synchronized修饰符修饰解决原子性操作问题，但是效率不高。</p>
+<p>我们可以使用AtomicInteger来解决。</p>
+<p><img src="image-20200406103657100.png" alt></p>
+<p><img src="image-20200406103701526.png" alt></p>
+<p><strong><font color="orange">每次从内存中读取数据然后将此数据和+1后的结果进行CAS操作，如果成功就返回结果，否则重试直到成功为止。</font></strong></p>
+<p><font color="red">CAS有3个操作数，内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。</font></p>
+<p>CAS的原子性实际上是CPU实现</p>
+<h3><span id="cas多数情况下对开发者来说是透明的">CAS多数情况下对开发者来说是透明的</span></h3><p>Ø J.U.C的atomic包提供了常用的原子性数据类型以及引用、数组等相关原子类型和更新操作工具，是很多线程安全程序的首选</p>
+<p>Ø Unsafe类虽然提供CAS服务，但因能够操纵任意内存地址读写而有隐患</p>
+<p>Ø Java9以后，可以使用Variable Handle API来替代Unsafe </p>
+<h3><span id="缺点">缺点</span></h3><p>Ø 若循环时间长，则开销很大</p>
+<p>Ø 只能保证一个共享变量的原子操作</p>
+<p>Ø ABA问题  解决：AtomicStampedReference</p>
+<p>ABA的意思是，A的值被改成B又被改成A了然后cas没办法感知它的变化，以为它一直是A。</p>
+<h2><span id="java线程池">Java线程池</span></h2><h3><span id="利用executors创建不同的线程池满足不同场景的需求">利用Executors创建不同的线程池满足不同场景的需求</span></h3><ol>
+<li><p>newFixedThreadPool（int nThreads）指定工作线程数量的线程池</p>
+</li>
+<li><p>newCachedThreadPool() 处理大量短时间工作任务的线程池，</p>
+</li>
+</ol>
+<p>（1）   试图缓存线程并重用，当无缓存线程可用时，就会创建新的工作线程；</p>
+<p>（2）   如果线程闲置的时间超过阈值，则会被终止并移除缓存；</p>
+<p>（3）   系统长时间闲置的时候，不会消耗什么资源</p>
+<ol start="3">
+<li><p>newSingleThreadExcutor（）创建唯一的工作者线程来执行任务，如果线程异常结束，会有另一个线程取代它</p>
+</li>
+<li><p>newSingleThreadScheduledExecutor（）与newScheduledThreadPool（int corePoolSize）定时或者周期性的工作调度，两者的区别在于单一工作线程还是多个线程</p>
+</li>
+<li><p>newWorkStealingPool（）</p>
+<p>内部会构建ForkJoinPool，利用working-stealing算法，并行地处理任务，不保证处理顺序</p>
+</li>
+</ol>
+<h3><span id="forkjoin框架">Fork/Join框架</span></h3><p>Work-Stealing算法：某个线程从其他队列里窃取任务来执行 </p>
+<p>Ø 把大任务分割成若干个小任务并行执行，最终汇总每个小任务结果后得到大任务结果的框架</p>
+<p><img src="image-20200406103916611.png" alt></p>
+<p>可能会出现有些线程的任务队列已经完成了，但其它线程的队列还有任务没有完成，主要会造成已完成任务的线程会被闲置，为了提高效率，已经完成任务的线程会从未完成任务线程的队列里面窃取任务。为了减少任务窃取线程和被窃取线程之间的竞争通常会使用双端队列。被窃取任务线程永远从双端队列的头部拿任务执行，而窃取任务线程永远从双端队列的尾部拿任务执行。</p>
+<h3><span id="为什么要使用线程池">为什么要使用线程池</span></h3><p>Ø 降低资源消耗</p>
+<p>Ø 提高线程的可管理性 </p>
+<h3><span id="executor的框架">Executor的框架</span></h3><p><img src="image-20200406103937736.png" alt></p>
+<h3><span id="juc的三个executor接口">J.U.C的三个Executor接口</span></h3><p>Ø Executor：运行新任务的简单接口，将任务提交和任务操作细节解耦</p>
+<p><img src="image-20200406103950097.png" alt></p>
+<p>Ø ExecutorService：具备管理执行器和任务生命周期的方法，提交任务机制更完善</p>
+<p>Ø ScheduledExecutorService：支持Future和定期执行任务   </p>
+<p><img src="image-20200406103956689.png" alt></p>
+<h3><span id="threadpoolexecutor的构造函数">ThreadPoolExecutor的构造函数</span></h3><p>Ø corePoolSize：核心线程数量</p>
+<p>Ø maximumPoolSize:线程不够用时能够创建的最大线程数</p>
+<p>Ø workQueue：任务等待队列</p>
+<p>Ø keepAliveTime：抢占的顺序不一定，看运气</p>
+<p>Ø threadFactory：创建新线程，Executors.defaultThreadFactory()</p>
+<h3><span id="threadpooleecutor">ThreadPoolEecutor</span></h3><p><img src="image-20200406104018426.png" alt></p>
+<h3><span id="handler线程池的饱和策略">Handler:线程池的饱和策略</span></h3><p>Ø AbortPolicy：直接抛出异常，这是默认策略</p>
+<p>Ø CallerRunsPolicy：用调用者所在的线程来执行任务</p>
+<p>Ø DiscardOldestPolicy：丢弃队列中靠最前的任务，并执行当前任务</p>
+<p>Ø DiscardPolicy：直接丢弃任务</p>
+<p>Ø 实现RejectedExecutionHandler接口的自定义handler</p>
+<h3><span id="新任务提交execute执行后的判断">新任务提交execute执行后的判断</span></h3><p>Ø 如果运行的线程少于corePoolSize，则创建新线程来处理任务，即使线程池中的其他线程是空闲的；</p>
+<p>Ø 如果线程池中的线程数量大于等于corePoolSize且小于maximumPoolSize，则只有当workQueue满时才创建新的线程去处理任务；</p>
+<p>Ø 如果设置的corePoolSize和maximumPoolSize相同，则创建的线程池的大小是固定的，这时如果有新任务提交，若workQueue未满，则将请求放入workQueue中，等待有空闲的线程去从workQueue中取任务并处理；</p>
+<p>Ø 如果运行的线程数量大于等于maximumPoolSize，这时如果workQueue已经满了，则通过handler所指定的策略来处理任务；</p>
+<p><img src="image-20200406104034547.png" alt></p>
+<p><img src="image-20200406104040637.png" alt></p>
+<p>Ctl：状态值和有效线程数。</p>
+<p>高3位run state</p>
+<p>剩下29位保存work account</p>
+<h3><span id="线程池的状态">线程池的状态</span></h3><p>Ø RUNNING:能接受新提交的任务，并且也能处理阻塞队列中的任务</p>
+<p>Ø SHUTDOWN:不再接受新提交的任务，但可以处理存量任务</p>
+<p>Ø STOP：不再接受新提交的任务，也不处理存量任务</p>
+<p>Ø TIDYING：所有的任务都已终止</p>
+<p>Ø TERMINATED：terminated（）方法执行完后进入该状态</p>
+<p><img src="image-20200406104105572.png" alt></p>
+<h3><span id="工作线程的生命周期">工作线程的生命周期</span></h3><p><img src="image-20200406104115334.png" alt></p>
+<h3><span id="线程池的大小如何选定">线程池的大小如何选定</span></h3><p>Ø CPU密集型：线程数=按照核数或者核数+1设定</p>
+<p>Ø I/O密集型：线程数=CPU核数*(1+平均等待时间/平均工作时间)</p>
+</div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: 'd154fff64901622afbb6',
+  clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
+  repo: 'Disda-coding.github.io',
+  owner: 'Disda-coding',
+  admin: ['Disda-coding'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div><div class="pure-u-1 pure-u-md-4-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Disda.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> </a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Disda.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
