@@ -74,6 +74,7 @@
 <li><a href="#ssrf">SSRF</a><ul>
 <li><a href="#内网访问">内网访问</a></li>
 <li><a href="#伪协议读取文件">伪协议读取文件</a></li>
+<li><a href="#端口扫描">端口扫描</a></li>
 </ul>
 </li>
 </ul>
@@ -573,7 +574,16 @@
 </ul>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.../?url=http://127.0.0.1/flag.php</span><br></pre></td></tr></table></figure>
 
-<h4><span id="伪协议读取文件">伪协议读取文件</span></h4><h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1></div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+<h4><span id="伪协议读取文件">伪协议读取文件</span></h4><ul>
+<li>这一题的考点主要是<strong>file协议</strong>读取文件</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.../?url=file:///var/www/html/flag.php</span><br></pre></td></tr></table></figure>
+
+<h4><span id="端口扫描">端口扫描</span></h4><ul>
+<li>考察<code>dict://</code>协议</li>
+</ul>
+<p>使用burp suite进行端口扫描</p>
+<h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1></div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
   repo: 'Disda-coding.github.io',
