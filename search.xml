@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>ctf-b站笔记</title>
+      <link href="/2023/04/13/ctf-b%E7%AB%99%E7%AC%94%E8%AE%B0/"/>
+      <url>/2023/04/13/ctf-b%E7%AB%99%E7%AC%94%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><a id="more"></a><!-- toc --><ul><li><a href="#b站网安课程">B站网安课程</a></li><li><a href="#杂项">杂项</a><ul><li><a href="#文件类型识别">文件类型识别</a><ul><li><a href="#文件分离操作">文件分离操作</a></li></ul></li></ul></li></ul><!-- tocstop --><h1><span id="b站网安课程">B站网安课程</span></h1><p><a href="https://www.processon.com/view/link/62b1b2267d9c08073c671315" target="_blank" rel="noopener">学习路线图</a></p><h1><span id="杂项">杂项</span></h1><h2><span id="文件类型识别">文件类型识别</span></h2><ol><li>file命令<ul><li>使用场景：不知道后缀，无法打开文件</li></ul></li><li>winhex<ul><li>使用场景：windows下通过文件头信息判断文件类型</li></ul></li></ol><ul><li>遇到题目给个.png文件，但是打不开，通过<code>file</code>命令识别发现是data的情况，需要修复。<ul><li>通过010 Editor在文件加上对应头部就行。</li></ul></li></ul><h3><span id="文件分离操作">文件分离操作</span></h3><ol><li><p>Binwalk工具</p><p>用法：</p><p>分析文件: binwalk filename</p><p>分离文件: binwalk -e filename</p></li><li><p>formost</p><ul><li>如果Binwalk没办法分离，可以使用它</li></ul><p>用法：</p><p>Foremost filename -o dir</p></li><li><p>dd</p><ul><li>如果是分块的话，前两个工具都不管用，就使用它把。</li></ul><p>用法：</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dd <span class="keyword">if</span> =<span class="number">1</span>.txt of=<span class="number">4</span>.txt bs=<span class="number">5</span> count=<span class="number">3</span> skip=<span class="number">1</span></span><br><span class="line"># inputfile outputfile blocksize</span><br></pre></td></tr></table></figure><p>如果我们不知道文件分成几块合适的话，需要借助binwalk</p></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctf </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ctf </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CTFHub入门笔记</title>
       <link href="/2023/03/29/ctf/"/>
       <url>/2023/03/29/ctf/</url>
