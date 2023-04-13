@@ -76,13 +76,27 @@
 <li><a href="#上传文件">上传文件</a></li>
 <li><a href="#redis协议">Redis协议</a></li>
 <li><a href="#url-bypass">URL Bypass</a></li>
+<li><a href="#数字ip-bypass">数字IP Bypass</a></li>
+<li><a href="#302跳转-1">302跳转</a></li>
+<li><a href="#dns重绑定-bypass">DNS重绑定 Bypass</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#reverse">Reverse</a></li>
 <li><a href="#crypto">Crypto</a></li>
-<li><a href="#misc">Misc</a></li>
+<li><a href="#misc">Misc</a><ul>
+<li><a href="#流量分析">流量分析</a><ul>
+<li><a href="#mysql流量">Mysql流量</a></li>
+<li><a href="#redis流量">Redis流量</a></li>
+<li><a href="#mongodb">MongoDB</a></li>
+<li><a href="#icmp-data">ICMP Data</a></li>
+<li><a href="#icmp-length">ICMP Length</a></li>
+<li><a href="#icmp-lengthbin">ICMP LengthBin</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <!-- tocstop -->
 
@@ -708,11 +722,88 @@
 <li><p>这道题直接使用@跳过</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">http://notfound.ctfhub.com@127.0.0.1:80/flag.php</span></span><br></pre></td></tr></table></figure>
 
+</li>
+</ul>
+<p><a href="https://blog.csdn.net/xhy18634297976/article/details/120895812" target="_blank" rel="noopener">其他方法</a></p>
+<h4><span id="数字ip-bypass">数字IP Bypass</span></h4><p><a href="https://tool.520101.com/wangluo/jinzhizhuanhuan/" target="_blank" rel="noopener">IP地址转换</a></p>
+<ul>
+<li><p>方法一：通过IP地址转换，将10进制的数代替127.0.0.1即可，或者16进制前面加个0x</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://challenge-8c88f2c702488010.sandbox.ctfhub.com:10800/?url=2130706433:80/flag.php</span><br><span class="line"></span><br><span class="line">http://challenge-b558d4473913b437.sandbox.ctfhub.com:10800/?url=0x7F000001:80/flag.php</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法二：使用localhost</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://challenge-8c88f2c702488010.sandbox.ctfhub.com:10800/?url=localhost:80/flag.php</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法三；特殊地址<a href="http://0/" target="_blank" rel="noopener">http://0/</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://challenge-8c88f2c702488010.sandbox.ctfhub.com:10800/?url=0/flag.php</span><br></pre></td></tr></table></figure>
+
 
 
 </li>
 </ul>
-<h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1></div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+<h4><span id="302跳转">302跳转</span></h4><ul>
+<li>常规解法参考上题能做。</li>
+<li>使用<a href="https://www.bejson.com/convert/shorturl/" target="_blank" rel="noopener">短地址转换</a> <code>http://127.0.0.1/flag.php</code>即可</li>
+</ul>
+<h4><span id="dns重绑定-bypass">DNS重绑定 Bypass</span></h4><ul>
+<li><p><strong>同源策略</strong>：两个URL使用相同的<font color="red"><strong><em>协议、域名、端口</em></strong> </font>（IE浏览器没有端口）三者相同则称为同源。简单来说同源就是为了使一个域名下的网站只能调用本域名下的资源，防止其它域名的访问造成一些危害。</p>
+</li>
+<li><p>DNS重绑定：在网页浏览过程中，用户在地址栏中输入包含域名的网址。浏览器通过DNS服务器将域名解析为IP地址，然后向对应的IP地址请求资源，最后展现给用户。而对于域名所有者，他可以设置域名所对应的IP地址。当用户第一次访问，解析域名获取一个IP地址；然后，域名持有者修改对应的IP地址；用户再次请求该域名，就会获取一个新的IP地址。对于浏览器来说，整个过程访问的都是同一域名，所以认为是安全的。（浏览器同源策略） 这就是DNS Rebinding攻击。</p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/89426041" target="_blank" rel="noopener">参考</a></p>
+</li>
+<li><p><a href="https://lock.cmpxchg8b.com/rebinder.html" target="_blank" rel="noopener">重绑定工具地址</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://challenge-008000c7973432be.sandbox.ctfhub.com:10800/?url=7f000001.c0a80001.rbndr.us/flag.php</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h1><span id="reverse">Reverse</span></h1><h1><span id="crypto">Crypto</span></h1><h1><span id="misc">Misc</span></h1><h3><span id="流量分析">流量分析</span></h3><ul>
+<li>使用到工具是<strong>WireShark</strong></li>
+</ul>
+<h4><span id="mysql流量">Mysql流量</span></h4><ul>
+<li>直接下载包，然后在filter里面输入mysql，然后看info里面登录成功的那条</li>
+<li>使用<strong>follow tcp stream</strong> 然后在<strong>find</strong>里面输入关键字<code>ctf</code>即可。</li>
+</ul>
+<h4><span id="redis流量">Redis流量</span></h4><ul>
+<li><p>使用<strong>follow tcp stream</strong> 然后在<strong>find</strong>里面输入关键字<code>ctf</code>即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Fl4g1</span><br><span class="line">$22</span><br><span class="line">ctfhub&#123;6051d6123de43df</span><br><span class="line">+OK</span><br><span class="line">*3</span><br><span class="line">$3</span><br><span class="line">set</span><br><span class="line">$5</span><br><span class="line">flag2</span><br><span class="line">$18</span><br><span class="line">ad7609804925c0121&#125;</span><br></pre></td></tr></table></figure>
+
+<p>拼接出<code>ctfhub{6051d6123de43dfad7609804925c0121}</code></p>
+</li>
+</ul>
+<h4><span id="mongodb">MongoDB</span></h4><ul>
+<li>也是直接跟踪流，然后旁边有个选项可以直接选择第几个流，我们直接搜关键词<code>ctfhub{</code>找不到就换下个流，节省很多时间。</li>
+</ul>
+<h4><span id="icmp-data">ICMP Data</span></h4><ul>
+<li><p>方法一：无法跟踪流，用↓逐个观察，发现有个位置每次和上次不一样，拼起来就是flag，每次都有两个包是一样的一个<em>request</em>一个<em>response</em>，因此答案就是<code>ctfhub{c87eb99796406ac0b}</code></p>
+</li>
+<li><p>方法二：编写脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding = utf-8</span></span><br><span class="line"><span class="comment"># --author：valecalida--</span></span><br><span class="line"><span class="keyword">from</span> os <span class="keyword">import</span> system <span class="keyword">as</span> get_hex</span><br><span class="line"><span class="comment"># 调用tshark时需要将tshark加入环境变量，且脚本需要与流量包在一个路径下</span></span><br><span class="line"> </span><br><span class="line">get_hex(<span class="string">"tshark -r icmp_data.pcap -Y \"icmp &amp;&amp; icmp.type==8\" -T fields -e data &gt; flag.txt"</span>)</span><br><span class="line">f = open(<span class="string">'flag.txt'</span>, <span class="string">'r'</span>)</span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> f.readlines():</span><br><span class="line">    flag += chr(int(line[<span class="number">16</span>:<span class="number">18</span>], <span class="number">16</span>))</span><br><span class="line">print(flag)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用pyshark，其中<strong>type=8即请求，type=0即响应</strong>，这里0或者8都可以，因为是重复的。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding = utf-8</span></span><br><span class="line"><span class="comment"># --author: valecalida--</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> pyshark</span><br><span class="line"> </span><br><span class="line">cap = pyshark.FileCapture(<span class="string">"icmp_data.pcap"</span>, display_filter=<span class="string">"icmp &amp;&amp; icmp.type==8"</span>)</span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">25</span>):</span><br><span class="line">    flag += chr(int(str(cap[i].icmp.data_data)[<span class="number">24</span>:<span class="number">26</span>], <span class="number">16</span>))</span><br><span class="line">print(flag)</span><br><span class="line">cap.close()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>注意</strong>：在jupyter里面使用代码会导致报错<code>This event loop is already running</code>。</p>
+<p><em>解决方案：</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> nest_asyncio</span><br><span class="line">nest_asyncio.apply()</span><br></pre></td></tr></table></figure>
+
+<h4><span id="icmp-length">ICMP Length</span></h4><ul>
+<li><p>题目提示，flag暗藏玄只因。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyshark</span><br><span class="line"></span><br><span class="line">cap = pyshark.FileCapture(<span class="string">'icmp_len.pcap'</span>,display_filter=<span class="string">'icmp &amp;&amp; icmp.type==8'</span>)</span><br><span class="line"></span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">18</span>):</span><br><span class="line">    pkt = cap[i]</span><br><span class="line">    flag+=(chr(int(pkt.icmp.data_len)))</span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4><span id="icmp-lengthbin">ICMP LengthBin</span></h4><ul>
+<li><p>题目很直接的给了提示，就是二进制与length的关系，使用wireshark打开流量包查看，使用过滤器icmp&amp;&amp; icmp.type==8来进行过滤，查看每一条流量的length值，发现都是32或64，直接编写脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding = utf-8</span></span><br><span class="line"><span class="comment"># --author: valecalida--</span></span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">import</span> pyshark</span><br><span class="line"> </span><br><span class="line">cap = pyshark.FileCapture(<span class="string">'icmp_len_binary.pcap'</span>, display_filter=<span class="string">"icmp &amp;&amp; icmp.type==8"</span>)</span><br><span class="line">cap.load_packets()</span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line">con1 = <span class="string">""</span></span><br><span class="line">con2 = <span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(cap)):</span><br><span class="line">    <span class="keyword">if</span> cap[i].icmp.data_len == <span class="string">'32'</span>:</span><br><span class="line">        con1 += <span class="string">'0'</span></span><br><span class="line">        con2 += <span class="string">'1'</span></span><br><span class="line">    <span class="keyword">elif</span> cap[i].icmp.data_len == <span class="string">'64'</span>:</span><br><span class="line">        con1 += <span class="string">'1'</span></span><br><span class="line">        con2 += <span class="string">'0'</span></span><br><span class="line">print(binascii.a2b_hex(hex(int(con1, base=<span class="number">2</span>))[<span class="number">2</span>:]))</span><br><span class="line">print(binascii.a2b_hex(hex(int(con2, base=<span class="number">2</span>))[<span class="number">2</span>:]))</span><br><span class="line">cap.close()</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2022/12/23/Spring%20Security/">Spring Security</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
   repo: 'Disda-coding.github.io',
