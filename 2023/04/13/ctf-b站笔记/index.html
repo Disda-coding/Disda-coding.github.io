@@ -8,7 +8,10 @@
 <li><a href="#文件类型识别">文件类型识别</a></li>
 <li><a href="#文件分离操作">文件分离操作</a></li>
 <li><a href="#文件合并操作">文件合并操作</a><ul>
-<li><a href="#图片隐写">图片隐写</a></li>
+<li><a href="#图片隐写">图片隐写</a><ul>
+<li><a href="#图片加密">图片加密</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -128,12 +131,67 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> PIL.Image</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">  im = PIL.Image.open(<span class="string">'01.bmp'</span>)</span><br><span class="line">  im2 = im.copy()</span><br><span class="line">  pix = im2.load()</span><br><span class="line">  wid,hei = im2.size</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">0</span>,wid):</span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> xrange(<span class="number">0</span>,hei):</span><br><span class="line">      <span class="keyword">if</span> pix[x,y]&amp;<span class="number">0x1</span> == <span class="number">0</span>:</span><br><span class="line">        pix[x,y]=<span class="number">0</span></span><br><span class="line">      <span class="keyword">else</span>:</span><br><span class="line">        pix[x,y]=<span class="number">255</span></span><br><span class="line"> im2.show()</span><br><span class="line"> <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>TweakPNG</strong>：</p>
+<ul>
+<li>​    CRC错误</li>
+</ul>
 <blockquote>
-<p>它可以修改和查看一些PNG图像文件的元信息存储，可能题目提示CRC校验出错，我们需要通过该软件修改。</p>
-<p>搜索软件提示错误值的crc值替换成正确的即可。</p>
+<p>它可以修改和查看一些PNG图像文件的元信息存储，我们需要通过该软件修改，搜索软件提示错误值的crc值替换成正确的即可。</p>
+</blockquote>
+<ul>
+<li>图片宽高错误</li>
+</ul>
+<blockquote>
+<p>需要通过CRC计算出正确的宽高</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line">crc_current = <span class="string">'0x08ec7edb'</span> <span class="comment"># 目前的就行，不是提示的正确的</span></span><br><span class="line">crcbp = open(<span class="string">'xxx.png'</span>,<span class="string">'rb'</span>).read()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1024</span>):</span><br><span class="line">  <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1024</span>):</span><br><span class="line">    data = crcbp[<span class="number">12</span>:<span class="number">16</span>] + struct.pack(<span class="string">'&gt;i'</span>,i)+struct.pack(<span class="string">'&gt;i'</span>)+crcbp[<span class="number">24</span>:<span class="number">29</span>]</span><br><span class="line">    crc32 = binascii.crc32(data) &amp; <span class="number">0xffffffff</span></span><br><span class="line">    <span class="keyword">if</span> crc == crc_current:</span><br><span class="line">      print(i,j)</span><br><span class="line">      print(hex(i),hex(j))</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4><span id="图片加密">图片加密</span></h4><ul>
+<li><p>Bftools</p>
+<blockquote>
+<p>在win下用于对加密过的图片进行解密操作</p>
+</blockquote>
+</li>
+<li><p>SilentEye</p>
+<blockquote>
+<p>可以将文字文件隐藏到图片，或者对图片进行解密的工具</p>
+</blockquote>
+</li>
+<li><p>Stegdetect</p>
+<blockquote>
+<p>主要用于检测图片使用哪些隐写工具隐藏信息</p>
+</blockquote>
+</li>
+<li><p>Jphide</p>
+<blockquote>
+<p>基于最低有效位LSB的图像隐写算法 </p>
+</blockquote>
+</li>
+<li><p>Outguess</p>
+<blockquote>
+<p>图像隐写算法 </p>
+</blockquote>
+</li>
+<li><p>F5</p>
+<blockquote>
+<p>图像隐写算法 </p>
+</blockquote>
+</li>
+<li><p>CQR</p>
+<blockquote>
+<p>二维码处理</p>
 </blockquote>
 </li>
 </ul>
+<p><strong>二维码处理：</strong></p>
+<ol>
+<li>补全，可能二维码的方块被挡住了，我们需要讲起补全即可</li>
+<li>取反：使用画图工具的反色 功能<ul>
+<li>如果是彩色图片可以用<strong>Stegsolve</strong>查看颜色通道进行扫码，如果还没办法扫出来可以先反色再扫。</li>
+</ul>
+</li>
+</ol>
 </div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2023/03/29/ctf/">CTFHub入门笔记</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
