@@ -5,22 +5,25 @@
 <ul>
 <li><a href="#b站网安课程">B站网安课程</a></li>
 <li><a href="#misc">Misc</a><ul>
+<li><a href="#文件操作与隐写">文件操作与隐写</a><ul>
 <li><a href="#文件类型识别">文件类型识别</a></li>
 <li><a href="#文件分离操作">文件分离操作</a></li>
-<li><a href="#文件合并操作">文件合并操作</a><ul>
+<li><a href="#文件合并操作">文件合并操作</a></li>
+</ul>
+</li>
 <li><a href="#图片隐写">图片隐写</a><ul>
 <li><a href="#图片加密">图片加密</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li><a href="#压缩文件处理">压缩文件处理</a></li>
+<li><a href="#流量分析">流量分析</a></li>
 </ul>
 </li>
 </ul>
 <!-- tocstop -->
 
 <h1><span id="b站网安课程">B站网安课程</span></h1><p><a href="https://www.processon.com/view/link/62b1b2267d9c08073c671315" target="_blank" rel="noopener">学习路线图</a></p>
-<h1><span id="misc">Misc</span></h1><h2><span id="文件类型识别">文件类型识别</span></h2><ol>
+<h1><span id="misc">Misc</span></h1><h2><span id="文件操作与隐写">文件操作与隐写</span></h2><h3><span id="文件类型识别">文件类型识别</span></h3><ol>
 <li>file命令<ul>
 <li>使用场景：不知道后缀，无法打开文件</li>
 </ul>
@@ -41,7 +44,7 @@
 <p>遇到都是16进制编码的文本，可以通过import hex导入。</p>
 </li>
 </ol>
-<h2><span id="文件分离操作">文件分离操作</span></h2><ol>
+<h3><span id="文件分离操作">文件分离操作</span></h3><ol>
 <li><p>Binwalk工具</p>
 <p>用法：</p>
 <p>分析文件: binwalk filename</p>
@@ -64,7 +67,7 @@
 <p>如果我们不知道文件分成几块合适的话，需要借助binwalk分析</p>
 </li>
 </ol>
-<h2><span id="文件合并操作">文件合并操作</span></h2><ol>
+<h3><span id="文件合并操作">文件合并操作</span></h3><ol>
 <li><p>Linux下</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat a b c ... &gt; dist</span><br><span class="line"><span class="meta">#</span><span class="bash"> 完整性检查</span></span><br><span class="line">md5sum filename</span><br></pre></td></tr></table></figure>
 </li>
@@ -73,7 +76,7 @@
 
 </li>
 </ol>
-<h3><span id="图片隐写">图片隐写</span></h3><ol>
+<h2><span id="图片隐写">图片隐写</span></h2><ol>
 <li><p>细微颜色区别</p>
 </li>
 <li><p>GIF图多帧隐藏</p>
@@ -147,7 +150,7 @@
 
 </li>
 </ul>
-<h4><span id="图片加密">图片加密</span></h4><ul>
+<h3><span id="图片加密">图片加密</span></h3><ul>
 <li><p>Bftools</p>
 <blockquote>
 <p>在win下用于对加密过的图片进行解密操作</p>
@@ -190,6 +193,160 @@
 <li>取反：使用画图工具的反色 功能<ul>
 <li>如果是彩色图片可以用<strong>Stegsolve</strong>查看颜色通道进行扫码，如果还没办法扫出来可以先反色再扫。</li>
 </ul>
+</li>
+</ol>
+<h2><span id="压缩文件处理">压缩文件处理</span></h2><ol>
+<li><p>伪加密</p>
+<blockquote>
+<p>如果压缩文件是加密的，或文件头正常但解压缩错误，首先尝试文件是否为伪加密。zip文件是否加密是通过标识符来显示的，在每个文件的文件目录字段有一位专门标识了文件是否加密，将其设置为00表示该文件未加密，如果成功解压则表示文件为伪加密，如果解压出错说明文件为真加密.</p>
+</blockquote>
+<p><strong>使用场景：</strong> 伪加密文件<br><strong>操作方法：</strong>使用winhex打开压缩文件，找到文件头第九第十个字符，将其修改为0000</p>
+<p>1.使用winhex打开文件搜索16进制504B0102，可以看到每个加密文件的文件头字段。</p>
+<p><font color="orange"><strong>RAR文件</strong></font>由于有头部校验，使用伪加密时打开文件会出现报错，使用winhex修改标志位后如报错消失目正常解压缩，说明是伪加密。使用winhex打开RAR文件，找到第24个字节，该字节尾数为4表示加密，0表示无加密，将尾数改为0即可破解伪加密</p>
+</li>
+<li><p>暴力破解</p>
+<p>通常我们可以使用ARCHPR.exe工具来破解rar文件，用Ziperello来破解zip</p>
+<p><strong>使用场景：</strong>windows下加密过的zip文件</p>
+<ol>
+<li><p>攻击类型选择暴力破解，在范围位置根据提示选择暴力破解范围选项设置暴力破解包含的类型开始于和结束于选项具体范围，如果没有定义则全范围暴力破解。点击打开选择要破解的文件，点击开始进行破解。建议使用1~9位的数字密码，以及系统 自带的英文字典作为密码字典。</p>
+</li>
+<li><p>攻击类型选择掩码可以进行复杂的暴力破解比如知道密码前3位是abc，后3位为数字，则在攻击类型选择掩码，在掩码处输入acb???，暴力范围选项选择所有数字，打开要破解的点击，点击破解。此时?? ?的部分会被我们选择的暴力破解范围中的字符代替。</p>
+</li>
+<li><p>有时不一定能破解出文件口令，但是能够找到加密密钥等信息，可以直接将文件解密，点击确定保存解密后的文件</p>
+</li>
+</ol>
+<p>使用该方法需要注意两个关键点:<br>1、有一个明文文件，压缩后CRC值与加密压缩包中的文件一致。<br>2、明文文件的压缩算法需要与加密压缩文件的压缩算法一致。</p>
+</li>
+<li><p>文件分析</p>
+<p>有时候给的RAR文件头部各个字块会故意给错导致无法识别（隐藏文件）</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>大小</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HEAD CRC</td>
+<td>2 字节</td>
+<td>所有块或块部分的CRC</td>
+</tr>
+<tr>
+<td>HEAD TYPE</td>
+<td>1 字节</td>
+<td>块类型</td>
+</tr>
+<tr>
+<td>HEAD FLAGS</td>
+<td>2 字节</td>
+<td>块标记</td>
+</tr>
+<tr>
+<td>HEAD SIZE</td>
+<td>2 字节</td>
+<td>块大小 #如果块标记的第一位被置1的话，还存在</td>
+</tr>
+<tr>
+<td>ADD SIZE</td>
+<td>4 字节</td>
+<td>可选结构 - 增加块大小</td>
+</tr>
+</tbody></table>
+<p>那么，文件块的<strong>第3个字节为块类型，也叫头类型</strong></p>
+<p> 头类型是0x72表示是标记块</p>
+<p>头类型是0x73表示是压缩文件头块</p>
+<p>头类型是0x74表示是<strong>文件头</strong>块</p>
+<p>头类型是0x75表示是注释头</p>
+</li>
+</ol>
+<h2><span id="流量分析">流量分析</span></h2><blockquote>
+<p>CTF 比赛中，流量包的取证分析是另一项重要的考察方向。<br>通常比赛中会提供一个包含流量数据的PCAP 文件，有时候也会需要选手们先进行修复或重构传输文件后，再进行分析。</p>
+</blockquote>
+<ul>
+<li><p>总体把握</p>
+<ul>
+<li>协议分级</li>
+<li>端点统计</li>
+</ul>
+</li>
+<li><p>过滤筛选</p>
+<ul>
+<li>过滤语法</li>
+<li>Host，Protocol，contains，特征值</li>
+</ul>
+</li>
+<li><p>发现异常</p>
+<ul>
+<li>特殊字符串</li>
+<li>协议某字段</li>
+<li>flag 位于服务器中</li>
+</ul>
+</li>
+<li><p>数据提取</p>
+<ul>
+<li>字符串取</li>
+<li>文件提取</li>
+</ul>
+</li>
+<li><p><strong>总的来说比赛中的流量分析可以概括为以下三个方向:</strong></p>
+<ul>
+<li>流量包修复</li>
+<li>协议分析</li>
+<li>数据提取</li>
+</ul>
+</li>
+</ul>
+<p>常用的过滤命令：</p>
+<ol>
+<li><p>过滤IP，如源IP或者目标</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ip.src eq x.x.x.x or ip.dst eq x.x.x.x</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">ip.addr eq x.x.x.x</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过滤端口</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tcp.port eq 80 or udp.port eq 80</span><br><span class="line">tcp.dstport == 80 <span class="comment"># 只显示tcp目标地址80端口</span></span><br><span class="line">tcp.srcport == 80 <span class="comment"># 只显示tcp目标地址80端口</span></span><br><span class="line">tcp.port &gt;=1 and tcp.port &lt;=80</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过滤协议</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcp/udp/arp/icmp/http/ftp/dns/ip...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过滤MAC</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eth.dst == xx:xx:...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>包长度过滤</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">udp.length == 26 <span class="comment"># 这个长度是指udp本身固定长度8加上udp下面那块数据包之和</span></span><br><span class="line">tcp.len &gt;=7 <span class="comment">#指的是ip数据包（tcp下面那块数据），不包括tcp本身</span></span><br><span class="line">ip.len == 94 <span class="comment">#除了以太网头固定长度14，其他都算ip.len，即从ip本身到最后</span></span><br><span class="line">frame.len == 119 <span class="comment">#整个数据包长度，从eth开始到最后</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>http模式过滤</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">http.request.method ==<span class="string">"GET"</span></span><br><span class="line">http.request.method ==<span class="string">"POST"</span></span><br><span class="line">http.request.uri == <span class="string">"/img/logo-edu.gif"</span></span><br><span class="line">http contains <span class="string">"GET"</span></span><br><span class="line">http contains <span class="string">"HTTP/1."</span></span><br><span class="line">http.request.method == <span class="string">"GET"</span> &amp;&amp; http contains <span class="string">"User-Agent:"</span></span><br><span class="line">http contains <span class="string">"flag"</span></span><br><span class="line">http contains <span class="string">"key"</span></span><br><span class="line">tcp contains <span class="string">"flag"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>协议分析</p>
+<blockquote>
+<p>Statistics-&gt;Protocal Hierarchy</p>
+<p>Apply as filter-&gt;selected</p>
+</blockquote>
+</li>
+<li><p>流汇聚</p>
+<blockquote>
+<p>选中一条后，追踪流</p>
+</blockquote>
+<ul>
+<li>HTML中直接包含重要信息</li>
+<li>上传或者下载文件内容，通常包含文件名、hash值等关键信息，常用POST请求上传</li>
+<li>一句话木马，POST请求，内容包含eval，使用base64加密</li>
+</ul>
+</li>
+<li><p>数据提取</p>
+<p>自动提取</p>
+<blockquote>
+<p>文件-&gt;导出对象-》http</p>
+</blockquote>
+<p>手动提取内容</p>
+<blockquote>
+<p>点击想要的数据包，选定media type的位置</p>
+<p>右键-&gt;导出分组字节流</p>
+<p>文件-&gt;出分组字节流</p>
+<p>选择保存二进制</p>
+</blockquote>
+</li>
+<li><p>无线wifi流量包</p>
 </li>
 </ol>
 </div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2023/03/29/ctf/">CTFHub入门笔记</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
