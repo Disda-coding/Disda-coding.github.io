@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://disda-coding.github.io/"/>
-  <updated>2023-04-19T10:11:55.127Z</updated>
+  <updated>2023-04-20T08:56:17.838Z</updated>
   <id>https://disda-coding.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://disda-coding.github.io/2023/04/19/ctfshow/"/>
     <id>https://disda-coding.github.io/2023/04/19/ctfshow/</id>
     <published>2023-04-19T09:51:30.000Z</published>
-    <updated>2023-04-19T10:11:55.127Z</updated>
+    <updated>2023-04-20T08:56:17.838Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><a id="more"></a><!-- toc --><ul><li><a href="#愚人节杯">愚人节杯</a><ul><li><a href="#web">WEB</a><ul><li><a href="#easy_signin">easy_signin</a></li></ul></li></ul></li><li><a href="#web-1">WEB</a></li></ul><!-- tocstop --><h1><span id="愚人节杯">愚人节杯</span></h1><h2><span id="web">WEB</span></h2><h3><span id="easy_signin">easy_signin</span></h3><p>查看浏览器发现url链接是base64加密。<img src="https://img-blog.csdnimg.cn/img_convert/eea66e162a70efe45a115593662b2631.png" alt="image-20230404183149808"></p><p>base64解码是<code>face.png</code>，尝试<code>flag.txt</code>和<code>flag.php</code>，base64加密后传入都不对，用<code>index.php</code>加密后传入，看源码，然后通过base64解密。</p><p><img src="/2023/04/19/ctfshow/disda/Desktop/Disda/hexo/source/_posts/ctfshow/image-20230419181149917.png" alt="image-20230419181149917"></p><h1><span id="web">WEB</span></h1>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><a id="more"></a><!-- toc --><ul><li><a href="#web入门">WEB入门</a><ul><li><a href="#信息收集">信息收集</a><ul><li><a href="#web05">web05</a></li><li><a href="#web10">web10</a></li><li><a href="#web12">web12</a></li><li><a href="#web13">web13</a></li></ul></li></ul></li><li><a href="#愚人节杯">愚人节杯</a><ul><li><a href="#web">WEB</a><ul><li><a href="#easy_signin">easy_signin</a></li></ul></li></ul></li></ul><!-- tocstop --><h1><span id="web入门">WEB入门</span></h1><h3><span id="信息收集">信息收集</span></h3><h4><span id="web05">web05</span></h4><p>phps泄露，phps存放着php<a href="https://so.csdn.net/so/search?q=源码&spm=1001.2101.3001.7020" target="_blank" rel="noopener">源码</a>,可通过尝试访问/index.phps读取,或者尝试扫描工具扫描读取。</p><h4><span id="web10">web10</span></h4><p>flag信息藏在dns记录里面，使用命令</p><p><a href="http://dbcha.com" target="_blank" rel="noopener">域名查询</a></p><h4><span id="web12">web12</span></h4><ul><li><p>有时候访问路径在<em>/robots.txt</em>里面</p></li><li><p>常见的管理员页面路径：</p><ul><li>/admin.php</li><li>/admin</li></ul></li></ul><h4><span id="web13">web13</span></h4><p>题目提示了要查看文档，f12粗略看了一下，没什么线索。</p><p>通过dirsearch也扫不到，看了一下提示，说是要查看网页源代码，然后查找一下document关键字，果然发现了个document.pdf。</p><h1><span id="愚人节杯">愚人节杯</span></h1><h2><span id="web">WEB</span></h2><h3><span id="easy_signin">easy_signin</span></h3><p>查看浏览器发现url链接是base64加密。<img src="https://img-blog.csdnimg.cn/img_convert/eea66e162a70efe45a115593662b2631.png" alt="image-20230404183149808"></p><p>base64解码是<code>face.png</code>，尝试<code>flag.txt</code>和<code>flag.php</code>，base64加密后传入都不对，用<code>index.php</code>加密后传入，看源码，然后通过base64解密。</p><p><img src="/2023/04/19/ctfshow/disda/Desktop/Disda/hexo/source/_posts/ctfshow/image-20230419181149917.png" alt="image-20230419181149917"></p>]]></content>
     
     <summary type="html">
     
