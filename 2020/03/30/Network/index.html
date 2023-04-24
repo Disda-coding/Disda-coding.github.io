@@ -1,123 +1,123 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>计算机网络 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">计算机网络</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">计算机网络</h1><div class="post-content"><p>整理了计算机网络的常考知识点</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
-<li><a href="#tcpip">TCP/IP</a><ul>
-<li><a href="#三次握手"><em>三次握手</em></a><ul>
-<li><a href="#syn-flood攻击">SYN Flood攻击 √</a><ul>
-<li><a href="#定义">定义</a></li>
-<li><a href="#原理">原理</a></li>
-<li><a href="#防范机制"><em>防范机制</em></a></li>
+<li><a href="#tcpip">TCP&#x2F;IP</a><ul>
+<li><a href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><em>三次握手</em></a><ul>
+<li><a href="#syn-flood%E6%94%BB%E5%87%BB">SYN Flood攻击 √</a><ul>
+<li><a href="#%E5%AE%9A%E4%B9%89">定义</a></li>
+<li><a href="#%E5%8E%9F%E7%90%86">原理</a></li>
+<li><a href="#%E9%98%B2%E8%8C%83%E6%9C%BA%E5%88%B6"><em>防范机制</em></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#tcp报文头"><em>TCP报文头</em> √</a><ul>
-<li><a href="#定义"><em>定义</em></a><ul>
-<li><a href="#三次握手">三次握手</a></li>
-<li><a href="#四次挥手">四次挥手</a></li>
+<li><a href="#tcp%E6%8A%A5%E6%96%87%E5%A4%B4"><em>TCP报文头</em> √</a><ul>
+<li><a href="#%E5%AE%9A%E4%B9%89"><em>定义</em></a></li>
+</ul>
+<ul>
+<li><a href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B">三次握手</a></li>
+<li><a href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B">四次挥手</a></li>
 </ul>
 </li>
+<li><a href="#%E5%92%8Cudp%E7%9A%84%E5%8C%BA%E5%88%AB"><em>和UDP的区别</em></a><ul>
+<li><a href="#udp%E7%9A%84%E6%8A%A5%E5%A4%B4-"><em>UDP的报头</em> -</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E-udp-%E7%9A%84%E5%87%A0%E4%B8%AA%E4%BE%8B%E5%AD%90"><em>基于 UDP 的几个例子</em></a></li>
 </ul>
 </li>
-<li><a href="#和udp的区别"><em>和UDP的区别</em></a><ul>
-<li><a href="#udp的报头-"><em>UDP的报头</em> -</a></li>
-<li><a href="#基于-udp-的几个例子"><em>基于 UDP 的几个例子</em></a></li>
+<li><a href="#%E5%8F%AF%E9%9D%A0%E6%80%A7">可靠性：</a></li>
+<li><a href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><em>拥塞控制</em></a></li>
+<li><a href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><em>滑动窗口</em></a><ul>
+<li><a href="#%E5%AE%9A%E4%B9%89-1"><em>定义</em></a></li>
+<li><a href="#%E4%BD%9C%E7%94%A8"><em>作用</em></a></li>
 </ul>
 </li>
-<li><a href="#可靠性">可靠性：</a></li>
-<li><a href="#拥塞控制"><em>拥塞控制</em></a></li>
-<li><a href="#滑动窗口"><em>滑动窗口</em></a><ul>
-<li><a href="#定义-1"><em>定义</em></a></li>
-<li><a href="#作用"><em>作用</em></a></li>
-</ul>
-</li>
-<li><a href="#常见问题"><em>常见问题：</em></a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><em>常见问题：</em></a></li>
 </ul>
 </li>
 <li><a href="#http">HTTP</a><ul>
-<li><a href="#主要特点">主要特点 √</a></li>
+<li><a href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9">主要特点 √</a></li>
 </ul>
 </li>
-<li><a href="#请求响应的步骤">请求\响应的步骤</a></li>
-<li><a href="#在浏览器键入url按下回车之后的流程面试">在浏览器键入URL，按下回车之后的流程（面试）</a><ul>
-<li><a href="#请求结构请求行-请求头部-请求数据">请求结构（请求行-请求头部-请求数据）</a><ul>
-<li><a href="#首先看看http请求消息就是浏览器丢给服务器的">首先看看http请求消息（就是浏览器丢给服务器的）：</a></li>
-<li><a href="#请求行">请求行</a></li>
-<li><a href="#请求头"><strong>请求头</strong></a></li>
+<li><a href="#%E8%AF%B7%E6%B1%82%E5%93%8D%E5%BA%94%E7%9A%84%E6%AD%A5%E9%AA%A4">请求\响应的步骤</a></li>
+<li><a href="#%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E9%94%AE%E5%85%A5url%E6%8C%89%E4%B8%8B%E5%9B%9E%E8%BD%A6%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B5%81%E7%A8%8B%E9%9D%A2%E8%AF%95">在浏览器键入URL，按下回车之后的流程（面试）</a><ul>
+<li><a href="#%E8%AF%B7%E6%B1%82%E7%BB%93%E6%9E%84%E8%AF%B7%E6%B1%82%E8%A1%8C-%E8%AF%B7%E6%B1%82%E5%A4%B4%E9%83%A8-%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE">请求结构（请求行-请求头部-请求数据）</a><ul>
+<li><a href="#%E9%A6%96%E5%85%88%E7%9C%8B%E7%9C%8Bhttp%E8%AF%B7%E6%B1%82%E6%B6%88%E6%81%AF%E5%B0%B1%E6%98%AF%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%A2%E7%BB%99%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84">首先看看http请求消息（就是浏览器丢给服务器的）：</a></li>
+<li><a href="#%E8%AF%B7%E6%B1%82%E8%A1%8C">请求行</a></li>
+<li><a href="#%E8%AF%B7%E6%B1%82%E5%A4%B4"><strong>请求头</strong></a></li>
 </ul>
 </li>
-<li><a href="#响应结构状态行-响应头部-响应正文"><em>响应结构（状态行-响应头部-响应正文）</em></a></li>
-<li><a href="#keep-alive模式"><em>Keep-Alive模式</em></a></li>
-<li><a href="#状态码">状态码</a></li>
-<li><a href="#get和post的区别-">GET和POST的区别 -</a></li>
-<li><a href="#什么是cookie">什么是Cookie √</a></li>
+<li><a href="#%E5%93%8D%E5%BA%94%E7%BB%93%E6%9E%84%E7%8A%B6%E6%80%81%E8%A1%8C-%E5%93%8D%E5%BA%94%E5%A4%B4%E9%83%A8-%E5%93%8D%E5%BA%94%E6%AD%A3%E6%96%87"><em>响应结构（状态行-响应头部-响应正文）</em></a></li>
+<li><a href="#keep-alive%E6%A8%A1%E5%BC%8F"><em>Keep-Alive模式</em></a></li>
+<li><a href="#%E7%8A%B6%E6%80%81%E7%A0%81">状态码</a></li>
+<li><a href="#get%E5%92%8Cpost%E7%9A%84%E5%8C%BA%E5%88%AB-">GET和POST的区别 -</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFcookie">什么是Cookie √</a></li>
 </ul>
 </li>
-<li><a href="#什么是session-">什么是Session -</a><ul>
-<li><a href="#cookie和session的区别">Cookie和Session的区别</a><ul>
-<li><a href="#1-存储位置不同">1、存储位置不同</a></li>
-<li><a href="#2-存储容量不同">2、存储容量不同</a></li>
-<li><a href="#3-存储方式不同">3、存储方式不同</a></li>
-<li><a href="#4-隐私策略不同">4、隐私策略不同</a></li>
-<li><a href="#5-有效期上不同">5、有效期上不同</a></li>
-<li><a href="#6-服务器压力不同">6、服务器压力不同</a></li>
-<li><a href="#7-浏览器支持不同">7、浏览器支持不同</a></li>
-<li><a href="#8-跨域支持上不同">8、跨域支持上不同</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFsession-">什么是Session -</a><ul>
+<li><a href="#cookie%E5%92%8Csession%E7%9A%84%E5%8C%BA%E5%88%AB">Cookie和Session的区别</a><ul>
+<li><a href="#1-%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE%E4%B8%8D%E5%90%8C">1、存储位置不同</a></li>
+<li><a href="#2-%E5%AD%98%E5%82%A8%E5%AE%B9%E9%87%8F%E4%B8%8D%E5%90%8C">2、存储容量不同</a></li>
+<li><a href="#3-%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F%E4%B8%8D%E5%90%8C">3、存储方式不同</a></li>
+<li><a href="#4-%E9%9A%90%E7%A7%81%E7%AD%96%E7%95%A5%E4%B8%8D%E5%90%8C">4、隐私策略不同</a></li>
+<li><a href="#5-%E6%9C%89%E6%95%88%E6%9C%9F%E4%B8%8A%E4%B8%8D%E5%90%8C">5、有效期上不同</a></li>
+<li><a href="#6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8E%8B%E5%8A%9B%E4%B8%8D%E5%90%8C">6、服务器压力不同</a></li>
+<li><a href="#7-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%94%AF%E6%8C%81%E4%B8%8D%E5%90%8C">7、浏览器支持不同</a></li>
+<li><a href="#8-%E8%B7%A8%E5%9F%9F%E6%94%AF%E6%8C%81%E4%B8%8A%E4%B8%8D%E5%90%8C">8、跨域支持上不同</a></li>
 </ul>
 </li>
-<li><a href="#http和https的区别">Http和Https的区别</a><ul>
-<li><a href="#ssl安全套接层">SSL（安全套接层）</a></li>
-<li><a href="#https数据传输流程">Https数据传输流程：</a></li>
-<li><a href="#二-http与https的区别">二、Http与Https的区别</a></li>
-<li><a href="#五-https的缺点对比优点">五、Https的缺点（对比优点）</a></li>
+<li><a href="#http%E5%92%8Chttps%E7%9A%84%E5%8C%BA%E5%88%AB">Http和Https的区别</a><ul>
+<li><a href="#ssl%E5%AE%89%E5%85%A8%E5%A5%97%E6%8E%A5%E5%B1%82">SSL（安全套接层）</a></li>
+<li><a href="#https%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E6%B5%81%E7%A8%8B">Https数据传输流程：</a></li>
+<li><a href="#%E4%BA%8C-http%E4%B8%8Ehttps%E7%9A%84%E5%8C%BA%E5%88%AB">二、Http与Https的区别</a></li>
+<li><a href="#%E4%BA%94-https%E7%9A%84%E7%BC%BA%E7%82%B9%E5%AF%B9%E6%AF%94%E4%BC%98%E7%82%B9">五、Https的缺点（对比优点）</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#各层常见协议">各层常见协议</a></li>
+<li><a href="#%E5%90%84%E5%B1%82%E5%B8%B8%E8%A7%81%E5%8D%8F%E8%AE%AE">各层常见协议</a></li>
 <li><a href="#socket">Socket</a><ul>
-<li><a href="#tcpserverclient">TCPServer/Client</a></li>
-<li><a href="#udpserverclient">UDPServer/Client</a><ul>
-<li><a href="#dns解析了解">DNS解析（了解）</a></li>
+<li><a href="#tcpserverclient">TCPServer&#x2F;Client</a></li>
+<li><a href="#udpserverclient">UDPServer&#x2F;Client</a></li>
 </ul>
-</li>
+<ul>
+<li><a href="#dns%E8%A7%A3%E6%9E%90%E4%BA%86%E8%A7%A3">DNS解析（了解）</a></li>
 </ul>
 </li>
 </ul>
 <!-- tocstop -->
 
-<p><img src="clip_image002.png" alt></p>
-<h2><span id="tcpip">TCP/IP</span></h2><h3><span id="三次握手"><em>三次握手</em></span></h3><h4><span id="syn-flood攻击">SYN Flood攻击 √</span></h4><h5><span id="定义">定义</span></h5><p>SYN Flood是当前最流行的DoS（拒绝服务攻击）与DDoS（分布式拒绝服务攻击）的方式之一，这是一种利用TCP协议缺陷，发送大量伪造的TCP连接请求，从而使得被攻击方资源耗尽（CPU满负荷或内存不足）的攻击方式。</p>
+<p><img src="/2020/03/30/Network/clip_image002.png"></p>
+<h2><span id="tcpx2fip">TCP&#x2F;IP</span></h2><h3><span id="三次握手"><em>三次握手</em></span></h3><h4><span id="syn-flood攻击">SYN Flood攻击 √</span></h4><h5><span id="定义">定义</span></h5><p>SYN Flood是当前最流行的DoS（拒绝服务攻击）与DDoS（分布式拒绝服务攻击）的方式之一，这是一种利用TCP协议缺陷，发送大量伪造的TCP连接请求，从而使得被攻击方资源耗尽（CPU满负荷或内存不足）的攻击方式。</p>
 <h5><span id="原理">原理</span></h5><p>大家都知道，TCP与UDP不同，它是基于连接的，也就是说：为了在服务端和客户端之间传送TCP数据，必须先建立一个虚拟链路，也就是TCP连接，建立TCP连接的标准过程是这样的：</p>
 <p>首先，请求端（客户端）发送一个包含SYN标志的TCP报文，SYN即同步（Synchronize），同步报文会指明客户端使用的端口以及TCP连接的初始序号；</p>
 <p>第二步，服务器在收到客户端的SYN报文后，将返回一个SYN+ACK的报文，表示客户端的请求被接受，同时TCP序号被加一，ACK即确认（Acknowledgement）。</p>
 <p>第三步，客户端也返回一个确认报文ACK给服务器端，同样TCP序列号被加一，到此一个TCP连接完成。</p>
 <p>以上的连接过程在TCP协议中被称为三次握手（Three-way Handshake）。</p>
-<p>假设一个用户向服务器发送了SYN报文后突然死机或掉线，那么服务器在发出SYN+ACK应答报文后是无法收到客户端的ACK报文的（第三次握手无法完成），这种情况下服务器端一般会重试（再次发送SYN+ACK给客户端）并等待一段时间后丢弃这个未完成的连接，这段时间的长度我们称为SYN Timeout，一般来说这个时间是分钟的数量级（大约为30秒-2分钟）；一个用户出现异常导致服务器的一个线程等待1分钟并不是什么很大的问题，但如果有一个恶意的攻击者大量模拟这种情况，服务器端将为了维护一个非常大的半连接列表而消耗非常多的资源—-数以万计的半连接，即 使是简单的保存并遍历也会消耗非常多的CPU时间和内存，何况还要不断对这个列表中的IP进行SYN+ACK的重试。实际上如果服务器的TCP/IP栈不够强大，最后的结果往往是堆栈溢出崩溃—即使服务器端的系统足够强大，服务器端也将忙于处理攻击者伪造的TCP连接请求而无暇理睬客户的正常请求（毕竟客户端的正常请求比率非常之小），此时从正常客户的角度看来，服务器失去响应，这种情况我们称作：服务器端受到了SYN Flood攻击（SYN洪水攻击）。</p>
-<h5><span id="防范机制"><em>防范机制</em></span></h5><p>Ø 第一种是缩短SYN Timeout时间，由于SYN Flood攻击的效果取决于服务器上保持的SYN半连接数，这个值=SYN攻击的频度 x SYN Timeout，所以通过缩短从接收到SYN报文到确定这个报文无效并丢弃改连接的时间，例如设置为20秒以下（过低的SYN Timeout设置可能会影响客户的正常访问），可以成倍的降低服务器的负荷。</p>
+<p>假设一个用户向服务器发送了SYN报文后突然死机或掉线，那么服务器在发出SYN+ACK应答报文后是无法收到客户端的ACK报文的（第三次握手无法完成），这种情况下服务器端一般会重试（再次发送SYN+ACK给客户端）并等待一段时间后丢弃这个未完成的连接，这段时间的长度我们称为SYN Timeout，一般来说这个时间是分钟的数量级（大约为30秒-2分钟）；一个用户出现异常导致服务器的一个线程等待1分钟并不是什么很大的问题，但如果有一个恶意的攻击者大量模拟这种情况，服务器端将为了维护一个非常大的半连接列表而消耗非常多的资源—-数以万计的半连接，即 使是简单的保存并遍历也会消耗非常多的CPU时间和内存，何况还要不断对这个列表中的IP进行SYN+ACK的重试。实际上如果服务器的TCP&#x2F;IP栈不够强大，最后的结果往往是堆栈溢出崩溃—即使服务器端的系统足够强大，服务器端也将忙于处理攻击者伪造的TCP连接请求而无暇理睬客户的正常请求（毕竟客户端的正常请求比率非常之小），此时从正常客户的角度看来，服务器失去响应，这种情况我们称作：服务器端受到了SYN Flood攻击（SYN洪水攻击）。</p>
+<h5><span id="防范机制"><em>防范机制</em></span></h5><p>Ø 第一种是缩短SYN Timeout时间，由于SYN Flood攻击的效果取决于服务器上保持的SYN半连接数，这个值&#x3D;SYN攻击的频度 x SYN Timeout，所以通过缩短从接收到SYN报文到确定这个报文无效并丢弃改连接的时间，例如设置为20秒以下（过低的SYN Timeout设置可能会影响客户的正常访问），可以成倍的降低服务器的负荷。</p>
 <p>Ø 第二种方法是设置SYN Cookie，就是给每一个请求连接的IP地址分配一个Cookie，如果短时间内连续受到某个IP的重复SYN报文，就认定是受到了攻击，以后从这个IP地址来的包会被一概丢弃。</p>
-<p>Ø 可是上述的两种方法只能对付比较原始的SYN Flood攻击，缩短SYN Timeout时间仅在对方攻击频度不高的情况下生效，SYN Cookie更依赖于对方使用真实的IP地址，如果攻击者以数万/秒的速度发送SYN报文，同时利用SOCK_RAW随机改写IP报文中的源地址，以上的方法将毫无用武之地。</p>
-<h3><span id="tcp报文头"><em>TCP报文头</em> √</span></h3><h5><span id="定义"><em>定义</em></span></h5><p><img src="image-20200330094555619.png" alt></p>
+<p>Ø 可是上述的两种方法只能对付比较原始的SYN Flood攻击，缩短SYN Timeout时间仅在对方攻击频度不高的情况下生效，SYN Cookie更依赖于对方使用真实的IP地址，如果攻击者以数万&#x2F;秒的速度发送SYN报文，同时利用SOCK_RAW随机改写IP报文中的源地址，以上的方法将毫无用武之地。</p>
+<h3><span id="tcp报文头"><em>TCP报文头</em> √</span></h3><h5><span id="定义"><em>定义</em></span></h5><p><img src="/2020/03/30/Network/image-20200330094555619.png"></p>
 <p>序列号seq：占4个字节，用来标记数据段的顺序，TCP把连接中发送的所有数据字节都编上一个序号，第一个字节的编号由本地随机产生；给字节编上序号后，就给每一个报文段指派一个序号；序列号seq就是这个报文段中的第一个字节的数据编号。 </p>
 <p>  确认号ack：占4个字节，期待收到对方下一个报文段的第一个数据字节的序号；序列号表示报文段携带数据的第一个字节的编号；而确认号指的是期望接收到下一个字节的编号；因此当前报文段最后一个字节的编号+1即为确认号。 </p>
-<p>  确认ACK：占1位，仅当ACK=1时，确认号字段才有效。ACK=0时，确认号无效 </p>
-<p>  同步SYN：连接建立时用于同步序号。当SYN=1，ACK=0时表示：这是一个连接请求报文段。若同意连接，则在响应报文段中使得SYN=1，ACK=1。因此，SYN=1表示这是一个连接请求，或连接接受报文。SYN这个标志位只有在TCP建产连接时才会被置1，握手完成后SYN标志位被置0。 </p>
-<p>  终止FIN：用来释放一个连接。FIN=1表示：此报文段的发送方的数据已经发送完毕，并要求释放运输连接 </p>
+<p>  确认ACK：占1位，仅当ACK&#x3D;1时，确认号字段才有效。ACK&#x3D;0时，确认号无效 </p>
+<p>  同步SYN：连接建立时用于同步序号。当SYN&#x3D;1，ACK&#x3D;0时表示：这是一个连接请求报文段。若同意连接，则在响应报文段中使得SYN&#x3D;1，ACK&#x3D;1。因此，SYN&#x3D;1表示这是一个连接请求，或连接接受报文。SYN这个标志位只有在TCP建产连接时才会被置1，握手完成后SYN标志位被置0。 </p>
+<p>  终止FIN：用来释放一个连接。FIN&#x3D;1表示：此报文段的发送方的数据已经发送完毕，并要求释放运输连接 </p>
 <p>  PS：ACK、SYN和FIN这些大写的单词表示标志位，其值要么是1，要么是0；ack、seq小写的单词表示序号。</p>
-<p> <img src="image-20200330094814772.png" alt></p>
-<h4><span id="三次握手">三次握手</span></h4><p><img src="image-20200330094908871.png" alt></p>
-<p>第一次握手：建立连接时，客户端发送syn包（syn=x）到服务器，并进入SYN_SENT状态，等待服务器确认；SYN：同步序列编号（Synchronize Sequence Numbers）。</p>
-<p>第二次握手：服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；</p>
-<p>第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手。</p>
-<h4><span id="四次挥手">四次挥手</span></h4><p><img src="image-20200330095258015.png" alt></p>
-<p>1）客户端进程发出连接释放报文，并且停止发送数据。释放数据报文首部，FIN=1，其序列号为seq=u（等于前面已经传送过来的数据的最后一个字节的序号加1），此时，客户端进入FIN-WAIT-1（终止等待1）状态。 TCP规定，<font color="red">FIN报文段即使不携带数据，也要消耗一个序号。</font></p>
-<p>2）服务器收到连接释放报文，发出确认报文，ACK=1，ack=u+1，并且带上自己的序列号seq=v，此时，服务端就进入了CLOSE-WAIT（关闭等待）状态。TCP服务器通知高层的应用进程，客户端向服务器的方向就释放了，这时候处于半关闭状态，即客户端已经没有数据要发送了，但是服务器若发送数据，客户端依然要接受。这个状态还要持续一段时间，也就是整个CLOSE-WAIT状态持续的时间。</p>
+<p> <img src="/2020/03/30/Network/image-20200330094814772.png"></p>
+<h4><span id="三次握手">三次握手</span></h4><p><img src="/2020/03/30/Network/image-20200330094908871.png"></p>
+<p>第一次握手：建立连接时，客户端发送syn包（syn&#x3D;x）到服务器，并进入SYN_SENT状态，等待服务器确认；SYN：同步序列编号（Synchronize Sequence Numbers）。</p>
+<p>第二次握手：服务器收到syn包，必须确认客户的SYN（ack&#x3D;x+1），同时自己也发送一个SYN包（syn&#x3D;y），即SYN+ACK包，此时服务器进入SYN_RECV状态；</p>
+<p>第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack&#x3D;y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手。</p>
+<h4><span id="四次挥手">四次挥手</span></h4><p><img src="/2020/03/30/Network/image-20200330095258015.png"></p>
+<p>1）客户端进程发出连接释放报文，并且停止发送数据。释放数据报文首部，FIN&#x3D;1，其序列号为seq&#x3D;u（等于前面已经传送过来的数据的最后一个字节的序号加1），此时，客户端进入FIN-WAIT-1（终止等待1）状态。 TCP规定，<font color="red">FIN报文段即使不携带数据，也要消耗一个序号。</font></p>
+<p>2）服务器收到连接释放报文，发出确认报文，ACK&#x3D;1，ack&#x3D;u+1，并且带上自己的序列号seq&#x3D;v，此时，服务端就进入了CLOSE-WAIT（关闭等待）状态。TCP服务器通知高层的应用进程，客户端向服务器的方向就释放了，这时候处于半关闭状态，即客户端已经没有数据要发送了，但是服务器若发送数据，客户端依然要接受。这个状态还要持续一段时间，也就是整个CLOSE-WAIT状态持续的时间。</p>
 <p>3）客户端收到服务器的确认请求后，此时，客户端就进入FIN-WAIT-2（终止等待2）状态，等待服务器发送连接释放报文（在这之前还需要接受服务器发送的最后的数据）。</p>
-<p>4）服务器将最后的数据发送完毕后，就向客户端发送连接释放报文，FIN=1，ack=u+1，由于在半关闭状态，服务器很可能又发送了一些数据，假定此时的序列号为seq=w，此时，服务器就进入了LAST-ACK（最后确认）状态，等待客户端的确认。</p>
-<p>5）客户端收到服务器的连接释放报文后，必须发出确认，ACK=1，ack=w+1，而自己的序列号是seq=u+1，此时，客户端就进入了TIME-WAIT（时间等待）状态。注意此时TCP连接还没有释放，必须经过2∗∗MSL（最长报文段寿命MaximumSegmentLifetime）的时间后，当客户端撤销相应的TCB后，才进入CLOSED状态。</p>
+<p>4）服务器将最后的数据发送完毕后，就向客户端发送连接释放报文，FIN&#x3D;1，ack&#x3D;u+1，由于在半关闭状态，服务器很可能又发送了一些数据，假定此时的序列号为seq&#x3D;w，此时，服务器就进入了LAST-ACK（最后确认）状态，等待客户端的确认。</p>
+<p>5）客户端收到服务器的连接释放报文后，必须发出确认，ACK&#x3D;1，ack&#x3D;w+1，而自己的序列号是seq&#x3D;u+1，此时，客户端就进入了TIME-WAIT（时间等待）状态。注意此时TCP连接还没有释放，必须经过2∗∗MSL（最长报文段寿命MaximumSegmentLifetime）的时间后，当客户端撤销相应的TCB后，才进入CLOSED状态。</p>
 <p>6）服务器只要收到了客户端发出的确认，立即进入CLOSED状态。同样，撤销TCB（传输控制块）后，就结束了这次的TCP连接。可以看到，服务器结束TCP连接的时间要比客户端早一些。</p>
 <h3><span id="和udp的区别"><em>和UDP的区别</em></span></h3><p>TCP 是面向连接的，UDP 是面向无连接的</p>
 <p>UDP程序结构较简单</p>
@@ -127,7 +127,7 @@
 <p><strong>TCP的优点</strong>：<font color="orange"> 可靠，稳定</font> TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有<font color="orange"> 确认、窗口、重传、拥塞控制机制</font>，在数据传完后，还会断开连接用来节约系统资源。 TCP的缺点：<font color="blue">  慢，效率低，占用系统资源高，易被攻击</font> 。</p>
 <p><strong>UDP的优点</strong>： <font color="orange"> 快，比TCP稍安全</font> UDP没有TCP的握手、确认、窗口、重传、拥塞控制等机制，UDP是一个无状态的传输协议，所以它在传递数据时非常快。没有TCP的这些机制，UDP较TCP被攻击者利用的漏洞就要少一些。但UDP也是无法避免攻击的，比如：UDP Flood攻击…… UDP的缺点：<font color="blue"> 不可靠，不稳定</font> 因为UDP没有TCP那些可靠的机制，在数据传递时，如果网络质量不好，就会很容易丢包。 基于上面的优缺点，</p>
 <p>那么： 什么时候应该使用TCP： 当对网络通讯质量有要求的时候，比如：整个数据要准确无误的传递给对方，这往往用于一些要求可靠的应用，比如HTTP、HTTPS、FTP等传输文件的协议，POP、SMTP等邮件传输的协议。 在日常生活中，常见使用TCP协议的应用如下： 浏览器，用的HTTP FlashFXP，用的FTP Outlook，用的POP、SMTP Putty，用的Telnet、SSH QQ文件传输 ………… 什么时候应该使用UDP： 当对网络通讯质量要求不高的时候，要求网络通讯速度能尽量的快，这时就可以使用UDP。 比如，日常生活中，常见使用UDP协议的应用如下： QQ语音 QQ视频 TFTP ……DNS,DHCP</p>
-<h5><span id="udp的报头-"><em>UDP的报头</em> -</span></h5><p><img src="clip_image002.jpg" alt="UDP 包头"></p>
+<h5><span id="udp的报头-"><em>UDP的报头</em> -</span></h5><p><img src="/2020/03/30/Network/clip_image002.jpg" alt="UDP 包头"></p>
 <h5><span id="基于-udp-的几个例子"><em>基于 UDP 的几个例子</em></span></h5><p>直播。直播对实时性的要求比较高，宁可丢包，也不要卡顿的，所以很多直播应用都基于 UDP 实现了自己的视频传输协议</p>
 <p>实时游戏。游戏的特点也是实时性比较高，在这种情况下，采用自定义的可靠的 UDP 协议，自定义重传策略，能够把产生的延迟降到最低，减少网络问题对游戏造成的影响</p>
 <p>物联网。一方面，物联网领域中断资源少，很可能知识个很小的嵌入式系统，而维护 TCP 协议的代价太大了；另一方面，物联网对实时性的要求也特别高。比如 Google 旗下的 Nest 简历 Thread Group，推出了物联网通信协议 Thread，就是基于 UDP 协议的</p>
@@ -157,26 +157,26 @@
 </li>
 </ul>
 <h3><span id="滑动窗口"><em>滑动窗口</em></span></h3><p>我们能不能把第一个和第二个包发过去后，收到第一个确认包就把第三个包发过去呢？而不是去等到第二个包的确认包才去发第三个包。这样就很自然的产生了我们”滑动窗口”的实现。</p>
-<p><img src="clip_image002-1585536742055.png" alt></p>
+<p><img src="/2020/03/30/Network/clip_image002-1585536742055.png"></p>
 <p>在图中，我们可看出灰色1号2号3号包已经发送完毕，并且已经收到Ack。这些包就已经是过去式。4、5、6、7号包是黄色的，表示已经发送了。但是并没有收到对方的Ack，所以也不知道接收方有没有收到。8、9、10号包是绿色的。是我们还没有发送的。这些绿色也就是我们接下来马上要发送的包。 可以看出我们的窗口正好是11格。后面的11-16还没有被读进内存。要等4号-10号包有接下来的动作后，我们的包才会继续往下发送。</p>
 <p><strong>正常情况</strong></p>
-<p><img src="clip_image004.png" alt></p>
+<p><img src="/2020/03/30/Network/clip_image004.png"></p>
 <p>可以看到4号包对方已经被接收到，所以被涂成了灰色。“窗口”就往右移一格，这里只要保证“窗口”是7格的。 我们就把11号包读进了我们的缓存。进入了“待发送”的状态。8、9号包已经变成了黄色，表示已经发送出去了。接下来的操作就是一样的了，确认包后，窗口往后移继续将未发送的包读进缓存，把“待发送“状态的包变为”已发送“。</p>
 <p><strong>丢包情况</strong></p>
 <p>有可能我们包发过去，对方的Ack丢了。也有可能我们的包并没有发送过去。从发送方角度看就是我们没有收到Ack。</p>
-<p><img src="clip_image006.png" alt></p>
+<p><img src="/2020/03/30/Network/clip_image006.png"></p>
 <p>发生的情况：一直在等Ack。如果一直等不到的话，我们也会把读进缓存的待发送的包也一起发过去。但是，这个时候我们的窗口已经发满了。所以并不能把12号包读进来，而是始终在等待5号包的Ack。</p>
 <p>如果我们这个Ack始终不来怎么办呢？</p>
 <p><strong>超时重发</strong></p>
 <p>这时候我们有个解决方法：超时重传<br> 这里有一点要说明：这个Ack是要按顺序的。必须要等到5的Ack收到，才会把6-11的Ack发送过去。这样就保证了滑动窗口的一个顺序。</p>
-<p><img src="clip_image008.png" alt></p>
+<p><img src="/2020/03/30/Network/clip_image008.png"></p>
 <p>这时候可以看出5号包已经接受到Ack，后面的6、7、8号包也已经发送过去已Ack。窗口便继续向后移动。</p>
-<p><img src="clip_image009.png" alt></p>
+<p><img src="/2020/03/30/Network/clip_image009.png"></p>
 <h5><span id="定义"><em>定义</em></span></h5><p>RTT：发送一个数据包到收到对应ACK所花费的时间</p>
 <p>RTO: 重传时间间隔</p>
 <h5><span id="作用"><em>作用</em></span></h5><p>保证了TCP的可靠性</p>
 <p>保证TCP的流控特性</p>
-<p><img src="clip_image011.jpg" alt></p>
+<p><img src="/2020/03/30/Network/clip_image011.jpg"></p>
 <p>LastByteAcked：已发送并已收到ACK</p>
 <p>LastByteSent： 已发送未收到ACK</p>
 <p>LastByteWritten： 未发送的包（当前程序准备好的数据）</p>
@@ -194,7 +194,7 @@
 <p>​    现在把三次握手改成仅需要两次握手，死锁是可能发生的。作为例子，考虑计算机S和C之间的通信，假定C给S发送一个连接请求分组，S收到了这个分组，并发 送了确认应答分组。按照两次握手的协定，S认为连接已经成功地建立了，可以开始发送数据分组。可是，C在S的应答分组在传输中被丢失的情况下，将不知道S 是否已准备好，不知道S建立什么样的序列号，C甚至怀疑S是否收到自己的连接请求分组。在这种情况下，C认为连接还未建立成功，将忽略S发来的任何数据分 组，只等待连接确认应答分组。而S在发出的分组超时后，重复发送同样的分组。这样就形成了死锁。</p>
 <p>【问题4】如果已经建立了连接，但是客户端突然出现故障了怎么办？ </p>
 <p>TCP还设有一个保活计时器，显然，客户端如果出现故障，服务器不能一直等下去，白白浪费资源。服务器每收到一次客户端的请求后都会重新复位这个计时器，时间通常是设置为2小时，若两小时还没有收到客户端的任何数据，服务器就会发送一个探测报文段，以后每隔75秒钟发送一次。若一连发送10个探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接。</p>
-<h2><span id="http">HTTP</span></h2><h3><span id="主要特点">主要特点 √</span></h3><p>Ø 支持客户/服务器模式</p>
+<h2><span id="http">HTTP</span></h2><h3><span id="主要特点">主要特点 √</span></h3><p>Ø 支持客户&#x2F;服务器模式</p>
 <p>Ø 简单快速</p>
 <p>Ø 灵活</p>
 <p>Ø 无连接</p>
@@ -217,7 +217,7 @@
 <p>包含响应行-响应头部-响应正文</p>
 <p>Ø 浏览器解析渲染页面</p>
 <p>Ø 连接结束</p>
-<h3><span id="请求结构请求行-请求头部-请求数据">请求结构（请求行-请求头部-请求数据）</span></h3><h4><span id="首先看看http请求消息就是浏览器丢给服务器的">首先看看http请求消息（就是浏览器丢给服务器的）：</span></h4><p><img src="clip_image001.png" alt>  </p>
+<h3><span id="请求结构请求行-请求头部-请求数据">请求结构（请求行-请求头部-请求数据）</span></h3><h4><span id="首先看看http请求消息就是浏览器丢给服务器的">首先看看http请求消息（就是浏览器丢给服务器的）：</span></h4><p><img src="/2020/03/30/Network/clip_image001.png">  </p>
 <h4><span id="请求行">请求行</span></h4><p>格式为：</p>
 <p>Method Request-URI HTTP-Version 结尾符</p>
 <p>结尾符一般用\r\n</p>
@@ -233,9 +233,9 @@
 <p>Accept：客户端可识别的内容类型列表，用于指定客户端接收那些类型的信息</p>
 <p>Accept-Encoding：客户端可识别的数据编码</p>
 <p>Accept-Language：表示浏览器所支持的语言类型</p>
-<p>Connection：允许客户端和服务器指定与请求/响应连接有关的选项，例如这是为Keep-Alive则表示保持连接。</p>
+<p>Connection：允许客户端和服务器指定与请求&#x2F;响应连接有关的选项，例如这是为Keep-Alive则表示保持连接。</p>
 <p>Transfer-Encoding：告知接收端为了保证报文的可靠传输，对报文采用了什么编码方式。</p>
-<h3><span id="响应结构状态行-响应头部-响应正文"><em>响应结构（状态行-响应头部-响应正文）</em></span></h3><p><img src="clip_image002-1585537261410.png" alt> </p>
+<h3><span id="响应结构状态行-响应头部-响应正文"><em>响应结构（状态行-响应头部-响应正文）</em></span></h3><p><img src="/2020/03/30/Network/clip_image002-1585537261410.png"> </p>
 <p><strong>状态行</strong></p>
 <p>由HTTP 协议版本字段、状码（如404）和状态码的描述文本3个部分组成</p>
 <p><strong>响应报头</strong></p>
@@ -252,8 +252,8 @@
 <p>Expires：实体报头给出响应过期的日期和时间</p>
 <p>空行</p>
 <p>http协议规定的格式，一般采用\r\n</p>
-<h3><span id="keep-alive模式"><em>Keep-Alive模式</em></span></h3><p>由上面的示例可以看到里面的请求头部和响应头部都有一个key-value Connection: Keep-Alive，这个键值对的作用是让HTTP保持连接状态，因为HTTP 协议采用“请求-应答”模式，当使用普通模式，即非 Keep-Alive 模式时，每个请求/应答客户和服务器都要新建一个连接，完成之后立即断开连接（HTTP 协议为无连接的协议）；当使用 Keep-Alive 模式时，Keep-Alive 功能使客户端到服务器端的连接持续有效。</p>
-<p>在HTTP 1.1版本后，默认都开启Keep-Alive模式，只有加入加入 Connection: close才关闭连接，当然也可以设置Keep-Alive模式的属性，例如 Keep-Alive: timeout=5, max=100，表示这个TCP通道可以保持5秒，max=100，表示这个长连接最多接收100次请求就断开。</p>
+<h3><span id="keep-alive模式"><em>Keep-Alive模式</em></span></h3><p>由上面的示例可以看到里面的请求头部和响应头部都有一个key-value Connection: Keep-Alive，这个键值对的作用是让HTTP保持连接状态，因为HTTP 协议采用“请求-应答”模式，当使用普通模式，即非 Keep-Alive 模式时，每个请求&#x2F;应答客户和服务器都要新建一个连接，完成之后立即断开连接（HTTP 协议为无连接的协议）；当使用 Keep-Alive 模式时，Keep-Alive 功能使客户端到服务器端的连接持续有效。</p>
+<p>在HTTP 1.1版本后，默认都开启Keep-Alive模式，只有加入加入 Connection: close才关闭连接，当然也可以设置Keep-Alive模式的属性，例如 Keep-Alive: timeout&#x3D;5, max&#x3D;100，表示这个TCP通道可以保持5秒，max&#x3D;100，表示这个长连接最多接收100次请求就断开。</p>
 <h3><span id="状态码">状态码</span></h3><p>HTTP状态码总的分为五类：</p>
 <p>1开头：信息状态码</p>
 <p>2开头：成功状态码</p>
@@ -536,7 +536,7 @@
 <p>Tomcat一开始两者都使用，如果支持Cookie就停止URL重写。</p>
 <h3><span id="cookie和session的区别">Cookie和Session的区别</span></h3><h4><span id="1-存储位置不同">1、存储位置不同</span></h4><p>cookie的数据信息存放在客户端浏览器上。</p>
 <p>session的数据信息存放在服务器上。</p>
-<h4><span id="2-存储容量不同">2、存储容量不同</span></h4><p>单个cookie保存的数据&lt;=4KB，一个站点最多保存20个Cookie。</p>
+<h4><span id="2-存储容量不同">2、存储容量不同</span></h4><p>单个cookie保存的数据&lt;&#x3D;4KB，一个站点最多保存20个Cookie。</p>
 <p>对于session来说并没有上限，但出于对服务器端的性能考虑，session内不要存放过多的东西，并且设置session删除机制。</p>
 <h4><span id="3-存储方式不同">3、存储方式不同</span></h4><p>cookie中只能保管ASCII字符串，并需要通过编码方式存储为Unicode字符或者二进制数据。</p>
 <p>session中能够存储任何类型的数据，包括且不限于string，integer，list，map等。</p>
@@ -578,27 +578,17 @@
 <p>网络层：IP、ARP、RARP</p>
 <p>传输层：TCP、UDP</p>
 <p>应用层：SMTP FTP HTTP</p>
-<h2><span id="socket">Socket</span></h2><p><img src="clip_image002-1585538329691.jpg" alt></p>
-<p><img src="clip_image004.jpg" alt></p>
-<h4><span id="tcpserverclient">TCPServer/Client</span></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TCPServer</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    ServerSocket ss = <span class="keyword">new</span> ServerSocket(<span class="number">3014</span>);</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">      Socket socket=ss.accept();</span><br><span class="line">      <span class="keyword">new</span> Working(socket).start();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="socket">Socket</span></h2><p><img src="/2020/03/30/Network/clip_image002-1585538329691.jpg"></p>
+<p><img src="/2020/03/30/Network/clip_image004.jpg"></p>
+<h4><span id="tcpserverx2fclient">TCPServer&#x2F;Client</span></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TCPServer</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">    <span class="type">ServerSocket</span> <span class="variable">ss</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerSocket</span>(<span class="number">3014</span>);</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>)&#123;</span><br><span class="line">      Socket socket=ss.accept();</span><br><span class="line">      <span class="keyword">new</span> <span class="title class_">Working</span>(socket).start();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Working</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">    <span class="comment">//以Socket为成员变量</span></span><br><span class="line">    <span class="keyword">private</span> Socket socket;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Working</span><span class="params">(Socket socket)</span>&#123;<span class="built_in">this</span>.socket=socket;&#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">try</span>(<span class="type">OutputStream</span> <span class="variable">os</span> <span class="operator">=</span> socket.getOutputStream();</span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> socket.getInputStream()) &#123;</span><br><span class="line">            <span class="type">int</span> ch=<span class="number">0</span>;</span><br><span class="line">            <span class="type">byte</span>[] buff = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            ch=is.read(buff);</span><br><span class="line">            <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(buff,<span class="number">0</span>,ch);</span><br><span class="line">            System.out.println(content);</span><br><span class="line">            os.write(String.valueOf(content.length()).getBytes());</span><br><span class="line">            socket.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TCPClient</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Socket</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Socket</span>(<span class="string">&quot;127.0.0.1&quot;</span>,<span class="number">3014</span>);</span><br><span class="line">             <span class="type">OutputStream</span> <span class="variable">os</span> <span class="operator">=</span>s.getOutputStream();</span><br><span class="line">             <span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> s.getInputStream();</span><br><span class="line">        )&#123;</span><br><span class="line">            <span class="type">int</span> ch=<span class="number">0</span>;</span><br><span class="line">            <span class="type">byte</span>[] buff = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="type">String</span> <span class="variable">output</span> <span class="operator">=</span> <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line">            os.write(output.getBytes());</span><br><span class="line">            ch=is.read(buff);</span><br><span class="line">            <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(buff,<span class="number">0</span>,ch);</span><br><span class="line">            System.out.println(content);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Working</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="comment">//以Socket为成员变量</span></span><br><span class="line">    <span class="keyword">private</span> Socket socket;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Working</span><span class="params">(Socket socket)</span></span>&#123;<span class="keyword">this</span>.socket=socket;&#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>(OutputStream os = socket.getOutputStream();</span><br><span class="line">            InputStream is = socket.getInputStream()) &#123;</span><br><span class="line">            <span class="keyword">int</span> ch=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buff = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            ch=is.read(buff);</span><br><span class="line">            String content = <span class="keyword">new</span> String(buff,<span class="number">0</span>,ch);</span><br><span class="line">            System.out.println(content);</span><br><span class="line">            os.write(String.valueOf(content.length()).getBytes());</span><br><span class="line">            socket.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4><span id="udpserverx2fclient">UDPServer&#x2F;Client</span></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.DatagramPacket;</span><br><span class="line"><span class="keyword">import</span> java.net.DatagramSocket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UDPServer</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        DatagramSocket socket=<span class="keyword">new</span> <span class="title class_">DatagramSocket</span>(<span class="number">65001</span>);</span><br><span class="line">        <span class="type">byte</span>[] buff = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">100</span>];</span><br><span class="line">        <span class="type">DatagramPacket</span> <span class="variable">packet</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(buff,buff.length);</span><br><span class="line">        socket.receive(packet);</span><br><span class="line">        <span class="type">byte</span>[] data=packet.getData();</span><br><span class="line">        <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(data,<span class="number">0</span>,packet.getLength());</span><br><span class="line">        System.out.println(content);</span><br><span class="line">        <span class="type">byte</span>[] sendContent = String.valueOf(content.length()).getBytes();</span><br><span class="line">        <span class="type">DatagramPacket</span> <span class="variable">packet2Client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(sendContent,sendContent.length,packet.getAddress(),packet.getPort());</span><br><span class="line">        socket.send(packet2Client);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
-
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TCPClient</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> (Socket s = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>,<span class="number">3014</span>);</span><br><span class="line">             OutputStream os =s.getOutputStream();</span><br><span class="line">             InputStream is = s.getInputStream();</span><br><span class="line">        )&#123;</span><br><span class="line">            <span class="keyword">int</span> ch=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buff = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            String output = <span class="string">"hello world"</span>;</span><br><span class="line">            os.write(output.getBytes());</span><br><span class="line">            ch=is.read(buff);</span><br><span class="line">            String content = <span class="keyword">new</span> String(buff,<span class="number">0</span>,ch);</span><br><span class="line">            System.out.println(content);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4><span id="udpserverclient">UDPServer/Client</span></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.DatagramPacket;</span><br><span class="line"><span class="keyword">import</span> java.net.DatagramSocket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UDPServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        DatagramSocket socket=<span class="keyword">new</span> DatagramSocket(<span class="number">65001</span>);</span><br><span class="line">        <span class="keyword">byte</span>[] buff = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">100</span>];</span><br><span class="line">        DatagramPacket packet = <span class="keyword">new</span> DatagramPacket(buff,buff.length);</span><br><span class="line">        socket.receive(packet);</span><br><span class="line">        <span class="keyword">byte</span>[] data=packet.getData();</span><br><span class="line">        String content = <span class="keyword">new</span> String(data,<span class="number">0</span>,packet.getLength());</span><br><span class="line">        System.out.println(content);</span><br><span class="line">        <span class="keyword">byte</span>[] sendContent = String.valueOf(content.length()).getBytes();</span><br><span class="line">        DatagramPacket packet2Client = <span class="keyword">new</span> DatagramPacket(sendContent,sendContent.length,packet.getAddress(),packet.getPort());</span><br><span class="line">        socket.send(packet2Client);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.DatagramPacket;</span><br><span class="line"><span class="keyword">import</span> java.net.DatagramSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.InetAddress;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UDPClient</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        DatagramSocket socket=<span class="keyword">new</span> DatagramSocket();</span><br><span class="line">        InetAddress address = InetAddress.getByName(<span class="string">"127.0.0.1"</span>);</span><br><span class="line">        <span class="keyword">byte</span>[] buf=<span class="string">"hello world"</span>.getBytes();</span><br><span class="line">        DatagramPacket packet = <span class="keyword">new</span> DatagramPacket(buf,buf.length,address,<span class="number">65001</span>);</span><br><span class="line">        socket.send(packet);</span><br><span class="line">        <span class="keyword">byte</span>[] data=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">100</span>];</span><br><span class="line">        DatagramPacket rcvPacket=<span class="keyword">new</span> DatagramPacket(data,data.length);</span><br><span class="line">        socket.receive(rcvPacket);</span><br><span class="line">        String content = <span class="keyword">new</span> String(rcvPacket.getData(),<span class="number">0</span>,rcvPacket.getLength());</span><br><span class="line">        System.out.println(content);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.DatagramPacket;</span><br><span class="line"><span class="keyword">import</span> java.net.DatagramSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.InetAddress;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UDPClient</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        DatagramSocket socket=<span class="keyword">new</span> <span class="title class_">DatagramSocket</span>();</span><br><span class="line">        <span class="type">InetAddress</span> <span class="variable">address</span> <span class="operator">=</span> InetAddress.getByName(<span class="string">&quot;127.0.0.1&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] buf=<span class="string">&quot;hello world&quot;</span>.getBytes();</span><br><span class="line">        <span class="type">DatagramPacket</span> <span class="variable">packet</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(buf,buf.length,address,<span class="number">65001</span>);</span><br><span class="line">        socket.send(packet);</span><br><span class="line">        <span class="type">byte</span>[] data=<span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">100</span>];</span><br><span class="line">        DatagramPacket rcvPacket=<span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(data,data.length);</span><br><span class="line">        socket.receive(rcvPacket);</span><br><span class="line">        <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(rcvPacket.getData(),<span class="number">0</span>,rcvPacket.getLength());</span><br><span class="line">        System.out.println(content);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>对于一台主机，它的操作系统内核实现了传输层到物理层的内容</p>
 <ul>
@@ -617,19 +607,19 @@
 <p>5、本地DNS服务器继续向域服务器发出请求，在这个例子中，请求的对象是.com域服务器。.com域服务器收到请求之后，也不会直接返回域名和IP地址的对应关系，而是告诉本地DNS服务器，你的域名的解析服务器的地址。</p>
 <p>6、最后，本地DNS服务器向域名的解析服务器发出请求，这时就能收到一个域名和IP地址对应关系，本地DNS服务器不仅要把IP地址返回给用户电脑，还要把这个对应关系保存在缓存中，以备下次别的用户查询时，可以直接返回结果，加快网络访问。</p>
 <p>下面这张图很完美的解释了这一过程：</p>
-<p> <img src="clip_image002-1585538209170.jpg" alt>1.什么是DNS？</p>
+<p> <img src="/2020/03/30/Network/clip_image002-1585538209170.jpg">1.什么是DNS？</p>
 <p>DNS（Domain Name System，域名系统），因特网上作为域名和IP地址相互映射的一个分布式数据库，能够使用户更方便的访问互联网，而不用去记住能够被机器直接读取的IP数串。通过主机名，最终得到该主机名对应的IP地址的过程叫做域名解析（或主机名解析）。<br> 　<br> 通俗的讲，我们更习惯于记住一个网站的名字，比如<a href="http://www.baidu.com,而不是记住它的ip地址，比如：167.23.10.2。而计算机更擅长记住网站的ip地址，而不是像www.baidu.com等链接。因为，DNS就相当于一个电话本，比如你要找www.baidu.com这个域名，那我翻一翻我的电话本，我就知道，哦，它的电话（ip）是167.23.10.2。">www.baidu.com,而不是记住它的ip地址，比如：167.23.10.2。而计算机更擅长记住网站的ip地址，而不是像www.baidu.com等链接。因为，DNS就相当于一个电话本，比如你要找www.baidu.com这个域名，那我翻一翻我的电话本，我就知道，哦，它的电话（ip）是167.23.10.2。</a></p>
 <p>2.DNS查询的两种方式：递归查询和迭代查询</p>
-<p><img src="clip_image003.png" alt></p>
-<p><strong>1**</strong>、递归解析**</p>
+<p><img src="/2020/03/30/Network/clip_image003.png"></p>
+<p><strong>1****、递归解析</strong></p>
 <p>当局部DNS服务器自己不能回答客户机的DNS查询时，它就需要向其他DNS服务器进行查询。此时有两种方式，如图所示的是递归方式。局部DNS服务器自己负责向其他DNS服务器进行查询，一般是先向该域名的根域服务器查询，再由根域名服务器一级级向下查询。最后得到的查询结果返回给局部DNS服务器，再由局部DNS服务器返回给客户端。</p>
-<p><img src="clip_image004-1585538209171.png" alt></p>
-<p><strong>2**</strong>、迭代解析**</p>
+<p><img src="/2020/03/30/Network/clip_image004-1585538209171.png"></p>
+<p><strong>2****、迭代解析</strong></p>
 <p>当局部DNS服务器自己不能回答客户机的DNS查询时，也可以通过迭代查询的方式进行解析，如图所示。局部DNS服务器不是自己向其他DNS服务器进行查询，而是把能解析该域名的其他DNS服务器的IP地址返回给客户端DNS程序，客户端DNS程序再继续向这些DNS服务器进行查询，直到得到查询结果为止。也就是说，迭代解析只是帮你找到相关的服务器而已，而不会帮你去查。比如说：baidu.com的服务器ip地址在192.168.4.5这里，你自己去查吧，本人比较忙，只能帮你到这里了。</p>
-<p><img src="clip_image005.jpg" alt></p>
+<p><img src="/2020/03/30/Network/clip_image005.jpg"></p>
 <p>3.DNS域名称空间的组织方式</p>
 <p>我们在前面有说到根DNS服务器，域DNS服务器，这些都是DNS域名称空间的组织方式。按其功能命名空间中用来描述 DNS 域名称的五个类别的介绍详见下表中，以及与每个名称类型的示例</p>
-<p> <img src="clip_image006.jpg" alt></p>
+<p> <img src="/2020/03/30/Network/clip_image006.jpg"></p>
 <p>4.DNS负载均衡</p>
 <p>当一个网站有足够多的用户的时候，假如每次请求的资源都位于同一台机器上面，那么这台机器随时可能会蹦掉。处理办法就是用DNS负载均衡技术，它的原理是在DNS服务器中为同一个主机名配置多个IP地址,在应答DNS查询时,DNS服务器对每个查询将以DNS文件中主机记录的IP地址按顺序返回不同的解析结果,将客户端的访问引导到不同的机器上去,使得不同的客户端访问不同的服务器,从而达到负载均衡的目的｡例如可以根据每台机器的负载量，该机器离用户地理位置的距离等等。</p>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({

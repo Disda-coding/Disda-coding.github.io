@@ -1,60 +1,60 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Java线程知识考点 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Java线程知识考点</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Java线程知识考点</h1><div class="post-content"><p>盘点了Java线程知识考点</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
-<li><a href="#进程和线程的区别">进程和线程的区别</a><ul>
-<li><a href="#进程是资源分配的最小单位线程是cpu调度的最小单位">进程是资源分配的最小单位，线程是CPU调度的最小单位</a></li>
-<li><a href="#进程和线程的区别-">进程和线程的区别 -</a></li>
-<li><a href="#总结">总结</a></li>
-<li><a href="#进程和线程通信方式-">进程和线程通信方式 -</a></li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB">进程和线程的区别</a><ul>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E6%98%AF%E8%B5%84%E6%BA%90%E5%88%86%E9%85%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E5%8D%95%E4%BD%8D%E7%BA%BF%E7%A8%8B%E6%98%AFcpu%E8%B0%83%E5%BA%A6%E7%9A%84%E6%9C%80%E5%B0%8F%E5%8D%95%E4%BD%8D">进程是资源分配的最小单位，线程是CPU调度的最小单位</a></li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB-">进程和线程的区别 -</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F-">进程和线程通信方式 -</a></li>
 </ul>
 </li>
-<li><a href="#java进程和线程的关系-">Java进程和线程的关系 -</a></li>
-<li><a href="#java中thread的start和run方法的区别">Java中Thread的start和run方法的区别 √</a></li>
-<li><a href="#thread-runnable以及callable有什么区别-">Thread、Runnable以及Callable有什么区别 -</a></li>
-<li><a href="#如何给run方法传参">如何给run()方法传参</a><ul>
-<li><a href="#实现的方式主要有三种-">实现的方式主要有三种 -</a></li>
-<li><a href="#如何获取线程的返回值">如何获取线程的返回值 √</a><ul>
-<li><a href="#方法1主线程等待法">方法1：主线程等待法</a></li>
-<li><a href="#方法2使用thread类的join阻塞当前线程等待子线程处理完毕">方法2：使用Thread类的join()阻塞当前线程等待子线程处理完毕</a></li>
-<li><a href="#方法3通过callable接口实现通过futuretask-or-线程池获取">方法3：通过Callable接口实现：通过FutureTask Or 线程池获取</a></li>
+<li><a href="#java%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB-">Java进程和线程的关系 -</a></li>
+<li><a href="#java%E4%B8%ADthread%E7%9A%84start%E5%92%8Crun%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB">Java中Thread的start和run方法的区别 √</a></li>
+<li><a href="#thread-runnable%E4%BB%A5%E5%8F%8Acallable%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB-">Thread、Runnable以及Callable有什么区别 -</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E7%BB%99run%E6%96%B9%E6%B3%95%E4%BC%A0%E5%8F%82">如何给run()方法传参</a><ul>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%96%B9%E5%BC%8F%E4%B8%BB%E8%A6%81%E6%9C%89%E4%B8%89%E7%A7%8D-">实现的方式主要有三种 -</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC">如何获取线程的返回值 √</a><ul>
+<li><a href="#%E6%96%B9%E6%B3%951%E4%B8%BB%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E6%B3%95">方法1：主线程等待法</a></li>
+<li><a href="#%E6%96%B9%E6%B3%952%E4%BD%BF%E7%94%A8thread%E7%B1%BB%E7%9A%84join%E9%98%BB%E5%A1%9E%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E5%AE%8C%E6%AF%95">方法2：使用Thread类的join()阻塞当前线程等待子线程处理完毕</a></li>
+<li><a href="#%E6%96%B9%E6%B3%953%E9%80%9A%E8%BF%87callable%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E9%80%9A%E8%BF%87futuretask-or-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%8E%B7%E5%8F%96">方法3：通过Callable接口实现：通过FutureTask Or 线程池获取</a></li>
 <li><a href="#threadpool">ThreadPool</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#线程的状态">线程的状态</a></li>
-<li><a href="#sleep和wait-">Sleep和wait -</a><ul>
-<li><a href="#基本的差别">基本的差别</a></li>
-<li><a href="#最主要的本质区别">最主要的本质区别</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81">线程的状态</a></li>
+<li><a href="#sleep%E5%92%8Cwait-">Sleep和wait -</a><ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B7%AE%E5%88%AB">基本的差别</a></li>
+<li><a href="#%E6%9C%80%E4%B8%BB%E8%A6%81%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB">最主要的本质区别</a></li>
 </ul>
 </li>
-<li><a href="#notify和notifyall的区别">Notify和notifyAll的区别 √</a><ul>
-<li><a href="#两个概念">两个概念</a><ul>
-<li><a href="#锁池entrylist">锁池EntryList</a></li>
-<li><a href="#等待池waitset">等待池WaitSet</a></li>
+<li><a href="#notify%E5%92%8Cnotifyall%E7%9A%84%E5%8C%BA%E5%88%AB">Notify和notifyAll的区别 √</a><ul>
+<li><a href="#%E4%B8%A4%E4%B8%AA%E6%A6%82%E5%BF%B5">两个概念</a><ul>
+<li><a href="#%E9%94%81%E6%B1%A0entrylist">锁池EntryList</a></li>
+<li><a href="#%E7%AD%89%E5%BE%85%E6%B1%A0waitset">等待池WaitSet</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#yeild方法">Yeild方法 √</a></li>
-<li><a href="#守护线程-">守护线程 -</a></li>
-<li><a href="#如何中断线程">如何中断线程 √</a><ul>
-<li><a href="#已经被抛弃的方法">已经被抛弃的方法</a></li>
-<li><a href="#目前使用的方法">目前使用的方法</a></li>
+<li><a href="#yeild%E6%96%B9%E6%B3%95">Yeild方法 √</a></li>
+<li><a href="#%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B-">守护线程 -</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E4%B8%AD%E6%96%AD%E7%BA%BF%E7%A8%8B">如何中断线程 √</a><ul>
+<li><a href="#%E5%B7%B2%E7%BB%8F%E8%A2%AB%E6%8A%9B%E5%BC%83%E7%9A%84%E6%96%B9%E6%B3%95">已经被抛弃的方法</a></li>
+<li><a href="#%E7%9B%AE%E5%89%8D%E4%BD%BF%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95">目前使用的方法</a></li>
 </ul>
 </li>
-<li><a href="#线程状态图">线程状态图</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E5%9B%BE">线程状态图</a></li>
 </ul>
 <!-- tocstop -->
 
-<h2><span id="进程和线程的区别">进程和线程的区别</span></h2><p><img src="clip_image002.jpg" alt></p>
+<h2><span id="进程和线程的区别">进程和线程的区别</span></h2><p><img src="/2020/04/05/java-Thread/clip_image002.jpg"></p>
 <h3><span id="进程是资源分配的最小单位线程是cpu调度的最小单位">进程是资源分配的最小单位，线程是CPU调度的最小单位</span></h3><p>Ø 所有与进程相关的资源，都被记录在PCB中</p>
 <p>Ø 进程是抢占处理器的调度单位；线程属于某个进程，共享其资源</p>
 <p>Ø 线程只由栈、寄存器，程序计数器和TCB组成</p>
-<p><img src="image-20200405094518246.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405094518246.png"></p>
 <h3><span id="进程和线程的区别-">进程和线程的区别 -</span></h3><p><font color="red">根本区别</font>：进程是资源分配的最小单位，而线程CPU调度的最小单位</p>
 <p><font color="red">开销方面</font>：每个进程都有独立的代码和数据空间（程序上下文），进程之间切换开销大；线程可以看做轻量级的进程，同一类线程共享代码和数据空间，每个线程都有自己独立的运行栈、寄存器和程序计数器（PC），线程之间切换的开销小 </p>
 <p><font color="red">所处环境</font>：在操作系统中能同时运行多个进程（程序）；而在同一个进程（程序）中有多个线程同时执行（通过CPU调度，在每个时间片中只有一个线程执行） </p>
@@ -64,7 +64,7 @@
 <p>Ø 线程没有独立的地址空间，多进程的程序比多线程程序健壮</p>
 <p>Ø 进程切换比线程的切换开销大</p>
 <h3><span id="进程和线程通信方式-">进程和线程通信方式 -</span></h3><p><strong>进程</strong>：</p>
-<p>（1）管道（pipe，半双工），流管道（s_pipe，全双工），有名管道（FIFO，全双工）<br>（2）信号量（sophomore/mutex）<br>（3）信号（signal）<br>（4）消息队列<br>（5）共享内存<br>（6）套接字（socket）</p>
+<p>（1）管道（pipe，半双工），流管道（s_pipe，全双工），有名管道（FIFO，全双工）<br>（2）信号量（sophomore&#x2F;mutex）<br>（3）信号（signal）<br>（4）消息队列<br>（5）共享内存<br>（6）套接字（socket）</p>
 <p><strong>线程</strong>：</p>
 <p>（1）volatile变量<br>（2）使用Object类的wait() 和 notify() 方法<br>（3）使用JUC工具类 CountDownLatch、CyclicBarrier、Exchanger、Semaphore<br>（4）使用 ReentrantLock 结合 Condition<br>（5）LockSupport方法<br>（6）阻塞队列</p>
 <h2><span id="java进程和线程的关系-">Java进程和线程的关系 -</span></h2><p>Ø Java对操作系统提供的功能进行封装，包括进程和线程</p>
@@ -75,20 +75,20 @@
 <p><font color="red">JVM是多线程的</font></p>
 <p>JVM实例在创建的时候同时会创建很多其他的线程，比如GC的线程。</p>
 <p>各个JVM实例之间是相互隔离的。</p>
-<h2><span id="java中thread的start和run方法的区别">Java中Thread的start和run方法的区别 √</span></h2><p><img src="image-20200405095635582.png" alt></p>
-<p><img src="image-20200405095643937.png" alt></p>
-<p><img src="image-20200405095653496.png" alt></p>
+<h2><span id="java中thread的start和run方法的区别">Java中Thread的start和run方法的区别 √</span></h2><p><img src="/2020/04/05/java-Thread/image-20200405095635582.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405095643937.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405095653496.png"></p>
 <p>调用线程的start方法是创建了新的线程，在新的线程中执行。<br>调用线程的run方法是在主线程中执行该方法，和调用普通方法一样</p>
-<h2><span id="thread-runnable以及callable有什么区别-">Thread、Runnable以及Callable有什么区别 -</span></h2><p><img src="image-20200405095750934.png" alt></p>
+<h2><span id="thread-runnable以及callable有什么区别-">Thread、Runnable以及Callable有什么区别 -</span></h2><p><img src="/2020/04/05/java-Thread/image-20200405095750934.png"></p>
 <ul>
 <li>由于java不能多继承可以实现多个接口，因此，在创建线程的时候尽量多考虑采用实现接口的形式；</li>
 <li>实现callable接口，提交给ExecutorService返回的是异步执行的结果，另外，通常也可以利用FutureTask(Callable  callable)将callable进行包装然后FutureTask提交给ExecutorService。</li>
 </ul>
 <p>·     callable的核心是call方法，允许返回值，runnable的核心是run方法，没有返回值</p>
 <p>·     call方法可以抛出异常，但是run方法不行</p>
-<p><img src="image-20200405095815514.png" alt></p>
-<p><img src="image-20200405095822530.png" alt></p>
-<p><img src="image-20200405095831324.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405095815514.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405095822530.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405095831324.png"></p>
 <p>Ø Thread是实现了<font color="red">Runnable接口的类</font>，使得run支持多线程</p>
 <p><strong>Future就是对于具体的Runnable或者Callable任务的执行结果进行</strong>取消、查询是否完成、获取结果、设置结果操作</p>
 <p>FutureTask类实现了RunnableFuture接口,<code>所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值</code></p>
@@ -96,16 +96,16 @@
 <h2><span id="如何给run方法传参">如何给run()方法传参</span></h2><h3><span id="实现的方式主要有三种-">实现的方式主要有三种 -</span></h3><p>Ø 构造参数传参</p>
 <p>Ø 成员变量传参</p>
 <p>Ø 回调函数传参</p>
-<p><img src="image-20200405101302498.png" alt></p>
-<h3><span id="如何获取线程的返回值">如何获取线程的返回值 √</span></h3><h4><span id="方法1主线程等待法">方法1：主线程等待法</span></h4><p><img src="image-20200405101320713.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405101302498.png"></p>
+<h3><span id="如何获取线程的返回值">如何获取线程的返回值 √</span></h3><h4><span id="方法1主线程等待法">方法1：主线程等待法</span></h4><p><img src="/2020/04/05/java-Thread/image-20200405101320713.png"></p>
 <p>缺点是控制时间不够精准，而且逻辑一多实现起来很麻烦</p>
-<h4><span id="方法2使用thread类的join阻塞当前线程等待子线程处理完毕">方法2：使用Thread类的join()阻塞当前线程等待子线程处理完毕</span></h4><p><img src="image-20200405101511632.png" alt></p>
+<h4><span id="方法2使用thread类的join阻塞当前线程等待子线程处理完毕">方法2：使用Thread类的join()阻塞当前线程等待子线程处理完毕</span></h4><p><img src="/2020/04/05/java-Thread/image-20200405101511632.png"></p>
 <p>缺点是粒度不够细，比如说无法做到线程1达到某个时刻去执行线程2的方法</p>
-<h4><span id="方法3通过callable接口实现通过futuretask-or-线程池获取">方法3：通过Callable接口实现：通过FutureTask Or 线程池获取</span></h4><p><img src="image-20200405101544024.png" alt></p>
-<p><img src="image-20200405101550999.png" alt></p>
-<h4><span id="threadpool">ThreadPool</span></h4><p><img src="image-20200405101621964.png" alt></p>
+<h4><span id="方法3通过callable接口实现通过futuretask-or-线程池获取">方法3：通过Callable接口实现：通过FutureTask Or 线程池获取</span></h4><p><img src="/2020/04/05/java-Thread/image-20200405101544024.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405101550999.png"></p>
+<h4><span id="threadpool">ThreadPool</span></h4><p><img src="/2020/04/05/java-Thread/image-20200405101621964.png"></p>
 <p>提交多个实现callable的类，让线程池并发的处理结果。统一管理</p>
-<h2><span id="线程的状态">线程的状态</span></h2><p><img src="image-20200405101708723.png" alt></p>
+<h2><span id="线程的状态">线程的状态</span></h2><p><img src="/2020/04/05/java-Thread/image-20200405101708723.png"></p>
 <p>Ø 新建（New）：创建后尚未启动的线程的状态</p>
 <p>Ø 运行（Runnable）：包含Running和Ready</p>
 <p>Ø 无限期等待（waiting）：不会被分配CPU执行时间，需要显式被唤醒</p>
@@ -118,7 +118,7 @@
 </thead>
 <tbody><tr>
 <td>没有设置Timeout参数的Object.wait()方法</td>
-<td>Object.notify() /  Object.notfifyAll()</td>
+<td>Object.notify() &#x2F;  Object.notfifyAll()</td>
 </tr>
 <tr>
 <td>没有设置Timeout参数的Thread.join()方法</td>
@@ -143,11 +143,11 @@
 </tr>
 <tr>
 <td>设置了Timeout参数的Object.wait()方法</td>
-<td>时间结束/Object.notify()/   Object.notfifyAll()</td>
+<td>时间结束&#x2F;Object.notify()&#x2F;   Object.notfifyAll()</td>
 </tr>
 <tr>
 <td>设置了Timeout参数的Thread.join()方法</td>
-<td>时间结束 / 被调用的线程执行完毕</td>
+<td>时间结束 &#x2F; 被调用的线程执行完毕</td>
 </tr>
 <tr>
 <td>LockSupport.parkNanos  方法</td>
@@ -161,15 +161,15 @@
 <p>Ø 阻塞（Blocked）:等待获取排他锁</p>
 <p>Ø 结束（Terminated）：已终止线程的状态，线程已经结束执行</p>
 <p>结束后运行join会发生异常</p>
-<p><img src="image-20200405101912677.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405101912677.png"></p>
 <h2><span id="sleep和wait-">Sleep和wait -</span></h2><h3><span id="基本的差别">基本的差别</span></h3><p>Ø Sleep是Thread类的方法，wait是Object类中定义的方法</p>
 <p>Ø Sleep()方法可以在任何地方使用</p>
 <p>Ø Wait()方法只能在synchronized方法或者synchronized块中使用</p>
-<p>Ø sleep()方法在休眠时间达到后如果再次获得CPU时间片就会继续执行，而wait()方法必须等待Object.notift/Object.notifyAll通知后，才会离开等待池，并且再次获得CPU时间片才会继续执行。</p>
+<p>Ø sleep()方法在休眠时间达到后如果再次获得CPU时间片就会继续执行，而wait()方法必须等待Object.notift&#x2F;Object.notifyAll通知后，才会离开等待池，并且再次获得CPU时间片才会继续执行。</p>
 <h3><span id="最主要的本质区别">最主要的本质区别</span></h3><p>Ø Thread.sleep只会让出CPU，不会导致锁行为的改变</p>
 <p>Ø Object.wait不仅让出CPU，还会释放已经占有的同步资源锁</p>
-<p> <img src="image-20200405103009700.png" alt></p>
-<p><img src="image-20200405103019328.png" alt></p>
+<p> <img src="/2020/04/05/java-Thread/image-20200405103009700.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405103019328.png"></p>
 <p>第一个实现wait逻辑，第二个实现sleep逻辑。</p>
 <p>在第一个线程start后sleep 10ms再运行第二个线程。</p>
 <p>此时由于线程A使用wait方法，所以B可以拿到锁。</p>
@@ -193,24 +193,24 @@
 <p>回到线程A wait（不给参数，无限等待），线程B sleep的状态</p>
 <p>就会发现A无限等待，然后B已经执行完了，程序还没结束。</p>
 <p>此时可以在B中加入notify来唤醒A、或者notifyall</p>
-<p><img src="image-20200405103049686.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405103049686.png"></p>
 <h2><span id="notify和notifyall的区别">Notify和notifyAll的区别 √</span></h2><h3><span id="两个概念">两个概念</span></h3><h4><span id="锁池entrylist">锁池EntryList</span></h4><p>假设线程A已经拥有了某个对象（不是类）的锁，而其他线程B、C想要调用这个对象的某个synchronized方法（或者块），由于B、C线程在进入对象的synchronized方法（或者块）之前必须先获得该对象锁的拥有权，而恰巧该对象的锁目前正被线程A所占用，此时B、C线程就会被阻塞，进入一个地方去等待锁的释放，这个地方便是该对象的锁池。 </p>
 <h4><span id="等待池waitset">等待池WaitSet</span></h4><p>假设线程A调用了某个对象的wait()方法，线程A就会释放该对象的锁，同时线程A就进入到了该对象的等待池中，进入到等待池中的线程不会去竞争该对象的锁</p>
 <p>Ø NotifyAll会让所有处于等待池的线程全部进入锁池去竞争获取锁的机会</p>
 <p>Ø Notify只会随机选择一个处于等待池中的线程进入锁池去竞争获取锁的机会</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.interview.javabasic.thread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.logging.Level;</span><br><span class="line"><span class="keyword">import</span> java.util.logging.Logger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NotificationDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> go = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> NotificationDemo test = <span class="keyword">new</span> NotificationDemo();</span><br><span class="line"></span><br><span class="line">        Runnable waitTask = <span class="keyword">new</span> Runnable()&#123;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    test.shouldGo();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">" finished Execution"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        Runnable notifyTask = <span class="keyword">new</span> Runnable()&#123;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                test.go();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">" finished Execution"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(waitTask, <span class="string">"WT1"</span>); <span class="comment">//will wait</span></span><br><span class="line">        Thread t2 = <span class="keyword">new</span> Thread(waitTask, <span class="string">"WT2"</span>); <span class="comment">//will wait</span></span><br><span class="line">        Thread t3 = <span class="keyword">new</span> Thread(waitTask, <span class="string">"WT3"</span>); <span class="comment">//will wait</span></span><br><span class="line">        Thread t4 = <span class="keyword">new</span> Thread(notifyTask,<span class="string">"NT1"</span>); <span class="comment">//will notify</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//starting all waiting thread</span></span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t3.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//pause to ensure all waiting thread started successfully</span></span><br><span class="line">        Thread.sleep(<span class="number">200</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//starting notifying thread</span></span><br><span class="line">        t4.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * wait and notify can only be called from synchronized method or bock</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">shouldGo</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(go != <span class="keyword">true</span>)&#123;</span><br><span class="line">            System.out.println(Thread.currentThread()</span><br><span class="line">                    + <span class="string">" is going to wait on this object"</span>);</span><br><span class="line">            wait(); <span class="comment">//release lock and reacquires on wakeup</span></span><br><span class="line">            System.out.println(Thread.currentThread() + <span class="string">" is woken up"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        go = <span class="keyword">false</span>; <span class="comment">//resetting condition</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * both shouldGo() and go() are locked on current object referenced by "this" keyword</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">go</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (go == <span class="keyword">false</span>)&#123;</span><br><span class="line">            System.out.println(Thread.currentThread()</span><br><span class="line">                    + <span class="string">" is going to notify all or one thread waiting on this object"</span>);</span><br><span class="line"></span><br><span class="line">            go = <span class="keyword">true</span>; <span class="comment">//making condition true for waiting thread</span></span><br><span class="line">            <span class="comment">//notify(); // only one out of three waiting thread WT1, WT2,WT3 will woke up</span></span><br><span class="line">            notifyAll(); <span class="comment">// all waiting thread  WT1, WT2,WT3 will woke up</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.interview.javabasic.thread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.logging.Level;</span><br><span class="line"><span class="keyword">import</span> java.util.logging.Logger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NotificationDemo</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">go</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="type">NotificationDemo</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NotificationDemo</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">Runnable</span> <span class="variable">waitTask</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable</span>()&#123;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    test.shouldGo();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; finished Execution&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="type">Runnable</span> <span class="variable">notifyTask</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable</span>()&#123;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">                test.go();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; finished Execution&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(waitTask, <span class="string">&quot;WT1&quot;</span>); <span class="comment">//will wait</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(waitTask, <span class="string">&quot;WT2&quot;</span>); <span class="comment">//will wait</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(waitTask, <span class="string">&quot;WT3&quot;</span>); <span class="comment">//will wait</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t4</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(notifyTask,<span class="string">&quot;NT1&quot;</span>); <span class="comment">//will notify</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//starting all waiting thread</span></span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t3.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//pause to ensure all waiting thread started successfully</span></span><br><span class="line">        Thread.sleep(<span class="number">200</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//starting notifying thread</span></span><br><span class="line">        t4.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * wait and notify can only be called from synchronized method or bock</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">shouldGo</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="keyword">while</span>(go != <span class="literal">true</span>)&#123;</span><br><span class="line">            System.out.println(Thread.currentThread()</span><br><span class="line">                    + <span class="string">&quot; is going to wait on this object&quot;</span>);</span><br><span class="line">            wait(); <span class="comment">//release lock and reacquires on wakeup</span></span><br><span class="line">            System.out.println(Thread.currentThread() + <span class="string">&quot; is woken up&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        go = <span class="literal">false</span>; <span class="comment">//resetting condition</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * both shouldGo() and go() are locked on current object referenced by &quot;this&quot; keyword</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">go</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (go == <span class="literal">false</span>)&#123;</span><br><span class="line">            System.out.println(Thread.currentThread()</span><br><span class="line">                    + <span class="string">&quot; is going to notify all or one thread waiting on this object&quot;</span>);</span><br><span class="line"></span><br><span class="line">            go = <span class="literal">true</span>; <span class="comment">//making condition true for waiting thread</span></span><br><span class="line">            <span class="comment">//notify(); // only one out of three waiting thread WT1, WT2,WT3 will woke up</span></span><br><span class="line">            notifyAll(); <span class="comment">// all waiting thread  WT1, WT2,WT3 will woke up</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="image-20200405103135404.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405103135404.png"></p>
 <p>如果改成notifyAll</p>
-<p><img src="image-20200405103148463.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405103148463.png"></p>
 <p>所有的线程都被唤醒了，但是最后<font color="red">只有一个执行成功</font>。其余线程<font color="red">又回到等待池</font>中。</p>
 <h2><span id="yeild方法">Yeild方法 √</span></h2><p>用了yield方法后，该线程就会把CPU时间让掉，让其他或者自己的线程执行（也就是谁先抢到谁执行）</p>
 <p>Yield对锁的行为没有影响 </p>
 <p>只会分配<strong>给当前线程相同优先级</strong>的线程 </p>
 <p>在Java程序中，通过一个<strong>整型成员变量</strong>Priority<strong>来控制优先级，优先级的范围从1~10.在构建线程的时候可以通过</strong>setPriority(int)方法进行设置，默认优先级为5，优先级高的线程相较于优先级低的线程优先获得处理器时间片。需要注意的是在不同JVM以及操作系统上，线程规划存在差异，有些操作系统甚至会忽略线程优先级的设定。</p>
-<p><img src="image-20200405103912517.png" alt></p>
-<p><img src="image-20200405103920271.png" alt></p>
-<p><img src="image-20200405103928822.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405103912517.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405103920271.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405103928822.png"></p>
 <p>Yield对锁的行为没有影响</p>
 <h2><span id="守护线程-">守护线程 -</span></h2><p>守护线程是一种特殊的线程，就和它的名字一样，它是系统的守护者，在后台默默地守护一些系统服务，比如垃圾回收线程就可以理解守护线程。与之对应的就是用户线程，用户线程就可以认为是系统的工作线程，它会完成整个系统的业务操作。</p>
 <p>这里需要注意的是<strong>守护线程在退出的时候并不会执行finnally</strong>块中的代码，所以将释放资源等操作不要放在finnally块中执行，这种操作是不安全的</p>
@@ -228,12 +228,12 @@
 <p>Ø 需要被调用的线程配合中断</p>
 <p>a)   在正常运行任务时，经常检查本线程的中断标志位，如果被设置了中断标志就自行停止线程。</p>
 <p>b)   如果线程处于正常活动状态，那么会将该线程的中断标志设置为true。被设置中断标志的线程将继续正常运行，不受影响。</p>
-<p><img src="image-20200405104227952.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405104227952.png"></p>
 <p>中断可以理解为线程的一个标志位，它表示了一个运行中的线程是否被其他线程进行了中断操作。中断好比其他线程对该线程打了一个招呼。其他线程可以调用该线程的interrupt()方法对其进行中断操作，同时该线程可以调用 isInterrupted（）来感知其他线程对其自身的中断操作，从而做出响应。另外，同样可以调用Thread的静态方法 interrupted（）对当前线程进行中断操作，该方法会清除中断标志位。<strong>需要注意的是，当抛出InterruptedException时候，会清除中断标志位，也就是说在调用isInterrupted会返回false</strong>。</p>
-<p><img src="image-20200405104410385.png" alt></p>
-<p><img src="image-20200405104418440.png" alt></p>
-<p><img src="image-20200405104444644.png" alt></p>
-<h2><span id="线程状态图">线程状态图</span></h2><p><img src="image-20200405104454839.png" alt></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405104410385.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405104418440.png"></p>
+<p><img src="/2020/04/05/java-Thread/image-20200405104444644.png"></p>
+<h2><span id="线程状态图">线程状态图</span></h2><p><img src="/2020/04/05/java-Thread/image-20200405104454839.png"></p>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',

@@ -1,73 +1,73 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Java常用类库与技巧 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Java常用类库与技巧</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Java常用类库与技巧</h1><div class="post-content"><p>盘点了Java常用类库与技巧</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
-<li><a href="#java异常">Java异常</a><ul>
-<li><a href="#异常处理机制主要回答了三个问题">异常处理机制主要回答了三个问题</a></li>
+<li><a href="#java%E5%BC%82%E5%B8%B8">Java异常</a><ul>
+<li><a href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6%E4%B8%BB%E8%A6%81%E5%9B%9E%E7%AD%94%E4%BA%86%E4%B8%89%E4%B8%AA%E9%97%AE%E9%A2%98">异常处理机制主要回答了三个问题</a></li>
 </ul>
 </li>
-<li><a href="#error和exception的区别">Error和Exception的区别</a><ul>
-<li><a href="#从概念角度解析java的异常处理机制">从概念角度解析Java的异常处理机制</a></li>
-<li><a href="#从责任角度看">从责任角度看</a></li>
+<li><a href="#error%E5%92%8Cexception%E7%9A%84%E5%8C%BA%E5%88%AB">Error和Exception的区别</a><ul>
+<li><a href="#%E4%BB%8E%E6%A6%82%E5%BF%B5%E8%A7%92%E5%BA%A6%E8%A7%A3%E6%9E%90java%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6">从概念角度解析Java的异常处理机制</a></li>
+<li><a href="#%E4%BB%8E%E8%B4%A3%E4%BB%BB%E8%A7%92%E5%BA%A6%E7%9C%8B">从责任角度看</a></li>
 </ul>
 </li>
-<li><a href="#常见error以及exception">常见Error以及Exception</a></li>
-<li><a href="#java的异常处理机制">Java的异常处理机制</a></li>
-<li><a href="#java异常的处理原则">Java异常的处理原则</a></li>
-<li><a href="#高效主流的异常处理框架">高效主流的异常处理框架</a></li>
-<li><a href="#try-catch的性能">Try-catch的性能</a><ul>
-<li><a href="#java异常处理消耗性能的地方">Java异常处理消耗性能的地方【】</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81error%E4%BB%A5%E5%8F%8Aexception">常见Error以及Exception</a></li>
+<li><a href="#java%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6">Java的异常处理机制</a></li>
+<li><a href="#java%E5%BC%82%E5%B8%B8%E7%9A%84%E5%A4%84%E7%90%86%E5%8E%9F%E5%88%99">Java异常的处理原则</a></li>
+<li><a href="#%E9%AB%98%E6%95%88%E4%B8%BB%E6%B5%81%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6">高效主流的异常处理框架</a></li>
+<li><a href="#try-catch%E7%9A%84%E6%80%A7%E8%83%BD">Try-catch的性能</a><ul>
+<li><a href="#java%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%B6%88%E8%80%97%E6%80%A7%E8%83%BD%E7%9A%84%E5%9C%B0%E6%96%B9">Java异常处理消耗性能的地方【】</a></li>
 </ul>
 </li>
-<li><a href="#java集合框架">Java集合框架</a><ul>
-<li><a href="#数据结构考点">数据结构考点</a></li>
-<li><a href="#算法考点">算法考点</a></li>
-<li><a href="#考点拓展">考点拓展</a></li>
+<li><a href="#java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6">Java集合框架</a><ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%80%83%E7%82%B9">数据结构考点</a></li>
+<li><a href="#%E7%AE%97%E6%B3%95%E8%80%83%E7%82%B9">算法考点</a></li>
+<li><a href="#%E8%80%83%E7%82%B9%E6%8B%93%E5%B1%95">考点拓展</a></li>
 </ul>
 </li>
-<li><a href="#集合之map">集合之Map</a></li>
-<li><a href="#为什么重写equals要重写hashcode">为什么重写equals要重写HashCode</a><ul>
-<li><a href="#hashmap-hashtable-concurrenthashmap的区别">HashMap HashTable ConcurrentHashMap的区别</a></li>
-<li><a href="#hashmapput方法的逻辑">HashMap：put方法的逻辑</a></li>
-<li><a href="#hashmapget方法的逻辑">HashMap：get方法的逻辑</a></li>
-<li><a href="#hashmap如何有效减少碰撞">HashMap：如何有效减少碰撞</a></li>
-<li><a href="#为什么不直接用hashcode作为下标">为什么不直接用hashcode作为下标</a></li>
-<li><a href="#hashmap扩容问题">HashMap：扩容问题</a></li>
-<li><a href="#collectionssynchronizedmap和hashtable的区别">Collections.synchronizedMap和Hashtable的区别</a></li>
-<li><a href="#concurrenthashmapput方法的逻辑">ConcurrentHashMap：put方法的逻辑</a></li>
-<li><a href="#get-过程分析">get 过程分析</a></li>
-<li><a href="#concurrenthashmap总结比起segment锁拆得更细">ConcurrentHashMap总结：比起Segment，锁拆得更细</a></li>
-<li><a href="#concurrenthashmap别的需要注意的点">ConcurrentHashMap：别的需要注意的点</a></li>
-<li><a href="#三者的区别">三者的区别</a></li>
+<li><a href="#%E9%9B%86%E5%90%88%E4%B9%8Bmap">集合之Map</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%8D%E5%86%99equals%E8%A6%81%E9%87%8D%E5%86%99hashcode">为什么重写equals要重写HashCode</a><ul>
+<li><a href="#hashmap-hashtable-concurrenthashmap%E7%9A%84%E5%8C%BA%E5%88%AB">HashMap HashTable ConcurrentHashMap的区别</a></li>
+<li><a href="#hashmapput%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%BB%E8%BE%91">HashMap：put方法的逻辑</a></li>
+<li><a href="#hashmapget%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%BB%E8%BE%91">HashMap：get方法的逻辑</a></li>
+<li><a href="#hashmap%E5%A6%82%E4%BD%95%E6%9C%89%E6%95%88%E5%87%8F%E5%B0%91%E7%A2%B0%E6%92%9E">HashMap：如何有效减少碰撞</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%9B%B4%E6%8E%A5%E7%94%A8hashcode%E4%BD%9C%E4%B8%BA%E4%B8%8B%E6%A0%87">为什么不直接用hashcode作为下标</a></li>
+<li><a href="#hashmap%E6%89%A9%E5%AE%B9%E9%97%AE%E9%A2%98">HashMap：扩容问题</a></li>
+<li><a href="#collectionssynchronizedmap%E5%92%8Chashtable%E7%9A%84%E5%8C%BA%E5%88%AB">Collections.synchronizedMap和Hashtable的区别</a></li>
+<li><a href="#concurrenthashmapput%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%BB%E8%BE%91">ConcurrentHashMap：put方法的逻辑</a></li>
+<li><a href="#get-%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90">get 过程分析</a></li>
+<li><a href="#concurrenthashmap%E6%80%BB%E7%BB%93%E6%AF%94%E8%B5%B7segment%E9%94%81%E6%8B%86%E5%BE%97%E6%9B%B4%E7%BB%86">ConcurrentHashMap总结：比起Segment，锁拆得更细</a></li>
+<li><a href="#concurrenthashmap%E5%88%AB%E7%9A%84%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E7%82%B9">ConcurrentHashMap：别的需要注意的点</a></li>
+<li><a href="#%E4%B8%89%E8%80%85%E7%9A%84%E5%8C%BA%E5%88%AB">三者的区别</a></li>
 </ul>
 </li>
 <li><a href="#java-util-concurrentjuc">Java util concurrent（JUC）</a><ul>
-<li><a href="#javautilconcurrent提供了并发编程的解决方案">Java.util.concurrent:提供了并发编程的解决方案</a></li>
-<li><a href="#juc包的分类">J.U.C包的分类</a></li>
-<li><a href="#并发工具类">并发工具类</a><ul>
-<li><a href="#countdownlatch让主线程等待一组事件发生后继续执行">CountDownLatch：让主线程等待一组事件发生后继续执行</a></li>
-<li><a href="#cyclicbarrier阻塞当前线程等待其他线程">CyclicBarrier：阻塞当前线程，等待其他线程</a></li>
-<li><a href="#semaphore控制某个资源可被同时访问的线程个数">Semaphore：控制某个资源可被同时访问的线程个数</a></li>
-<li><a href="#exchanger两个线程到达同步点后相互交换数据">Exchanger：两个线程到达同步点后，相互交换数据</a></li>
+<li><a href="#javautilconcurrent%E6%8F%90%E4%BE%9B%E4%BA%86%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">Java.util.concurrent:提供了并发编程的解决方案</a></li>
+<li><a href="#juc%E5%8C%85%E7%9A%84%E5%88%86%E7%B1%BB">J.U.C包的分类</a></li>
+<li><a href="#%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E7%B1%BB">并发工具类</a><ul>
+<li><a href="#countdownlatch%E8%AE%A9%E4%B8%BB%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E4%B8%80%E7%BB%84%E4%BA%8B%E4%BB%B6%E5%8F%91%E7%94%9F%E5%90%8E%E7%BB%A7%E7%BB%AD%E6%89%A7%E8%A1%8C">CountDownLatch：让主线程等待一组事件发生后继续执行</a></li>
+<li><a href="#cyclicbarrier%E9%98%BB%E5%A1%9E%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%85%B6%E4%BB%96%E7%BA%BF%E7%A8%8B">CyclicBarrier：阻塞当前线程，等待其他线程</a></li>
+<li><a href="#semaphore%E6%8E%A7%E5%88%B6%E6%9F%90%E4%B8%AA%E8%B5%84%E6%BA%90%E5%8F%AF%E8%A2%AB%E5%90%8C%E6%97%B6%E8%AE%BF%E9%97%AE%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%B8%AA%E6%95%B0">Semaphore：控制某个资源可被同时访问的线程个数</a></li>
+<li><a href="#exchanger%E4%B8%A4%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%88%B0%E8%BE%BE%E5%90%8C%E6%AD%A5%E7%82%B9%E5%90%8E%E7%9B%B8%E4%BA%92%E4%BA%A4%E6%8D%A2%E6%95%B0%E6%8D%AE">Exchanger：两个线程到达同步点后，相互交换数据</a></li>
 </ul>
 </li>
-<li><a href="#blockingqueue提供可阻塞的入队和出队操作">BlockingQueue：提供可阻塞的入队和出队操作</a><ul>
-<li><a href="#blockingqueue类型">BlockingQueue类型</a></li>
+<li><a href="#blockingqueue%E6%8F%90%E4%BE%9B%E5%8F%AF%E9%98%BB%E5%A1%9E%E7%9A%84%E5%85%A5%E9%98%9F%E5%92%8C%E5%87%BA%E9%98%9F%E6%93%8D%E4%BD%9C">BlockingQueue：提供可阻塞的入队和出队操作</a><ul>
+<li><a href="#blockingqueue%E7%B1%BB%E5%9E%8B">BlockingQueue类型</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#同步与异步">同步与异步</a></li>
-<li><a href="#阻塞和非阻塞">阻塞和非阻塞</a></li>
-<li><a href="#bio-同步阻塞io模式">BIO (同步阻塞I/O模式)</a></li>
-<li><a href="#nio同步非阻塞">NIO（同步非阻塞）</a></li>
-<li><a href="#aio-异步非阻塞io模型">AIO （异步非阻塞I/O模型）</a></li>
-<li><a href="#nio-如何实现多路复用功能">NIO 如何实现多路复用功能</a></li>
-<li><a href="#aio-bio-nio的适用场景">AIO、BIO、NIO的适用场景</a></li>
-<li><a href="#nio的核心概念">NIO的核心概念</a><ul>
-<li><a href="#nio应用和框架等等">NIO应用和框架等等</a></li>
+<li><a href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5">同步与异步</a></li>
+<li><a href="#%E9%98%BB%E5%A1%9E%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9E">阻塞和非阻塞</a></li>
+<li><a href="#bio-%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio%E6%A8%A1%E5%BC%8F">BIO (同步阻塞I&#x2F;O模式)</a></li>
+<li><a href="#nio%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9E">NIO（同步非阻塞）</a></li>
+<li><a href="#aio-%E5%BC%82%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9Eio%E6%A8%A1%E5%9E%8B">AIO （异步非阻塞I&#x2F;O模型）</a></li>
+<li><a href="#nio-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%8A%9F%E8%83%BD">NIO 如何实现多路复用功能</a></li>
+<li><a href="#aio-bio-nio%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF">AIO、BIO、NIO的适用场景</a></li>
+<li><a href="#nio%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">NIO的核心概念</a><ul>
+<li><a href="#nio%E5%BA%94%E7%94%A8%E5%92%8C%E6%A1%86%E6%9E%B6%E7%AD%89%E7%AD%89">NIO应用和框架等等</a></li>
 </ul>
 </li>
 </ul>
@@ -76,14 +76,14 @@
 <h2><span id="java异常">Java异常</span></h2><h3><span id="异常处理机制主要回答了三个问题">异常处理机制主要回答了三个问题</span></h3><p>Ø What：异常类型回答了什么被抛出</p>
 <p>Ø Where：异常堆栈跟踪回答了在哪抛出</p>
 <p>Ø Why：异常信息回答了为什么被抛出</p>
-<h2><span id="error和exception的区别">Error和Exception的区别</span></h2><p>  <img src="image-20200331101145233.png" alt>                             </p>
+<h2><span id="error和exception的区别">Error和Exception的区别</span></h2><p>  <img src="/2020/03/31/Java-jar/image-20200331101145233.png">                             </p>
 <h3><span id="从概念角度解析java的异常处理机制">从概念角度解析Java的异常处理机制</span></h3><p>Ø Error：程序无法处理的系统错误，编译器不做检查</p>
 <p>Ø Exception：程序可以处理的异常，捕获后可能恢复</p>
 <p>Ø 总结：前者是程序无法处理的错误，后者是可以处理的异常</p>
 <ul>
 <li><p>RuntimeException：不可预知的，程序应当自行避免</p>
 </li>
-<li><p>非RuntimeException：可预知的，从编译器校验的异常 </p>
+<li><p>非RuntimeException：可预知的，从编译器校验的异常</p>
 </li>
 </ul>
 <h3><span id="从责任角度看">从责任角度看</span></h3><ol>
@@ -92,16 +92,16 @@
 <li><p>RuntimeException是程序应该负担的责任；</p>
 </li>
 <li><p>Checked Exception可检查异常是Java编译器应该负担的责任</p>
-<p><img src="image-20200331101305428.png" alt>             </p>
+<p><img src="/2020/03/31/Java-jar/image-20200331101305428.png"></p>
 </li>
 </ol>
 <p>Checked Exception是编译器必须要追踪且处理的异常，可以使用Try catch处理，或者使用throws 来抛出异常。虽然抛出异常可以抛出异常的父类，但是还是不要泛化异常，以便查询到异常。 </p>
 <p>如果写方法的时候不使用try catch来捕获异常，则需要在调用此方法的位置进行处理。</p>
-<p><img src="image-20200331101329377.png" alt></p>
-<p><img src="image-20200331101340011.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331101329377.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331101340011.png"></p>
 <p>如果调用者知道如何处理异常便可以使用try catch来处理。</p>
 <p>如果不知道的话也可以向上抛出异常，将异常层层上抛直到被处理，或者到顶层抛出异常为止，这里main函数是顶层，如果直接throws就会终止程序。</p>
-<p><img src="image-20200331101509470.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331101509470.png"></p>
 <h2><span id="常见error以及exception">常见Error以及Exception</span></h2><p><strong>RuntimeException</strong></p>
 <ol>
 <li><p>NullPointerException-空指针引用异常</p>
@@ -145,22 +145,22 @@
 <p>​    </p>
 <p>   <strong>Try with resources</strong></p>
 <p>   在括号里面声明继承<em>AutoClosable的对象，在结束时自动关闭。</em></p>
-<p><img src="image-20200331181358769.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331181358769.png"></p>
 <p>为了确保外部资源一定要被关闭，通常关闭代码被写入finally代码块中，当然我们还必须注意到关闭资源时可能抛出的异常，于是变有了下面的经典代码：   </p>
-<p><img src="image-20200331181431748.png" alt>                            </p>
+<p><img src="/2020/03/31/Java-jar/image-20200331181431748.png">                            </p>
 <p>直到JDK7中新增了try-with-resource语法，才实现了这一功能。</p>
 <p>那什么是try-with-resource呢？简而言之，当一个外部资源的句柄对象（比如FileInputStream对象）实现了AutoCloseable接口，那么就可以将上面的板式代码简化为如下形式：</p>
-<p> <img src="image-20200331181450895.png" alt></p>
-<p><img src="image-20200331181458549.png" alt></p>
-<p><img src="image-20200331181508292.png" alt></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200331181450895.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331181458549.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331181508292.png"></p>
 <p>Finally是先于return执行的逻辑（因为无论是什么情况finally都会被执行的。） </p>
 <p>将上述代码改造</p>
-<p> <img src="image-20200331181520292.png" alt></p>
-<p> <img src="image-20200331181527546.png" alt></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200331181520292.png"></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200331181527546.png"></p>
 <p>Finally会在catch中return前执行，然后再执行catch中的代码。</p>
 <p>抛出的异常<font color="orange">最多只会被catch一次</font>，被一个异常处理器处理，且catch块是<font color="red">按顺序</font>进行匹配的。</p>
 <p>尽量不要捕获如Exception这样的<font color="red">通用异常</font>，而是应该捕获<font color="red">特定的异常</font>。一是为了代码更加清晰，二是为了不要捕获到我们不需要捕获的异常。</p>
-<p><img src="image-20200331181652613.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331181652613.png"></p>
 <p>这样也有问题。就是不要生吞异常：即将异常捕获却不做处理，难以定位并解决问题。</p>
 <h2><span id="java异常的处理原则">Java异常的处理原则</span></h2><p>Ø 具体明确：抛出的异常应通过异常类名和message准确说明异常的类型和产生异常的原因；</p>
 <p>Ø 提早抛出：应尽可能早的发现并抛出异常，便于精确定位问题；</p>
@@ -171,7 +171,7 @@
 <p>Ø 其余异常都统一转译为上述异常AppException</p>
 <p>Ø 在catch之后，抛出上述异常的子类，并提供足以定位的信息</p>
 <p>Ø 由前端接收AppException做统一处理</p>
-<p><img src="image-20200331182250395.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182250395.png"></p>
 <h2><span id="try-catch的性能">Try-catch的性能</span></h2><h3><span id="java异常处理消耗性能的地方">Java异常处理消耗性能的地方【】</span></h3><p>Ø Try-catch块影响JVM的优化</p>
 <p>Ø 异常对象实例需要保存栈快照等信息，开销较大 </p>
 <p>Try catch开销较大，因此只在必要的代码段用try catch包住。 </p>
@@ -198,34 +198,34 @@
 <p>排序前两个相等的数其在序列的前后位置顺序和排序后它们两个的前后位置顺序相同</p>
 <p>Ø 不同数据集，各种排序最好最差的情况</p>
 <p>Ø 如何优化算法</p>
-<p><img src="image-20200331182401175.png" alt></p>
-<p><img src="image-20200331182420309.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182401175.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182420309.png"></p>
 <p>Comparable接口：</p>
 <p>必须实现 equals compareTo 和 Hashcode</p>
 <p>CompareTo方法：<strong>自然排序</strong></p>
-<p><img src="image-20200331182440072.png" alt></p>
-<p><img src="image-20200331182449763.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182440072.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182449763.png"></p>
 <p>这是在外部实现的comparator的<strong>客户化排序</strong></p>
-<p><img src="image-20200331182506916.png" alt></p>
-<p><img src="image-20200331182515418.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182506916.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182515418.png"></p>
 <p>最后却打印出了一个元素，是因为compare方法重写了，认为名字相同就是同一个对象，而由于set不能保存同一个对象，因此只有一个结果。</p>
 <p>因此</p>
 <p><font color="red"><strong>如果客户化排序和自然排序共存，则以客户化排序为主。</strong></font></p>
-<h2><span id="集合之map">集合之Map</span></h2><h2><span id="为什么重写equals要重写hashcode">为什么重写equals要重写HashCode</span></h2><p>因为不重写 equals 方法，执行 user1.equals(user2) 比较的就是两个对象的地址（即 user1 == user2），肯定是不相等的。</p>
-<p><strong>hashCode</strong> <strong>是用于散列数据的快速存取，如利用</strong> <strong>HashSet/HashMap/Hashtable</strong> <strong>类来存储数据时，都会根据存储对象的</strong> <strong>hashCode</strong> <strong>值来进行判断是否相同的。</strong></p>
+<h2><span id="集合之map">集合之Map</span></h2><h2><span id="为什么重写equals要重写hashcode">为什么重写equals要重写HashCode</span></h2><p>因为不重写 equals 方法，执行 user1.equals(user2) 比较的就是两个对象的地址（即 user1 &#x3D;&#x3D; user2），肯定是不相等的。</p>
+<p><strong>hashCode</strong> <strong>是用于散列数据的快速存取，如利用</strong> <strong>HashSet&#x2F;HashMap&#x2F;Hashtable</strong> <strong>类来存储数据时，都会根据存储对象的</strong> <strong>hashCode</strong> <strong>值来进行判断是否相同的。</strong></p>
 <p>下面以HashSet为例进行分析，我们都知道：在hashset中不允许出现重复对象，元素的位置也是不确定的。在hashset中又是怎样判定元素是否重复的呢？在java的集合中，判断两个对象是否相等的规则是：<br>     1.判断两个对象的hashCode是否相等</p>
 <p>​       如果不相等，认为两个对象也不相等，完毕<br>​        如果相等，转入2<br>​      （这一点只是为了提高存储效率而要求的，其实理论上没有也可以，但如果没有，实际使用时效率会大大降低，所以我们这里将其做为必需的。）</p>
 <p>​     2.判断两个对象用equals运算是否相等<br>​       如果不相等，认为两个对象也不相等<br>​       如果相等，认为两个对象相等（equals()是判断两个对象是否相等的关键）<br>​       为什么是两条准则，难道用第一条不行吗？不行，因为前面已经说了，hashcode()相等时，equals()方法也可能不等，所以必须用第2条准则进行限制，才能保证加入的为非重复元素。</p>
 <p>Map中的Key是用set组成的，value是用collection组织起来的。</p>
-<p> <img src="image-20200331182620663.png" alt></p>
-<h3><span id="hashmap-hashtable-concurrenthashmap的区别">HashMap HashTable ConcurrentHashMap的区别</span></h3><p><img src="image-20200331182635063.png" alt></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200331182620663.png"></p>
+<h3><span id="hashmap-hashtable-concurrenthashmap的区别">HashMap HashTable ConcurrentHashMap的区别</span></h3><p><img src="/2020/03/31/Java-jar/image-20200331182635063.png"></p>
 <p>默认长度为16</p>
 <p>实际上是通过位运算而不是取模</p>
-<p><img src="image-20200331182648604.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200331182648604.png"></p>
 <p>Node是由hash值，键值对和next组成的。</p>
 <p>数组分成一个个bucket</p>
-<p>如果链表长度超过TREEIFY_THRESHOLD=8 就会变成红黑树</p>
-<p>少于UNTREEIFY_THREHOLD=6就会变成链表</p>
+<p>如果链表长度超过TREEIFY_THRESHOLD&#x3D;8 就会变成红黑树</p>
+<p>少于UNTREEIFY_THREHOLD&#x3D;6就会变成链表</p>
 <p>HashMap是使用LazyLoad的原则，在首次使用的时候才初始化。</p>
 <p>Resize方法既具备初始化还具备扩容的作用</p>
 <h3><span id="hashmapput方法的逻辑">HashMap：put方法的逻辑</span></h3><ol>
@@ -248,19 +248,19 @@
 </ol>
 <p>桶就是数组</p>
 <p>Resize后重新计算每个元素在数组中的位置（要么是当前位置要么是当前下标+oldCap）</p>
-<p><img src="image-20200403163716667.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403163716667.png"></p>
 <h3><span id="hashmapget方法的逻辑">HashMap：get方法的逻辑</span></h3><ul>
 <li>计算 key 的 hash 值，根据 hash 值找到对应数组下标:     hash &amp; (length-1)</li>
 <li>判断数组该位置处的元素是否刚好就是我们要找的</li>
 <li>如果不是，判断该元素类型是否是 TreeNode，如果是，用红黑树的方法取数据。</li>
-<li>如果不是，遍历链表，直到找到相等(==或equals)的 key。</li>
+<li>如果不是，遍历链表，直到找到相等(&#x3D;&#x3D;或equals)的 key。</li>
 </ul>
-<p>扩容<img src="image-20200403163829060.png" alt></p>
+<p>扩容<img src="/2020/03/31/Java-jar/image-20200403163829060.png"></p>
 <h3><span id="hashmap如何有效减少碰撞">HashMap：如何有效减少碰撞</span></h3><p>Ø 扰动函数：促使元素位置分布均匀，减少碰撞几率</p>
 <p>Ø 使用final对象，并采用合适的equals()和hashCode()方法</p>
-<h3><span id="为什么不直接用hashcode作为下标">为什么不直接用hashcode作为下标</span></h3><p><img src="image-20200403164018087.png" alt>         </p>
+<h3><span id="为什么不直接用hashcode作为下标">为什么不直接用hashcode作为下标</span></h3><p><img src="/2020/03/31/Java-jar/image-20200403164018087.png">         </p>
 <p>直接用hashCode作为下标的话太浪费空间，有40亿的空间内存放不下这么大的数组且扩容前数组默认大小才16。混合原始hashCode的高位和低位，加大随机性同时能得到高低位的特征，在数组length较小的时候也能保证高低位参与hash运算当中，也不会有太大开销。最后用位与的操作来替代取模达到更高效率。（因为HashMap的长度是2的n次方，因此可以用取模来替代）</p>
-<p> <img src="image-20200403164029114.png" alt></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200403164029114.png"></p>
 <p>扩容因子是0.75，当hashmap填满百分之75的bucket的时候，将会创建原来hashMap 2倍大小的数组，并将原来的对象转移过去。这部叫做rehashing。</p>
 <h3><span id="hashmap扩容问题">HashMap：扩容问题</span></h3><p>Ø 多线程环境下，调整大小会存在条件竞争，容易造成死锁</p>
 <p>Ø Rehashing是一个比较耗时的过程</p>
@@ -269,9 +269,9 @@
 <p>SynchronizedMap的原理几乎和Hashtable的实现一致，hashtable将public的方法都添加了synchronized关键字。唯一区别就是<font color="orange">锁定的对象不一致。</font></p>
 <p>Hashtable获取的是方法调用者this的锁，而synchronizedMap是使用定义好的成员变量mutex。</p>
 <p>由于这两者在多线程情况下是<font color="orange">串行执行的，效率比较低</font>，因此我们需要ConcurrentHashMap</p>
-<p><img src="image-20200403164302476.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403164302476.png"></p>
 <p>现在做法：只锁定当前链表或者红黑树的首节点。</p>
-<p><img src="image-20200403164412266.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403164412266.png"></p>
 <p>ConcurrentHashMap不允许插入null key，而HashMap可以。</p>
 <h3><span id="concurrenthashmapput方法的逻辑">ConcurrentHashMap：put方法的逻辑</span></h3><ol>
 <li><p>判断Node[]数组是否初始化，没有则进行初始化操作</p>
@@ -280,7 +280,7 @@
 </li>
 <li><p>如果hash为MOVED检查到内部正在扩容，就帮助它一块扩容。</p>
 </li>
-<li><p>如果f!=null，则使用synchronized锁住f元素（链表/红黑二叉树的头元素）</p>
+<li><p>如果f!&#x3D;null，则使用synchronized锁住f元素（链表&#x2F;红黑二叉树的头元素）</p>
 <p>a)   如果是Node（链表结构）则执行链表的添加操作。</p>
 <p>b)   如果是TreeNode（树型结构）则执行树添加操作。</p>
 <p>c)   如果是reservationNode就抛出异常。</p>
@@ -318,21 +318,21 @@
 <p>Ø 原子变量类atomic</p>
 <p>Ø 并发工具类tools</p>
 <p>Ø 并发集合collections</p>
-<p><img src="image-20200403164644589.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403164644589.png"></p>
 <h3><span id="并发工具类">并发工具类</span></h3><p>Ø 闭锁CountDownLatch</p>
 <p>Ø 栅栏CyclicBarrier</p>
 <p>Ø 信号量Semaphore</p>
 <p>Ø 交换器Exchanger</p>
 <h4><span id="countdownlatch让主线程等待一组事件发生后继续执行">CountDownLatch：让主线程等待一组事件发生后继续执行</span></h4><p>Ø 事件指的是CountDownLatch里的countDown()方法</p>
-<p>​     <img src="image-20200403164732266.png" alt></p>
+<p>​     <img src="/2020/03/31/Java-jar/image-20200403164732266.png"></p>
 <p>其他线程使用countDown后还会继续执行，并不代表该子线程已经执行完毕了，而是告诉主线程可以继续执行。每次调用countDown的时候cnt都会-1；</p>
-<p> <img src="image-20200403164739889.png" alt></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200403164739889.png"></p>
 <h4><span id="cyclicbarrier阻塞当前线程等待其他线程">CyclicBarrier：阻塞当前线程，等待其他线程</span></h4><p>Ø 等待其它线程，且会阻塞自己当前线程，所有线程必须同时到达栅栏位置后，才能继续执行；</p>
 <p>Ø 所有线程到达栅栏处，可以触发执行另外一个预先设置的线程</p>
-<p> <img src="image-20200403164751372.png" alt></p>
-<p>每个线程调用await()的时候，cnt会减一，当cnt不为0的时候，会阻塞。当cnt=0，即所有线程都调用了await()，Ta主线程才会和t1 t2 t3一起执行。</p>
-<p> <img src="image-20200403164805834.png" alt></p>
-<h4><span id="semaphore控制某个资源可被同时访问的线程个数">Semaphore：控制某个资源可被同时访问的线程个数</span></h4><p><img src="image-20200403165110119.png" alt></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200403164751372.png"></p>
+<p>每个线程调用await()的时候，cnt会减一，当cnt不为0的时候，会阻塞。当cnt&#x3D;0，即所有线程都调用了await()，Ta主线程才会和t1 t2 t3一起执行。</p>
+<p> <img src="/2020/03/31/Java-jar/image-20200403164805834.png"></p>
+<h4><span id="semaphore控制某个资源可被同时访问的线程个数">Semaphore：控制某个资源可被同时访问的线程个数</span></h4><p><img src="/2020/03/31/Java-jar/image-20200403165110119.png"></p>
 <p>· Semaphore 类是一个计数信号量，必须由获取它的线程释放， 通常用于限制可以访问某些资源（物理或逻辑的）线程数目。 </p>
 <p>· 一个信号量有且仅有 3 种操作，且它们全部是原子的。 </p>
 <ul>
@@ -352,16 +352,14 @@
 </ul>
 <p>· Semaphore 有两种模式，<strong>公平模式</strong> 和 <strong>非公平模式</strong>。 </p>
 <ul>
-<li><p>公平模式就是调用     acquire 的顺序就是获取许可证的顺序，遵循 FIFO。</p>
-</li>
-<li><p>非公平模式是抢占式的，也就是有可能一个新的获取线程恰好在一个许可证释放时得到了这个许可证，而前面还有等待的线程。</p>
-<p><img src="image-20200403165155908.png" alt></p>
-</li>
+<li>公平模式就是调用     acquire 的顺序就是获取许可证的顺序，遵循 FIFO。</li>
+<li>非公平模式是抢占式的，也就是有可能一个新的获取线程恰好在一个许可证释放时得到了这个许可证，而前面还有等待的线程。</li>
 </ul>
-<h4><span id="exchanger两个线程到达同步点后相互交换数据">Exchanger：两个线程到达同步点后，相互交换数据</span></h4><p> <img src="image-20200403165216566.png" alt></p>
-<p> <img src="image-20200403165226727.png" alt></p>
-<p><img src="image-20200403165237352.png" alt></p>
-<h3><span id="blockingqueue提供可阻塞的入队和出队操作">BlockingQueue：提供可阻塞的入队和出队操作</span></h3><p> <img src="image-20200403165244330.png" alt></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200403165155908.png"></p>
+<h4><span id="exchanger两个线程到达同步点后相互交换数据">Exchanger：两个线程到达同步点后，相互交换数据</span></h4><p> <img src="/2020/03/31/Java-jar/image-20200403165216566.png"></p>
+<p> <img src="/2020/03/31/Java-jar/image-20200403165226727.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403165237352.png"></p>
+<h3><span id="blockingqueue提供可阻塞的入队和出队操作">BlockingQueue：提供可阻塞的入队和出队操作</span></h3><p> <img src="/2020/03/31/Java-jar/image-20200403165244330.png"></p>
 <p><strong>主要用于生产者-消费者模式，在多线程场景时生产者线程在队列尾部添加元素，而消费者线程则在队列头部消费元素，通过这种方式能够达到将任务的生产和消费进行隔离的目的</strong></p>
 <p>如果队列满了，入队操作将阻塞，如果队列空了，出队操作将阻塞。</p>
 <p>Add()往队列尾部添加元素，成功返回true，失败抛出IllegalStateException</p>
@@ -375,7 +373,7 @@
 <p>contains判断队列中是否存在指定对象 </p>
 <p>drainTo转移到指定集合。</p>
 <h4><span id="blockingqueue类型">BlockingQueue类型</span></h4><p><strong>1.</strong>   <font color="orange"><strong>ArrayBlockingQueue：一个由数组结构组成的有界阻塞队列；</strong></font></p>
-<p><strong>2.</strong>    <font color="orange"><strong>LinkedBlockingQueue：一个由链表结构组成的有界/无界阻塞队列；</strong></font></p>
+<p><strong>2.</strong>    <font color="orange"><strong>LinkedBlockingQueue：一个由链表结构组成的有界&#x2F;无界阻塞队列；</strong></font></p>
 <p><strong>3.</strong>   <font color="orange"> <strong>PriorityBlockingQueue：一个支持优先级排序的无界阻塞队列</strong></font></p>
 <p><strong>4.</strong>   <strong>DealyQueue：一个使用优先级队列实现的无界阻塞队列；</strong></p>
 <p><strong>5.</strong>   <strong>SynchronousQueue：一个不存储元素的阻塞队列；</strong></p>
@@ -393,12 +391,12 @@
 <li><strong>阻塞：</strong> 阻塞就是发起一个请求，调用者一直等待请求结果返回，也就是当前线程会被挂起，无法从事其他任务，只有当条件就绪才能继续。</li>
 <li><strong>非阻塞：</strong> 非阻塞就是发起一个请求，调用者不用一直等着结果返回，可以先去干其他事情。</li>
 </ul>
-<h2><span id="bio-同步阻塞io模式">BIO (同步阻塞I/O模式)</span></h2><p><img src="image-20200403170310675.png" alt></p>
+<h2><span id="bio-同步阻塞ix2fo模式">BIO (同步阻塞I&#x2F;O模式)</span></h2><p><img src="/2020/03/31/Java-jar/image-20200403170310675.png"></p>
 <p>数据的读取写入必须阻塞在一个线程内等待其完成。</p>
-<h2><span id="nio同步非阻塞">NIO（同步非阻塞）</span></h2><p><img src="image-20200403170244673.png" alt></p>
+<h2><span id="nio同步非阻塞">NIO（同步非阻塞）</span></h2><p><img src="/2020/03/31/Java-jar/image-20200403170244673.png"></p>
 <p>构建多路复用的、同步非阻塞的IO操作</p>
-<h2><span id="aio-异步非阻塞io模型">AIO （异步非阻塞I/O模型）</span></h2><p>基于事件和回调机制的异步非阻塞IO</p>
-<p><img src="image-20200403170137243.png" alt></p>
+<h2><span id="aio-异步非阻塞ix2fo模型">AIO （异步非阻塞I&#x2F;O模型）</span></h2><p>基于事件和回调机制的异步非阻塞IO</p>
+<p><img src="/2020/03/31/Java-jar/image-20200403170137243.png"></p>
 <p>Ø 基于回调：实现CompletionHandler接口，调用时触发回调函数</p>
 <p>Ø 返回Future：通过isDone()查看是否准备好，通过get()等待返回数据</p>
 <p>仅仅Select阶段是阻塞的，可以避免大量客户端连接时频繁切换线程带来的问题。</p>
@@ -462,14 +460,14 @@
 <p>·     SocketChannel:从TCP网络中读取或者写入数据。</p>
 <p>·     ServerSocketChannel:允许你监听来自TCP的连接，就像服务器一样。每一个连接都会有一个SocketChannel产生。</p>
 <p><strong>3.多路复用器Selector</strong></p>
-<p><img src="image-20200403165738902.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403165738902.png"></p>
 <p>Ø Selector选择器可以监听多个Channel通道</p>
 <p>Ø 实现一个线程管理多个Channel，节省线程切换上下文的资源消耗。</p>
 <p>Ø Selector只能管理非阻塞的通道，FileChannel是阻塞的，无法管理。</p>
-<p><img src="image-20200403165814493.png" alt></p>
-<p><img src="image-20200403165805117.png" alt></p>
-<p><img src="image-20200403170112067.png" alt></p>
-<p><img src="image-20200403170119045.png" alt></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403165814493.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403165805117.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403170112067.png"></p>
+<p><img src="/2020/03/31/Java-jar/image-20200403170119045.png"></p>
 <h3><span id="nio应用和框架等等">NIO应用和框架等等</span></h3><p>例如：Dubbo(服务框架)，就默认使用Netty作为基础通信组件，用于实现各进程节点之间的内部通信。</p>
 <p>Netty是目前最流行的一个Java开源框架NIO框架，Netty提供异步的、事件驱动的网络应用程序框架和工具，用以快速开发高性能、高可靠性的网络服务器和客户端程序。</p>
 <p>相比JDK原生NIO，Netty提供了相对十分简单易用的API，非常适合网络编程。</p>

@@ -1,57 +1,57 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>秒杀项目 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">秒杀项目</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">秒杀项目</h1><div class="post-content"><p>整理自己秒杀项目的问答点。</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
-<li><a href="#设计原则">设计原则</a></li>
-<li><a href="#数据库设计">数据库设计</a></li>
-<li><a href="#页面静态化">页面静态化</a></li>
-<li><a href="#服务降级">服务降级</a></li>
-<li><a href="#接口防刷">接口防刷</a><ul>
+<li><a href="#%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99">设计原则</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1">数据库设计</a></li>
+<li><a href="#%E9%A1%B5%E9%9D%A2%E9%9D%99%E6%80%81%E5%8C%96">页面静态化</a></li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7">服务降级</a></li>
+<li><a href="#%E6%8E%A5%E5%8F%A3%E9%98%B2%E5%88%B7">接口防刷</a><ul>
 <li><a href="#nginx">Nginx</a></li>
-<li><a href="#隐藏接口">隐藏接口</a></li>
-<li><a href="#单用户限制频率">单用户限制频率</a></li>
-<li><a href="#采用验证码">采用验证码</a></li>
+<li><a href="#%E9%9A%90%E8%97%8F%E6%8E%A5%E5%8F%A3">隐藏接口</a></li>
+<li><a href="#%E5%8D%95%E7%94%A8%E6%88%B7%E9%99%90%E5%88%B6%E9%A2%91%E7%8E%87">单用户限制频率</a></li>
+<li><a href="#%E9%87%87%E7%94%A8%E9%AA%8C%E8%AF%81%E7%A0%81">采用验证码</a></li>
 </ul>
 </li>
-<li><a href="#怎么解决超卖">怎么解决超卖</a></li>
-<li><a href="#分布式session">分布式Session</a></li>
-<li><a href="#限流算法">限流算法</a><ul>
-<li><a href="#计数器算法">计数器算法</a></li>
-<li><a href="#滑动窗口算法">滑动窗口算法</a></li>
-<li><a href="#漏桶算法">漏桶算法</a></li>
-<li><a href="#令牌桶算法">令牌桶算法</a></li>
+<li><a href="#%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E8%B6%85%E5%8D%96">怎么解决超卖</a></li>
+<li><a href="#%E5%88%86%E5%B8%83%E5%BC%8Fsession">分布式Session</a></li>
+<li><a href="#%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95">限流算法</a><ul>
+<li><a href="#%E8%AE%A1%E6%95%B0%E5%99%A8%E7%AE%97%E6%B3%95">计数器算法</a></li>
+<li><a href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95">滑动窗口算法</a></li>
+<li><a href="#%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95">漏桶算法</a></li>
+<li><a href="#%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95">令牌桶算法</a></li>
 </ul>
 </li>
 <li><a href="#nginx-1">Nginx</a><ul>
-<li><a href="#命令">命令</a></li>
-<li><a href="#nginx负载均衡算法">Nginx负载均衡算法</a></li>
-<li><a href="#nginx高性能的原因">Nginx高性能的原因</a><ul>
-<li><a href="#协程机制">协程机制</a></li>
+<li><a href="#%E5%91%BD%E4%BB%A4">命令</a></li>
+<li><a href="#nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95">Nginx负载均衡算法</a></li>
+<li><a href="#nginx%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84%E5%8E%9F%E5%9B%A0">Nginx高性能的原因</a><ul>
+<li><a href="#%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6">协程机制</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#redis">Redis</a><ul>
-<li><a href="#怎么保证redis缓存和数据库的一致性">怎么保证Redis缓存和数据库的一致性？</a></li>
-<li><a href="#雪崩">雪崩</a></li>
-<li><a href="#更新库存问题">更新库存问题</a></li>
+<li><a href="#%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81redis%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7">怎么保证Redis缓存和数据库的一致性？</a></li>
+<li><a href="#%E9%9B%AA%E5%B4%A9">雪崩</a></li>
+<li><a href="#%E6%9B%B4%E6%96%B0%E5%BA%93%E5%AD%98%E9%97%AE%E9%A2%98">更新库存问题</a></li>
 </ul>
 </li>
 <li><a href="#mq">MQ</a></li>
 <li><a href="#tomcat">Tomcat</a></li>
 <li><a href="#cap">CAP</a><ul>
-<li><a href="#一致性">一致性</a></li>
-<li><a href="#可用性">可用性</a></li>
-<li><a href="#分区容忍性">分区容忍性</a></li>
-<li><a href="#权衡">权衡</a></li>
+<li><a href="#%E4%B8%80%E8%87%B4%E6%80%A7">一致性</a></li>
+<li><a href="#%E5%8F%AF%E7%94%A8%E6%80%A7">可用性</a></li>
+<li><a href="#%E5%88%86%E5%8C%BA%E5%AE%B9%E5%BF%8D%E6%80%A7">分区容忍性</a></li>
+<li><a href="#%E6%9D%83%E8%A1%A1">权衡</a></li>
 </ul>
 </li>
 <li><a href="#base">BASE</a><ul>
-<li><a href="#基本可用">基本可用</a></li>
-<li><a href="#软状态">软状态</a></li>
-<li><a href="#最终一致性">最终一致性</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E5%8F%AF%E7%94%A8">基本可用</a></li>
+<li><a href="#%E8%BD%AF%E7%8A%B6%E6%80%81">软状态</a></li>
+<li><a href="#%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7">最终一致性</a></li>
 </ul>
 </li>
 </ul>
@@ -67,13 +67,13 @@
 <li><p>使用消息队列去做削峰填谷，同时异步去写数据库，降低数据库的压力。</p>
 </li>
 </ol>
-<h1><span id="数据库设计">数据库设计</span></h1><p><img src="image-20200409183104311.png" alt></p>
+<h1><span id="数据库设计">数据库设计</span></h1><p><img src="/2020/04/09/projectQA/image-20200409183104311.png"></p>
 <p>item 商品信息表</p>
-<p><img src="image-20200409183733005.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183733005.png"></p>
 <p>item_stock 库存表</p>
-<p><img src="image-20200409183704658.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183704658.png"></p>
 <p>order_info 下单信息表</p>
-<p><img src="image-20200409183638605.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183638605.png"></p>
 <blockquote>
 <p>订单号有16位</p>
 <p>前8位为时间信息，年月日</p>
@@ -81,16 +81,16 @@
 <p>最后两位分库分表</p>
 </blockquote>
 <p>promo 秒杀商品信息表</p>
-<p><img src="image-20200409183609319.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183609319.png"></p>
 <p>sequence_info </p>
 <p>order_info表根据里面的step去存</p>
-<p><img src="image-20200409183549383.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183549383.png"></p>
 <p>stock_log</p>
-<p><img src="image-20200409183500903.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183500903.png"></p>
 <p>user_info 用户信息表</p>
-<p><img src="image-20200409183418037.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183418037.png"></p>
 <p>user_password 用户密码表</p>
-<p><img src="image-20200409183222767.png" alt></p>
+<p><img src="/2020/04/09/projectQA/image-20200409183222767.png"></p>
 <h1><span id="页面静态化">页面静态化</span></h1><p>cdn的核心原理并将静态页面部署到cdn上，之后使用了phantomjs的无头浏览器方案实现了将静态请求和动态请求合并一同部署到cdn上，更进一步的将商品详情页的流量能力提升到极致；</p>
 <p>页面静态化，其实就是将动态生成的jsp页面，变成静态的HTML页面，让用户直接访问。这样的好处就是：</p>
 <ul>
@@ -117,7 +117,7 @@
 <h2><span id="单用户限制频率">单用户限制频率</span></h2><p>每当用户访问一次下单接口就将用户的访问数+1，到达一定阈值就拒绝访问。</p>
 <h2><span id="采用验证码">采用验证码</span></h2><p>加入验证码来防止机器刷接口。</p>
 <h1><span id="怎么解决超卖">怎么解决超卖</span></h1><blockquote>
-<p>使用redis服务器，将并发的请求转化成串行的请求，逐一处理每一个请求，原子操作减库存。<br>减库存sql，set库存=库存-1 where 库存&gt;0。</p>
+<p>使用redis服务器，将并发的请求转化成串行的请求，逐一处理每一个请求，原子操作减库存。<br>减库存sql，set库存&#x3D;库存-1 where 库存&gt;0。</p>
 </blockquote>
 <ol>
 <li>在系统初始化时，或者定时任务，调用接口时将商品的库存数量加载到Redis缓存中</li>
@@ -164,8 +164,8 @@
 <li>开启tomcat access log(访问日志)验证</li>
 </ul>
 <h2><span id="命令">命令</span></h2><ul>
-<li>sbin/nginx -c conf/nginx.conf启动;</li>
-<li>修改配置后直接sbin/nginx -s reload无缝重启;</li>
+<li>sbin&#x2F;nginx -c conf&#x2F;nginx.conf启动;</li>
+<li>修改配置后直接sbin&#x2F;nginx -s reload无缝重启;</li>
 </ul>
 <h2><span id="nginx负载均衡算法">Nginx负载均衡算法</span></h2><p><strong>1. 轮询(默认)</strong><br>每个web请求按照时间顺序逐一分配到不同的后端服务器，如果后端服务器over了，就自动剔除；</p>
 <p><strong>2. weight权重</strong><br>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况，weight默认是1；</p>

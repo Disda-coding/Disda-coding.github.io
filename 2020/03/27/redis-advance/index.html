@@ -1,26 +1,26 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Redis进阶【转】 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Redis进阶【转】</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Redis进阶【转】</h1><div class="post-content"><p>盘点了常考的Redis进阶知识点</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
-<li><a href="#项目中缓存是如何使用的为什么要用缓存缓存使用不当会造成什么后果">项目中缓存是如何使用的？为什么要用缓存？缓存使用不当会造成什么后果？</a><ul>
-<li><a href="#面试官心理分析">面试官心理分析</a></li>
-<li><a href="#面试题剖析">面试题剖析</a><ul>
-<li><a href="#项目中缓存是如何使用的">项目中缓存是如何使用的？</a></li>
-<li><a href="#为什么要用缓存">为什么要用缓存？</a><ul>
-<li><a href="#高性能">高性能</a></li>
-<li><a href="#高并发">高并发</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%BC%93%E5%AD%98%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E7%BC%93%E5%AD%98%E7%BC%93%E5%AD%98%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%BD%93%E4%BC%9A%E9%80%A0%E6%88%90%E4%BB%80%E4%B9%88%E5%90%8E%E6%9E%9C">项目中缓存是如何使用的？为什么要用缓存？缓存使用不当会造成什么后果？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90">面试题剖析</a><ul>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%BC%93%E5%AD%98%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E7%9A%84">项目中缓存是如何使用的？</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E7%BC%93%E5%AD%98">为什么要用缓存？</a><ul>
+<li><a href="#%E9%AB%98%E6%80%A7%E8%83%BD">高性能</a></li>
+<li><a href="#%E9%AB%98%E5%B9%B6%E5%8F%91">高并发</a></li>
 </ul>
 </li>
-<li><a href="#用了缓存之后会有什么不良后果">用了缓存之后会有什么不良后果？</a></li>
+<li><a href="#%E7%94%A8%E4%BA%86%E7%BC%93%E5%AD%98%E4%B9%8B%E5%90%8E%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%89%AF%E5%90%8E%E6%9E%9C">用了缓存之后会有什么不良后果？</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#redis-都有哪些数据类型分别在哪些场景下使用比较合适">redis 都有哪些数据类型？分别在哪些场景下使用比较合适？</a><ul>
-<li><a href="#面试官心理分析-1">面试官心理分析</a></li>
-<li><a href="#面试题剖析-1">面试题剖析</a><ul>
+<li><a href="#redis-%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%88%86%E5%88%AB%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BD%BF%E7%94%A8%E6%AF%94%E8%BE%83%E5%90%88%E9%80%82">redis 都有哪些数据类型？分别在哪些场景下使用比较合适？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-1">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-1">面试题剖析</a><ul>
 <li><a href="#string">string</a></li>
 <li><a href="#hash">hash</a></li>
 <li><a href="#list">list</a></li>
@@ -30,119 +30,119 @@
 </li>
 </ul>
 </li>
-<li><a href="#redis-的过期策略都有哪些内存淘汰机制都有哪些手写一下-lru-代码实现">redis 的过期策略都有哪些？内存淘汰机制都有哪些？手写一下 LRU 代码实现？</a><ul>
-<li><a href="#面试官心理分析-2">面试官心理分析</a></li>
-<li><a href="#面试题剖析-2">面试题剖析</a><ul>
-<li><a href="#redis-过期策略">redis 过期策略</a></li>
-<li><a href="#内存淘汰机制">内存淘汰机制</a></li>
-<li><a href="#手写一个-lru-算法">手写一个 LRU 算法</a></li>
+<li><a href="#redis-%E7%9A%84%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%8B-lru-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0">redis 的过期策略都有哪些？内存淘汰机制都有哪些？手写一下 LRU 代码实现？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-2">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-2">面试题剖析</a><ul>
+<li><a href="#redis-%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5">redis 过期策略</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6">内存淘汰机制</a></li>
+<li><a href="#%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA-lru-%E7%AE%97%E6%B3%95">手写一个 LRU 算法</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#redis-的持久化有哪几种方式不同的持久化机制都有什么优缺点持久化机制具体底层是如何实现的">redis 的持久化有哪几种方式？不同的持久化机制都有什么优缺点？持久化机制具体底层是如何实现的？</a><ul>
-<li><a href="#面试官心理分析-3">面试官心理分析</a></li>
-<li><a href="#面试题剖析-3">面试题剖析</a><ul>
-<li><a href="#redis-持久化的两种方式">redis 持久化的两种方式</a><ul>
-<li><a href="#rdb-优缺点">RDB 优缺点</a></li>
-<li><a href="#aof-优缺点">AOF 优缺点</a></li>
+<li><a href="#redis-%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F%E4%B8%8D%E5%90%8C%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6%E9%83%BD%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E7%BC%BA%E7%82%B9%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6%E5%85%B7%E4%BD%93%E5%BA%95%E5%B1%82%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84">redis 的持久化有哪几种方式？不同的持久化机制都有什么优缺点？持久化机制具体底层是如何实现的？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-3">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-3">面试题剖析</a><ul>
+<li><a href="#redis-%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F">redis 持久化的两种方式</a><ul>
+<li><a href="#rdb-%E4%BC%98%E7%BC%BA%E7%82%B9">RDB 优缺点</a></li>
+<li><a href="#aof-%E4%BC%98%E7%BC%BA%E7%82%B9">AOF 优缺点</a></li>
 </ul>
 </li>
-<li><a href="#rdb-和-aof-到底该如何选择">RDB 和 AOF 到底该如何选择</a></li>
+<li><a href="#rdb-%E5%92%8C-aof-%E5%88%B0%E5%BA%95%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9">RDB 和 AOF 到底该如何选择</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#如何保证缓存与数据库的双写一致性">如何保证缓存与数据库的双写一致性？</a><ul>
-<li><a href="#面试官心理分析-4">面试官心理分析</a></li>
-<li><a href="#面试题剖析-4">面试题剖析</a><ul>
+<li><a href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E7%BC%93%E5%AD%98%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7">如何保证缓存与数据库的双写一致性？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-4">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-4">面试题剖析</a><ul>
 <li><a href="#cache-aside-pattern">Cache Aside Pattern</a></li>
-<li><a href="#最初级的缓存不一致问题及解决方案">最初级的缓存不一致问题及解决方案</a></li>
-<li><a href="#比较复杂的数据不一致问题分析">比较复杂的数据不一致问题分析</a></li>
+<li><a href="#%E6%9C%80%E5%88%9D%E7%BA%A7%E7%9A%84%E7%BC%93%E5%AD%98%E4%B8%8D%E4%B8%80%E8%87%B4%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">最初级的缓存不一致问题及解决方案</a></li>
+<li><a href="#%E6%AF%94%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%8D%E4%B8%80%E8%87%B4%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90">比较复杂的数据不一致问题分析</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#redis-的并发竞争问题是什么如何解决这个问题了解-redis-事务的-cas-方案吗">redis 的并发竞争问题是什么？如何解决这个问题？了解 redis 事务的 CAS 方案吗？</a><ul>
-<li><a href="#面试官心理分析-5">面试官心理分析</a></li>
-<li><a href="#面试题剖析-5">面试题剖析</a></li>
+<li><a href="#redis-%E7%9A%84%E5%B9%B6%E5%8F%91%E7%AB%9E%E4%BA%89%E9%97%AE%E9%A2%98%E6%98%AF%E4%BB%80%E4%B9%88%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E4%BA%86%E8%A7%A3-redis-%E4%BA%8B%E5%8A%A1%E7%9A%84-cas-%E6%96%B9%E6%A1%88%E5%90%97">redis 的并发竞争问题是什么？如何解决这个问题？了解 redis 事务的 CAS 方案吗？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-5">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-5">面试题剖析</a></li>
 </ul>
 </li>
-<li><a href="#了解什么是-redis-的雪崩-穿透和击穿redis-崩溃之后会怎么样系统该如何应对这种情况如何处理-redis-的穿透">了解什么是 redis 的雪崩、穿透和击穿？redis 崩溃之后会怎么样？系统该如何应对这种情况？如何处理 redis 的穿透？</a><ul>
-<li><a href="#面试官心理分析-6">面试官心理分析</a></li>
-<li><a href="#面试题剖析-6">面试题剖析</a><ul>
-<li><a href="#缓存雪崩">缓存雪崩</a></li>
-<li><a href="#缓存穿透">缓存穿透</a></li>
-<li><a href="#缓存击穿">缓存击穿</a></li>
+<li><a href="#%E4%BA%86%E8%A7%A3%E4%BB%80%E4%B9%88%E6%98%AF-redis-%E7%9A%84%E9%9B%AA%E5%B4%A9-%E7%A9%BF%E9%80%8F%E5%92%8C%E5%87%BB%E7%A9%BFredis-%E5%B4%A9%E6%BA%83%E4%B9%8B%E5%90%8E%E4%BC%9A%E6%80%8E%E4%B9%88%E6%A0%B7%E7%B3%BB%E7%BB%9F%E8%AF%A5%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86-redis-%E7%9A%84%E7%A9%BF%E9%80%8F">了解什么是 redis 的雪崩、穿透和击穿？redis 崩溃之后会怎么样？系统该如何应对这种情况？如何处理 redis 的穿透？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-6">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-6">面试题剖析</a><ul>
+<li><a href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9">缓存雪崩</a></li>
+<li><a href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F">缓存穿透</a></li>
+<li><a href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF">缓存击穿</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#redis-主从架构">Redis 主从架构</a><ul>
-<li><a href="#redis-replication-的核心机制">redis replication 的核心机制</a></li>
-<li><a href="#redis-主从复制的核心原理">redis 主从复制的核心原理</a><ul>
-<li><a href="#主从复制的断点续传">主从复制的断点续传</a></li>
-<li><a href="#无磁盘化复制">无磁盘化复制</a></li>
-<li><a href="#过期-key-处理">过期 key 处理</a></li>
+<li><a href="#redis-%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84">Redis 主从架构</a><ul>
+<li><a href="#redis-replication-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6">redis replication 的核心机制</a></li>
+<li><a href="#redis-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86">redis 主从复制的核心原理</a><ul>
+<li><a href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0">主从复制的断点续传</a></li>
+<li><a href="#%E6%97%A0%E7%A3%81%E7%9B%98%E5%8C%96%E5%A4%8D%E5%88%B6">无磁盘化复制</a></li>
+<li><a href="#%E8%BF%87%E6%9C%9F-key-%E5%A4%84%E7%90%86">过期 key 处理</a></li>
 </ul>
 </li>
-<li><a href="#复制的完整流程">复制的完整流程</a><ul>
-<li><a href="#全量复制">全量复制</a></li>
-<li><a href="#增量复制">增量复制</a></li>
+<li><a href="#%E5%A4%8D%E5%88%B6%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B">复制的完整流程</a><ul>
+<li><a href="#%E5%85%A8%E9%87%8F%E5%A4%8D%E5%88%B6">全量复制</a></li>
+<li><a href="#%E5%A2%9E%E9%87%8F%E5%A4%8D%E5%88%B6">增量复制</a></li>
 <li><a href="#heartbeat">heartbeat</a></li>
-<li><a href="#异步复制">异步复制</a></li>
+<li><a href="#%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6">异步复制</a></li>
 </ul>
 </li>
-<li><a href="#redis-如何才能做到高可用">redis 如何才能做到高可用</a></li>
+<li><a href="#redis-%E5%A6%82%E4%BD%95%E6%89%8D%E8%83%BD%E5%81%9A%E5%88%B0%E9%AB%98%E5%8F%AF%E7%94%A8">redis 如何才能做到高可用</a></li>
 </ul>
 </li>
-<li><a href="#redis-哨兵集群实现高可用">Redis 哨兵集群实现高可用</a><ul>
-<li><a href="#哨兵的介绍">哨兵的介绍</a></li>
-<li><a href="#哨兵的核心知识">哨兵的核心知识</a></li>
-<li><a href="#redis-哨兵主备切换的数据丢失问题">redis 哨兵主备切换的数据丢失问题</a><ul>
-<li><a href="#两种情况和导致数据丢失">两种情况和导致数据丢失</a></li>
-<li><a href="#数据丢失问题的解决方案">数据丢失问题的解决方案</a></li>
+<li><a href="#redis-%E5%93%A8%E5%85%B5%E9%9B%86%E7%BE%A4%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%8F%AF%E7%94%A8">Redis 哨兵集群实现高可用</a><ul>
+<li><a href="#%E5%93%A8%E5%85%B5%E7%9A%84%E4%BB%8B%E7%BB%8D">哨兵的介绍</a></li>
+<li><a href="#%E5%93%A8%E5%85%B5%E7%9A%84%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86">哨兵的核心知识</a></li>
+<li><a href="#redis-%E5%93%A8%E5%85%B5%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E9%97%AE%E9%A2%98">redis 哨兵主备切换的数据丢失问题</a><ul>
+<li><a href="#%E4%B8%A4%E7%A7%8D%E6%83%85%E5%86%B5%E5%92%8C%E5%AF%BC%E8%87%B4%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1">两种情况和导致数据丢失</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">数据丢失问题的解决方案</a></li>
 </ul>
 </li>
-<li><a href="#sdown-和-odown-转换机制">sdown 和 odown 转换机制</a></li>
-<li><a href="#哨兵集群的自动发现机制">哨兵集群的自动发现机制</a></li>
-<li><a href="#slave-配置的自动纠正">slave 配置的自动纠正</a></li>
-<li><a href="#slave-master-选举算法">slave-&gt;master 选举算法</a></li>
-<li><a href="#quorum-和-majority">quorum 和 majority</a></li>
+<li><a href="#sdown-%E5%92%8C-odown-%E8%BD%AC%E6%8D%A2%E6%9C%BA%E5%88%B6">sdown 和 odown 转换机制</a></li>
+<li><a href="#%E5%93%A8%E5%85%B5%E9%9B%86%E7%BE%A4%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8F%91%E7%8E%B0%E6%9C%BA%E5%88%B6">哨兵集群的自动发现机制</a></li>
+<li><a href="#slave-%E9%85%8D%E7%BD%AE%E7%9A%84%E8%87%AA%E5%8A%A8%E7%BA%A0%E6%AD%A3">slave 配置的自动纠正</a></li>
+<li><a href="#slave-master-%E9%80%89%E4%B8%BE%E7%AE%97%E6%B3%95">slave-&gt;master 选举算法</a></li>
+<li><a href="#quorum-%E5%92%8C-majority">quorum 和 majority</a></li>
 <li><a href="#configuration-epoch">configuration epoch</a></li>
-<li><a href="#configuration-传播">configuration 传播</a></li>
+<li><a href="#configuration-%E4%BC%A0%E6%92%AD">configuration 传播</a></li>
 </ul>
 </li>
-<li><a href="#redis-集群模式的工作原理能说一下么在集群模式下redis-的-key-是如何寻址的分布式寻址都有哪些算法了解一致性-hash-算法吗">redis 集群模式的工作原理能说一下么？在集群模式下，redis 的 key 是如何寻址的？分布式寻址都有哪些算法？了解一致性 hash 算法吗？</a><ul>
-<li><a href="#面试官心理分析-7">面试官心理分析</a></li>
-<li><a href="#面试题剖析-7">面试题剖析</a><ul>
-<li><a href="#redis-cluster-介绍">redis cluster 介绍</a></li>
-<li><a href="#节点间的内部通信机制">节点间的内部通信机制</a><ul>
-<li><a href="#基本通信原理">基本通信原理</a></li>
-<li><a href="#gossip-协议">gossip 协议</a></li>
-<li><a href="#ping-消息深入">ping 消息深入</a></li>
+<li><a href="#redis-%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E8%83%BD%E8%AF%B4%E4%B8%80%E4%B8%8B%E4%B9%88%E5%9C%A8%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E4%B8%8Bredis-%E7%9A%84-key-%E6%98%AF%E5%A6%82%E4%BD%95%E5%AF%BB%E5%9D%80%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AF%BB%E5%9D%80%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E7%AE%97%E6%B3%95%E4%BA%86%E8%A7%A3%E4%B8%80%E8%87%B4%E6%80%A7-hash-%E7%AE%97%E6%B3%95%E5%90%97">redis 集群模式的工作原理能说一下么？在集群模式下，redis 的 key 是如何寻址的？分布式寻址都有哪些算法？了解一致性 hash 算法吗？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-7">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-7">面试题剖析</a><ul>
+<li><a href="#redis-cluster-%E4%BB%8B%E7%BB%8D">redis cluster 介绍</a></li>
+<li><a href="#%E8%8A%82%E7%82%B9%E9%97%B4%E7%9A%84%E5%86%85%E9%83%A8%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6">节点间的内部通信机制</a><ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86">基本通信原理</a></li>
+<li><a href="#gossip-%E5%8D%8F%E8%AE%AE">gossip 协议</a></li>
+<li><a href="#ping-%E6%B6%88%E6%81%AF%E6%B7%B1%E5%85%A5">ping 消息深入</a></li>
 </ul>
 </li>
-<li><a href="#分布式寻址算法">分布式寻址算法</a><ul>
-<li><a href="#hash-算法">hash 算法</a></li>
-<li><a href="#一致性-hash-算法">一致性 hash 算法</a></li>
-<li><a href="#redis-cluster-的-hash-slot-算法">redis cluster 的 hash slot 算法</a></li>
+<li><a href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%AF%BB%E5%9D%80%E7%AE%97%E6%B3%95">分布式寻址算法</a><ul>
+<li><a href="#hash-%E7%AE%97%E6%B3%95">hash 算法</a></li>
+<li><a href="#%E4%B8%80%E8%87%B4%E6%80%A7-hash-%E7%AE%97%E6%B3%95">一致性 hash 算法</a></li>
+<li><a href="#redis-cluster-%E7%9A%84-hash-slot-%E7%AE%97%E6%B3%95">redis cluster 的 hash slot 算法</a></li>
 </ul>
 </li>
-<li><a href="#redis-cluster-的高可用与主备切换原理">redis cluster 的高可用与主备切换原理</a><ul>
-<li><a href="#判断节点宕机">判断节点宕机</a></li>
-<li><a href="#从节点过滤">从节点过滤</a></li>
-<li><a href="#从节点选举">从节点选举</a></li>
-<li><a href="#与哨兵比较">与哨兵比较</a></li>
+<li><a href="#redis-cluster-%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%E4%B8%8E%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E5%8E%9F%E7%90%86">redis cluster 的高可用与主备切换原理</a><ul>
+<li><a href="#%E5%88%A4%E6%96%AD%E8%8A%82%E7%82%B9%E5%AE%95%E6%9C%BA">判断节点宕机</a></li>
+<li><a href="#%E4%BB%8E%E8%8A%82%E7%82%B9%E8%BF%87%E6%BB%A4">从节点过滤</a></li>
+<li><a href="#%E4%BB%8E%E8%8A%82%E7%82%B9%E9%80%89%E4%B8%BE">从节点选举</a></li>
+<li><a href="#%E4%B8%8E%E5%93%A8%E5%85%B5%E6%AF%94%E8%BE%83">与哨兵比较</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#生产环境中的-redis-是怎么部署的">生产环境中的 redis 是怎么部署的？</a><ul>
-<li><a href="#面试官心理分析-8">面试官心理分析</a></li>
-<li><a href="#面试题剖析-8">面试题剖析</a></li>
+<li><a href="#%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84-redis-%E6%98%AF%E6%80%8E%E4%B9%88%E9%83%A8%E7%BD%B2%E7%9A%84">生产环境中的 redis 是怎么部署的？</a><ul>
+<li><a href="#%E9%9D%A2%E8%AF%95%E5%AE%98%E5%BF%83%E7%90%86%E5%88%86%E6%9E%90-8">面试官心理分析</a></li>
+<li><a href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E5%89%96%E6%9E%90-8">面试题剖析</a></li>
 </ul>
 </li>
 </ul>
@@ -163,13 +163,11 @@
 </blockquote>
 <h3><span id="用了缓存之后会有什么不良后果">用了缓存之后会有什么不良后果？</span></h3><p>常见的缓存问题有以下几个：</p>
 <ul>
-<li>[缓存与数据库双写不一致]</li>
+<li><p>[缓存与数据库双写不一致]</p>
+</li>
 <li><a href="/2020/03/25/dp/" title="动态规划集合">动态规划集合</a>
 
-
 </li>
-</ul>
-<ul>
 <li><p>[缓存雪崩、缓存穿透]</p>
 </li>
 <li><p>[缓存并发竞争]</p>
@@ -195,9 +193,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> college szu</span><br></pre></td></tr></table></figure>
 
 <h3><span id="hash">hash</span></h3><p>这个是类似 map 的一种结构，这个一般就是可以将结构化的数据，比如一个对象（前提是<strong>这个对象没嵌套其他的对象</strong>）给缓存在 redis 里，然后每次读写缓存的时候，可以就操作 hash 里的<strong>某个字段</strong>。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hset person name bingo</span><br><span class="line">hset person age 20</span><br><span class="line">hset person id 1</span><br><span class="line">hget person name</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hset person name bingo</span><br><span class="line">hset person age 20</span><br><span class="line">hset person <span class="built_in">id</span> 1</span><br><span class="line">hget person name</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">person = &#123;</span><br><span class="line">    "name": "bingo",</span><br><span class="line">    "age": 20,</span><br><span class="line">    "id": 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">person = <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bingo&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">20</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">1</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <h3><span id="list">list</span></h3><p>list 是有序列表，这个可以玩儿出很多花样。</p>
 <p>比如可以通过 list 存储一些列表型的数据结构，类似粉丝列表、文章的评论列表之类的东西。</p>
@@ -248,7 +246,7 @@
 </ul>
 <h3><span id="手写一个-lru-算法">手写一个 LRU 算法</span></h3><p>你可以现场手写最原始的 LRU 算法，那个代码量太大了，似乎不太现实。</p>
 <p>不求自己纯手工从底层开始打造出自己的 LRU，但是起码要知道如何利用已有的 JDK 数据结构实现一个 Java 版的 LRU。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cap,count;</span><br><span class="line">    HashMap&lt;Integer,Node&gt; map=<span class="keyword">new</span> HashMap();</span><br><span class="line">    Node head,tail;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">        Node pre,next;</span><br><span class="line">        <span class="keyword">int</span> val,key;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> key,<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.key=key;</span><br><span class="line">            <span class="keyword">this</span>.val=value;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        cap=capacity;</span><br><span class="line">        count=<span class="number">0</span>;</span><br><span class="line">        head=<span class="keyword">new</span> Node();</span><br><span class="line">        tail=<span class="keyword">new</span> Node();</span><br><span class="line">        head.next=tail;</span><br><span class="line">        tail.pre=head;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">        Node n = map.get(key);</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="keyword">null</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        remove(n);</span><br><span class="line">        add(n);</span><br><span class="line">        <span class="keyword">return</span> n.val;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        Node n = map.get(key);</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="keyword">null</span>)&#123;</span><br><span class="line">            n = <span class="keyword">new</span> Node(key,value);</span><br><span class="line">            map.put(key,n);</span><br><span class="line">            add(n);</span><br><span class="line">            count++;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            n.val=value;</span><br><span class="line">            remove(n);</span><br><span class="line">            add(n);</span><br><span class="line">        &#125;<span class="keyword">if</span>(count&gt;cap)&#123;</span><br><span class="line">            Node del=tail.pre;</span><br><span class="line">            remove(del);</span><br><span class="line">            map.remove(del.key);</span><br><span class="line">            count--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Node n)</span></span>&#123;</span><br><span class="line">        Node after=head.next;</span><br><span class="line">        head.next=n;</span><br><span class="line">        n.pre=head;</span><br><span class="line">        n.next=after;</span><br><span class="line">        after.pre=n;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Node n)</span></span>&#123;</span><br><span class="line">         Node before=n.pre,after=n.next;</span><br><span class="line">         before.next=after;</span><br><span class="line">         after.pre=before;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LRUCache</span> &#123;</span><br><span class="line">    <span class="type">int</span> cap,count;</span><br><span class="line">    HashMap&lt;Integer,Node&gt; map=<span class="keyword">new</span> <span class="title class_">HashMap</span>();</span><br><span class="line">    Node head,tail;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Node</span>&#123;</span><br><span class="line">        Node pre,next;</span><br><span class="line">        <span class="type">int</span> val,key;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(<span class="type">int</span> key,<span class="type">int</span> value)</span>&#123;</span><br><span class="line">            <span class="built_in">this</span>.key=key;</span><br><span class="line">            <span class="built_in">this</span>.val=value;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="built_in">this</span>(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LRUCache</span><span class="params">(<span class="type">int</span> capacity)</span> &#123;</span><br><span class="line">        cap=capacity;</span><br><span class="line">        count=<span class="number">0</span>;</span><br><span class="line">        head=<span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        tail=<span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        head.next=tail;</span><br><span class="line">        tail.pre=head;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">get</span><span class="params">(<span class="type">int</span> key)</span> &#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">n</span> <span class="operator">=</span> map.get(key);</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="literal">null</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        remove(n);</span><br><span class="line">        add(n);</span><br><span class="line">        <span class="keyword">return</span> n.val;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">put</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span> value)</span> &#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">n</span> <span class="operator">=</span> map.get(key);</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="literal">null</span>)&#123;</span><br><span class="line">            n = <span class="keyword">new</span> <span class="title class_">Node</span>(key,value);</span><br><span class="line">            map.put(key,n);</span><br><span class="line">            add(n);</span><br><span class="line">            count++;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            n.val=value;</span><br><span class="line">            remove(n);</span><br><span class="line">            add(n);</span><br><span class="line">        &#125;<span class="keyword">if</span>(count&gt;cap)&#123;</span><br><span class="line">            Node del=tail.pre;</span><br><span class="line">            remove(del);</span><br><span class="line">            map.remove(del.key);</span><br><span class="line">            count--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Node n)</span>&#123;</span><br><span class="line">        Node after=head.next;</span><br><span class="line">        head.next=n;</span><br><span class="line">        n.pre=head;</span><br><span class="line">        n.next=after;</span><br><span class="line">        after.pre=n;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Node n)</span>&#123;</span><br><span class="line">         Node before=n.pre,after=n.next;</span><br><span class="line">         before.next=after;</span><br><span class="line">         after.pre=before;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h1><span id="redis-的持久化有哪几种方式不同的持久化机制都有什么优缺点持久化机制具体底层是如何实现的">redis 的持久化有哪几种方式？不同的持久化机制都有什么优缺点？持久化机制具体底层是如何实现的？</span></h1><h2><span id="面试官心理分析">面试官心理分析</span></h2><p>redis 如果仅仅只是将数据缓存在内存里面，如果 redis 宕机了再重启，内存里的数据就全部都弄丢了啊。你必须得用 redis 的持久化机制，将数据写入内存的同时，异步的慢慢的将数据写入磁盘文件里，进行持久化。</p>
 <p>如果 redis 宕机重启，自动从磁盘上加载之前持久化的一些数据就可以了，也许会丢失少许数据，但是至少不会将所有数据都弄丢。</p>
@@ -278,7 +276,7 @@
 <li>AOF 日志文件的命令通过非常可读的方式进行记录，这个特性非常<strong>适合做灾难性的误删除的紧急恢复</strong>。比如某人不小心用 <code>flushall</code> 命令清空了所有数据，只要这个时候后台 <code>rewrite</code> 还没有发生，那么就可以立即拷贝 AOF 文件，将最后一条 <code>flushall</code> 命令给删了，然后再将该 <code>AOF</code> 文件放回去，就可以通过恢复机制，自动恢复所有数据。</li>
 <li>对于同一份数据来说，AOF 日志文件通常比 RDB 数据快照文件更大。</li>
 <li>AOF 开启后，支持的写 QPS 会比 RDB 支持的写 QPS 低，因为 AOF 一般会配置成每秒 <code>fsync</code> 一次日志文件，当然，每秒一次 <code>fsync</code>，性能也还是很高的。（如果实时写入，那么 QPS 会大降，redis 性能会大大降低）</li>
-<li>以前 AOF 发生过 bug，就是通过 AOF 记录的日志，进行数据恢复的时候，没有恢复一模一样的数据出来。所以说，类似 AOF 这种较为复杂的基于命令日志 / merge / 回放的方式，比基于 RDB 每次持久化一份完整的数据快照文件的方式，更加脆弱一些，容易有 bug。不过 AOF 就是为了避免 rewrite 过程导致的 bug，因此每次 rewrite 并不是基于旧的指令日志进行 merge 的，而是<strong>基于当时内存中的数据进行指令的重新构建</strong>，这样健壮性会好很多。</li>
+<li>以前 AOF 发生过 bug，就是通过 AOF 记录的日志，进行数据恢复的时候，没有恢复一模一样的数据出来。所以说，类似 AOF 这种较为复杂的基于命令日志 &#x2F; merge &#x2F; 回放的方式，比基于 RDB 每次持久化一份完整的数据快照文件的方式，更加脆弱一些，容易有 bug。不过 AOF 就是为了避免 rewrite 过程导致的 bug，因此每次 rewrite 并不是基于旧的指令日志进行 merge 的，而是<strong>基于当时内存中的数据进行指令的重新构建</strong>，这样健壮性会好很多。</li>
 </ul>
 <h3><span id="rdb-和-aof-到底该如何选择">RDB 和 AOF 到底该如何选择</span></h3><ul>
 <li>不要仅仅使用 RDB，因为那样会导致你丢失很多数据；</li>
@@ -317,7 +315,7 @@
 </ul>
 <p>由于读请求进行了非常轻度的异步化，所以一定要注意读超时的问题，每个读请求必须在超时时间范围内返回。</p>
 <p>该解决方案，最大的风险点在于说，<strong>可能数据更新很频繁</strong>，导致队列中积压了大量更新操作在里面，然后<strong>读请求会发生大量的超时</strong>，最后导致大量的请求直接走数据库。务必通过一些模拟真实的测试，看看更新数据的频率是怎样的。</p>
-<p>另外一点，因为一个队列中，可能会积压针对多个数据项的更新操作，因此需要根据自己的业务情况进行测试，可能需要<strong>部署多个服务</strong>，每个服务分摊一些数据的更新操作。如果一个内存队列里居然会挤压 100 个商品的库存修改操作，每个库存修改操作要耗费 10ms 去完成，那么最后一个商品的读请求，可能等待 10 * 100 = 1000ms = 1s 后，才能得到数据，这个时候就导致<strong>读请求的长时阻塞</strong>。</p>
+<p>另外一点，因为一个队列中，可能会积压针对多个数据项的更新操作，因此需要根据自己的业务情况进行测试，可能需要<strong>部署多个服务</strong>，每个服务分摊一些数据的更新操作。如果一个内存队列里居然会挤压 100 个商品的库存修改操作，每个库存修改操作要耗费 10ms 去完成，那么最后一个商品的读请求，可能等待 10 * 100 &#x3D; 1000ms &#x3D; 1s 后，才能得到数据，这个时候就导致<strong>读请求的长时阻塞</strong>。</p>
 <p>一定要做根据实际业务系统的运行情况，去进行一些压力测试，和模拟线上环境，去看看最繁忙的时候，内存队列可能会挤压多少更新操作，可能会导致最后一个更新操作对应的读请求，会 hang 多少时间，如果读请求在 200ms 返回，如果你计算过后，哪怕是最繁忙的时候，积压 10 个更新操作，最多等待 200ms，那还可以的。</p>
 <p><strong>如果一个内存队列中可能积压的更新操作特别多</strong>，那么你就要<strong>加机器</strong>，让每个机器上部署的服务实例处理更少的数据，那么每个内存队列中积压的更新操作就会越少。</p>
 <p>其实根据之前的项目经验，一般来说，数据的写频率是很低的，因此实际上正常来说，在队列中积压的更新操作应该是很少的。像这种针对读高并发、读缓存架构的项目，一般来说写请求是非常少的，每秒的 QPS 能到几百就不错了。</p>
@@ -341,13 +339,13 @@
 <h1><span id="redis-的并发竞争问题是什么如何解决这个问题了解-redis-事务的-cas-方案吗">redis 的并发竞争问题是什么？如何解决这个问题？了解 redis 事务的 CAS 方案吗？</span></h1><h2><span id="面试官心理分析">面试官心理分析</span></h2><p>这个也是线上非常常见的一个问题，就是<strong>多客户端同时并发写</strong>一个 key，可能本来应该先到的数据后到了，导致数据版本错了；或者是多客户端同时获取一个 key，修改值之后再写回去，只要顺序错了，数据就错了。</p>
 <p>而且 redis 自己就有天然解决这个问题的 CAS 类的乐观锁方案。</p>
 <h2><span id="面试题剖析">面试题剖析</span></h2><p>某个时刻，多个系统实例都去更新某个 key。可以基于 zookeeper 实现分布式锁。每个系统通过 zookeeper 获取分布式锁，确保同一时间，只能有一个系统实例在操作某个 key，别人都不允许读和写。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/zookeeper-distributed-lock.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/zookeeper-distributed-lock.png" alt="zookeeper-distributed-lock"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/zookeeper-distributed-lock.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/zookeeper-distributed-lock.png" alt="zookeeper-distributed-lock"></a></p>
 <p>你要写入缓存的数据，都是从 mysql 里查出来的，都得写入 mysql 中，写入 mysql 中的时候必须保存一个时间戳，从 mysql 查出来的时候，时间戳也查出来。</p>
 <p>每次要<strong>写之前，先判断</strong>一下当前这个 value 的时间戳是否比缓存里的 value 的时间戳要新。如果是的话，那么可以写，否则，就不能用旧的数据覆盖新的数据。</p>
 <h1><span id="了解什么是-redis-的雪崩-穿透和击穿redis-崩溃之后会怎么样系统该如何应对这种情况如何处理-redis-的穿透">了解什么是 redis 的雪崩、穿透和击穿？redis 崩溃之后会怎么样？系统该如何应对这种情况？如何处理 redis 的穿透？</span></h1><h2><span id="面试官心理分析">面试官心理分析</span></h2><p>其实这是问到缓存必问的，因为缓存雪崩和穿透，是缓存最大的两个问题，要么不出现，一旦出现就是致命性的问题，所以面试官一定会问你。</p>
 <h2><span id="面试题剖析">面试题剖析</span></h2><h3><span id="缓存雪崩">缓存雪崩</span></h3><p>对于系统 A，假设每天高峰期每秒 5000 个请求，本来缓存在高峰期可以扛住每秒 4000 个请求，但是缓存机器意外发生了全盘宕机。缓存挂了，此时 1 秒 5000 个请求全部落数据库，数据库必然扛不住，它会报一下警，然后就挂了。此时，如果没有采用什么特别的方案来处理这个故障，DBA 很着急，重启数据库，但是数据库立马又被新的流量给打死了。</p>
 <p>这就是缓存雪崩。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-caching-avalanche.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-caching-avalanche.png" alt="redis-caching-avalanche"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-caching-avalanche.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-caching-avalanche.png" alt="redis-caching-avalanche"></a></p>
 <p>大约在 3 年前，国内比较知名的一个互联网公司，曾因为缓存事故，导致雪崩，后台系统全部崩溃，事故从当天下午持续到晚上凌晨 3~4 点，公司损失了几千万。</p>
 <p>缓存雪崩的事前事中事后的解决方案如下：</p>
 <ul>
@@ -355,19 +353,19 @@
 <li>事中：本地 ehcache 缓存 + hystrix 限流&amp;降级，避免 MySQL 被打死。</li>
 <li>事后：redis 持久化，一旦重启，自动从磁盘上加载数据，快速恢复缓存数据。</li>
 </ul>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-caching-avalanche-solution.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-caching-avalanche-solution.png" alt="redis-caching-avalanche-solution"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-caching-avalanche-solution.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-caching-avalanche-solution.png" alt="redis-caching-avalanche-solution"></a></p>
 <p>用户发送一个请求，系统 A 收到请求后，先查本地 ehcache 缓存，如果没查到再查 redis。如果 ehcache 和 redis 都没有，再查数据库，将数据库中的结果，写入 ehcache 和 redis 中。</p>
 <p>限流组件，可以设置每秒的请求，有多少能通过组件，剩余的未通过的请求，怎么办？<strong>走降级</strong>！可以返回一些默认的值，或者友情提示，或者空白的值。</p>
 <p>好处：</p>
 <ul>
 <li>数据库绝对不会死，限流组件确保了每秒只有多少个请求能通过。</li>
-<li>只要数据库不死，就是说，对用户来说，2/5 的请求都是可以被处理的。</li>
-<li>只要有 2/5 的请求可以被处理，就意味着你的系统没死，对用户来说，可能就是点击几次刷不出来页面，但是多点几次，就可以刷出来一次。</li>
+<li>只要数据库不死，就是说，对用户来说，2&#x2F;5 的请求都是可以被处理的。</li>
+<li>只要有 2&#x2F;5 的请求可以被处理，就意味着你的系统没死，对用户来说，可能就是点击几次刷不出来页面，但是多点几次，就可以刷出来一次。</li>
 </ul>
 <h3><span id="缓存穿透">缓存穿透</span></h3><p>对于系统A，假设一秒 5000 个请求，结果其中 4000 个请求是黑客发出的恶意攻击。</p>
 <p>黑客发出的那 4000 个攻击，缓存中查不到，每次你去数据库里查，也查不到。</p>
 <p>举个栗子。数据库 id 是从 1 开始的，结果黑客发过来的请求 id 全部都是负数。这样的话，缓存中不会有，请求每次都“<strong>视缓存于无物</strong>”，直接查询数据库。这种恶意攻击场景的缓存穿透就会直接把数据库给打死。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-caching-penetration.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-caching-penetration.png" alt="redis-caching-penetration"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-caching-penetration.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-caching-penetration.png" alt="redis-caching-penetration"></a></p>
 <p>解决方式很简单，每次系统 A 从数据库中只要没查到，就写一个空值到缓存里去，比如 <code>set -999 UNKNOWN</code>。然后设置一个过期时间，这样的话，下次有相同的 key 来访问的时候，在缓存失效之前，都可以直接从缓存中取数据。</p>
 <h3><span id="缓存击穿">缓存击穿</span></h3><p>缓存击穿，就是说某个 key 非常热点，访问非常频繁，处于集中式高并发访问的情况，当这个 key 在失效的瞬间，大量的请求就击穿了缓存，直接请求数据库，就像是在一道屏障上凿开了一个洞。</p>
 <p>不同场景下的解决方式可如下：</p>
@@ -377,7 +375,7 @@
 <li>若缓存的数据更新频繁或者缓存刷新的流程耗时较长的情况下，可以利用定时线程在缓存过期前主动的重新构建缓存或者延后缓存的过期时间，以保证所有的请求能一直访问到对应的缓存。</li>
 </ul>
 <h1><span id="redis-主从架构">Redis 主从架构</span></h1><p>单机的 redis，能够承载的 QPS 大概就在上万到几万不等。对于缓存来说，一般都是用来支撑<strong>读高并发</strong>的。因此架构做成主从(master-slave)架构，一主多从，主负责写，并且将数据复制到其它的 slave 节点，从节点负责读。所有的<strong>读请求全部走从节点</strong>。这样也可以很轻松实现水平扩容，<strong>支撑读高并发</strong>。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-master-slave.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-master-slave.png" alt="redis-master-slave"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-master-slave.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-master-slave.png" alt="redis-master-slave"></a></p>
 <p>redis replication -&gt; 主从架构 -&gt; 读写分离 -&gt; 水平扩容支撑读高并发</p>
 <h2><span id="redis-replication-的核心机制">redis replication 的核心机制</span></h2><ul>
 <li>redis 采用<strong>异步方式</strong>复制数据到 slave 节点，不过 redis2.8 开始，slave node 会周期性地确认自己每次复制的数据量；</li>
@@ -387,30 +385,30 @@
 <li>slave node 在做复制的时候，也不会 block 对自己的查询操作，它会用旧的数据集来提供服务；但是复制完成的时候，需要删除旧数据集，加载新数据集，这个时候就会暂停对外服务了；</li>
 <li>slave node 主要用来进行横向扩容，做读写分离，扩容的 slave node 可以提高读的吞吐量。</li>
 </ul>
-<p>注意，如果采用了主从架构，那么建议必须<strong>开启</strong> master node 的<a href="https://github.com/Disda-coding/advanced-java/blob/master/docs/high-concurrency/redis-persistence.md" target="_blank" rel="noopener">持久化</a>，不建议用 slave node 作为 master node 的数据热备，因为那样的话，如果你关掉 master 的持久化，可能在 master 宕机重启的时候数据是空的，然后可能一经过复制， slave node 的数据也丢了。</p>
-<p>另外，master 的各种备份方案，也需要做。万一本地的所有文件丢失了，从备份中挑选一份 rdb 去恢复 master，这样才能<strong>确保启动的时候，是有数据的</strong>，即使采用了后续讲解的<a href="https://github.com/Disda-coding/advanced-java/blob/master/docs/high-concurrency/redis-sentinel.md" target="_blank" rel="noopener">高可用机制</a>，slave node 可以自动接管 master node，但也可能 sentinel 还没检测到 master failure，master node 就自动重启了，还是可能导致上面所有的 slave node 数据被清空。</p>
+<p>注意，如果采用了主从架构，那么建议必须<strong>开启</strong> master node 的<a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/docs/high-concurrency/redis-persistence.md">持久化</a>，不建议用 slave node 作为 master node 的数据热备，因为那样的话，如果你关掉 master 的持久化，可能在 master 宕机重启的时候数据是空的，然后可能一经过复制， slave node 的数据也丢了。</p>
+<p>另外，master 的各种备份方案，也需要做。万一本地的所有文件丢失了，从备份中挑选一份 rdb 去恢复 master，这样才能<strong>确保启动的时候，是有数据的</strong>，即使采用了后续讲解的<a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/docs/high-concurrency/redis-sentinel.md">高可用机制</a>，slave node 可以自动接管 master node，但也可能 sentinel 还没检测到 master failure，master node 就自动重启了，还是可能导致上面所有的 slave node 数据被清空。</p>
 <h2><span id="redis-主从复制的核心原理">redis 主从复制的核心原理</span></h2><p>当启动一个 slave node 的时候，它会发送一个 <code>PSYNC</code> 命令给 master node。</p>
 <p>如果这是 slave node 初次连接到 master node，那么会触发一次 <code>full resynchronization</code> 全量复制。此时 master 会启动一个后台线程，开始生成一份 <code>RDB</code> 快照文件，同时还会将从客户端 client 新收到的所有写命令缓存在内存中。<code>RDB</code> 文件生成完毕后， master 会将这个 <code>RDB</code> 发送给 slave，slave 会先<strong>写入本地磁盘，然后再从本地磁盘加载到内存</strong>中，接着 master 会将内存中缓存的写命令发送到 slave，slave 也会同步这些数据。slave node 如果跟 master node 有网络故障，断开了连接，会自动重连，连接之后 master node 仅会复制给 slave 部分缺少的数据。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-master-slave-replication.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-master-slave-replication.png" alt="redis-master-slave-replication"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-master-slave-replication.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-master-slave-replication.png" alt="redis-master-slave-replication"></a></p>
 <h3><span id="主从复制的断点续传">主从复制的断点续传</span></h3><p>从 redis2.8 开始，就支持主从复制的断点续传，如果主从复制过程中，网络连接断掉了，那么可以接着上次复制的地方，继续复制下去，而不是从头开始复制一份。</p>
 <p>master node 会在内存中维护一个 backlog，master 和 slave 都会保存一个 replica offset 还有一个 master run id，offset 就是保存在 backlog 中的。如果 master 和 slave 网络连接断掉了，slave 会让 master 从上次 replica offset 开始继续复制，如果没有找到对应的 offset，那么就会执行一次 <code>resynchronization</code>。</p>
 <blockquote>
 <p>如果根据 host+ip 定位 master node，是不靠谱的，如果 master node 重启或者数据出现了变化，那么 slave node 应该根据不同的 run id 区分。</p>
 </blockquote>
 <h3><span id="无磁盘化复制">无磁盘化复制</span></h3><p>master 在内存中直接创建 <code>RDB</code>，然后发送给 slave，不会在自己本地落地磁盘了。只需要在配置文件中开启 <code>repl-diskless-sync yes</code> 即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">repl-diskless-sync yes</span><br><span class="line"></span><br><span class="line"># 等待 5s 后再开始复制，因为要等更多 slave 重新连接过来</span><br><span class="line">repl-diskless-sync-delay 5</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">repl-diskless-sync yes</span><br><span class="line"></span><br><span class="line"># 等待 5s 后再开始复制，因为要等更多 slave 重新连接过来</span><br><span class="line">repl-diskless-sync-delay 5</span><br></pre></td></tr></table></figure>
 
 <h3><span id="过期-key-处理">过期 key 处理</span></h3><p>slave 不会过期 key，只会等待 master 过期 key。如果 master 过期了一个 key，或者通过 LRU 淘汰了一个 key，那么会模拟一条 del 命令发送给 slave。</p>
 <h2><span id="复制的完整流程">复制的完整流程</span></h2><p>slave node 启动时，会在自己本地保存 master node 的信息，包括 master node 的<code>host</code>和<code>ip</code>，但是复制流程没开始。</p>
 <p>slave node 内部有个定时任务，每秒检查是否有新的 master node 要连接和复制，如果发现，就跟 master node 建立 socket 网络连接。然后 slave node 发送 <code>ping</code> 命令给 master node。如果 master 设置了 requirepass，那么 slave node 必须发送 masterauth 的口令过去进行认证。master node <strong>第一次执行全量复制</strong>，将所有数据发给 slave node。而在后续，master node 持续将写命令，异步复制给 slave node。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-master-slave-replication-detail.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-master-slave-replication-detail.png" alt="redis-master-slave-replication-detail"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-master-slave-replication-detail.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-master-slave-replication-detail.png" alt="redis-master-slave-replication-detail"></a></p>
 <h3><span id="全量复制">全量复制</span></h3><ul>
 <li>master 执行 bgsave ，在本地生成一份 rdb 快照文件。</li>
 <li>master node 将 rdb 快照文件发送给 slave node，如果 rdb 复制时间超过 60秒（repl-timeout），那么 slave node 就会认为复制失败，可以适当调大这个参数(对于千兆网卡的机器，一般每秒传输 100MB，6G 文件，很可能超过 60s)</li>
 <li>master node 在生成 rdb 时，会将所有新的写命令缓存在内存中，在 slave node 保存了 rdb 之后，再将新的写命令复制给 slave node。</li>
 <li>如果在复制期间，内存缓冲区持续消耗超过 64MB，或者一次性超过 256MB，那么停止复制，复制失败。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client-output-buffer-limit slave 256MB 64MB 60</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client-output-buffer-limit slave 256MB 64MB 60</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>slave node 接收到 rdb 之后，清空自己的旧数据，然后重新加载 rdb 到自己的内存中，同时<strong>基于旧的数据版本</strong>对外提供服务。</li>
@@ -446,15 +444,15 @@
 <li>哨兵 + redis 主从的部署架构，是<strong>不保证数据零丢失</strong>的，只能保证 redis 集群的高可用性。</li>
 <li>对于哨兵 + redis 主从这种复杂的部署架构，尽量在测试环境和生产环境，都进行充足的测试和演练。</li>
 </ul>
-<p>哨兵集群必须部署 2 个以上节点，如果哨兵集群仅仅部署了 2 个哨兵实例，quorum = 1。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+----+         +----+</span><br><span class="line">| M1 |---------| R1 |</span><br><span class="line">| S1 |         | S2 |</span><br><span class="line">+----+         +----+</span><br></pre></td></tr></table></figure>
+<p>哨兵集群必须部署 2 个以上节点，如果哨兵集群仅仅部署了 2 个哨兵实例，quorum &#x3D; 1。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+----+         +----+</span><br><span class="line">| M1 |---------| R1 |</span><br><span class="line">| S1 |         | S2 |</span><br><span class="line">+----+         +----+</span><br></pre></td></tr></table></figure>
 
 <p>配置 <code>quorum=1</code>，如果 master 宕机， s1 和 s2 中只要有 1 个哨兵认为 master 宕机了，就可以进行切换，同时 s1 和 s2 会选举出一个哨兵来执行故障转移。但是同时这个时候，需要 majority，也就是大多数哨兵都是运行的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2 个哨兵，majority&#x3D;2</span><br><span class="line">3 个哨兵，majority&#x3D;2</span><br><span class="line">4 个哨兵，majority&#x3D;2</span><br><span class="line">5 个哨兵，majority&#x3D;3</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2 个哨兵，majority=2</span><br><span class="line">3 个哨兵，majority=2</span><br><span class="line">4 个哨兵，majority=2</span><br><span class="line">5 个哨兵，majority=3</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
 <p>如果此时仅仅是 M1 进程宕机了，哨兵 s1 正常运行，那么故障转移是 OK 的。但是如果是整个 M1 和 S1 运行的机器宕机了，那么哨兵只有 1 个，此时就没有 majority 来允许执行故障转移，虽然另外一台机器上还有一个 R1，但是故障转移不会执行。</p>
 <p>经典的 3 节点哨兵集群是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">       +----+</span><br><span class="line">       | M1 |</span><br><span class="line">       | S1 |</span><br><span class="line">       +----+</span><br><span class="line">          |</span><br><span class="line">+----+    |    +----+</span><br><span class="line">| R2 |----+----| R3 |</span><br><span class="line">| S2 |         | S3 |</span><br><span class="line">+----+         +----+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">       +----+</span><br><span class="line">       | M1 |</span><br><span class="line">       | S1 |</span><br><span class="line">       +----+</span><br><span class="line">          |</span><br><span class="line">+----+    |    +----+</span><br><span class="line">| R2 |----+----| R3 |</span><br><span class="line">| S2 |         | S3 |</span><br><span class="line">+----+         +----+</span><br></pre></td></tr></table></figure>
 
 <p>配置 <code>quorum=2</code>，如果 M1 所在机器宕机了，那么三个哨兵还剩下 2 个，S2 和 S3 可以一致认为 master 宕机了，然后选举出一个来执行故障转移，同时 3 个哨兵的 majority 是 2，所以还剩下的 2 个哨兵运行着，就可以允许执行故障转移。</p>
 <h2><span id="redis-哨兵主备切换的数据丢失问题">redis 哨兵主备切换的数据丢失问题</span></h2><h3><span id="两种情况和导致数据丢失">两种情况和导致数据丢失</span></h3><p>主备切换的过程，可能会导致数据丢失：</p>
@@ -462,15 +460,15 @@
 <li>异步复制导致的数据丢失</li>
 </ul>
 <p>因为 master-&gt;slave 的复制是异步的，所以可能有部分数据还没复制到 slave，master 就宕机了，此时这部分数据就丢失了。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/async-replication-data-lose-case.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/async-replication-data-lose-case.png" alt="async-replication-data-lose-case"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/async-replication-data-lose-case.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/async-replication-data-lose-case.png" alt="async-replication-data-lose-case"></a></p>
 <ul>
 <li>脑裂导致的数据丢失</li>
 </ul>
 <p>脑裂，也就是说，某个 master 所在机器突然<strong>脱离了正常的网络</strong>，跟其他 slave 机器不能连接，但是实际上 master 还运行着。此时哨兵可能就会<strong>认为</strong> master 宕机了，然后开启选举，将其他 slave 切换成了 master。这个时候，集群里就会有两个 master ，也就是所谓的<strong>脑裂</strong>。</p>
 <p>此时虽然某个 slave 被切换成了 master，但是可能 client 还没来得及切换到新的 master，还继续向旧 master 写数据。因此旧 master 再次恢复的时候，会被作为一个 slave 挂到新的 master 上去，自己的数据会清空，重新从新的 master 复制数据。而新的 master 并没有后来 client 写入的数据，因此，这部分数据也就丢失了。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-cluster-split-brain.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-cluster-split-brain.png" alt="redis-cluster-split-brain"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-cluster-split-brain.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-cluster-split-brain.png" alt="redis-cluster-split-brain"></a></p>
 <h3><span id="数据丢失问题的解决方案">数据丢失问题的解决方案</span></h3><p>进行如下配置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">min-slaves-to-write 1</span><br><span class="line">min-slaves-max-lag 10</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">min-slaves-to-write 1</span><br><span class="line">min-slaves-max-lag 10</span><br></pre></td></tr></table></figure>
 
 <p>表示，要求至少有 1 个 slave，数据复制和同步的延迟不能超过 10 秒。</p>
 <p>如果说一旦所有的 slave，数据复制和同步的延迟都超过了 10 秒钟，那么这个时候，master 就不会再接收任何请求了。</p>
@@ -500,7 +498,7 @@
 <li>run id</li>
 </ul>
 <p>如果一个 slave 跟 master 断开连接的时间已经超过了 <code>down-after-milliseconds</code> 的 10 倍，外加 master 宕机的时长，那么 slave 就被认为不适合选举为 master。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(down-after-milliseconds * 10) + milliseconds_since_master_is_in_SDOWN_state</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(down-after-milliseconds * 10) + milliseconds_since_master_is_in_SDOWN_state</span><br></pre></td></tr></table></figure>
 
 <p>接下来会对 slave 进行排序：</p>
 <ul>
@@ -510,7 +508,7 @@
 </ul>
 <h2><span id="quorum-和-majority">quorum 和 majority</span></h2><p>每次一个哨兵要做主备切换，首先需要 quorum 数量的哨兵认为 odown，然后选举出一个哨兵来做切换，这个哨兵还需要得到 majority 哨兵的授权，才能正式执行切换。</p>
 <p>如果 quorum &lt; majority，比如 5 个哨兵，majority 就是 3，quorum 设置为 2，那么就 3 个哨兵授权就可以执行切换。</p>
-<p>但是如果 quorum &gt;= majority，那么必须 quorum 数量的哨兵都授权，比如 5 个哨兵，quorum 是 5，那么必须 5 个哨兵都同意授权，才能执行切换。</p>
+<p>但是如果 quorum &gt;&#x3D; majority，那么必须 quorum 数量的哨兵都授权，比如 5 个哨兵，quorum 是 5，那么必须 5 个哨兵都同意授权，才能执行切换。</p>
 <h2><span id="configuration-epoch">configuration epoch</span></h2><p>哨兵会对一套 redis master+slaves 进行监控，有相应的监控的配置。</p>
 <p>执行切换的那个哨兵，会从要切换到的新 master（salve-&gt;master）那里得到一个 configuration epoch，这就是一个 version 号，每次切换的 version 号都必须是唯一的。</p>
 <p>如果第一个选举出的哨兵切换失败了，那么其他哨兵，会等待 failover-timeout 时间，然后接替继续执行切换，此时会重新获取一个新的 configuration epoch，作为新的 version 号。</p>
@@ -529,9 +527,9 @@
 <p>16379 端口号是用来进行节点间通信的，也就是 cluster bus 的东西，cluster bus 的通信，用来进行故障检测、配置更新、故障转移授权。cluster bus 用了另外一种二进制的协议，<code>gossip</code> 协议，用于节点间进行高效的数据交换，占用更少的网络带宽和处理时间。</p>
 <h3><span id="节点间的内部通信机制">节点间的内部通信机制</span></h3><h4><span id="基本通信原理">基本通信原理</span></h4><p>集群元数据的维护有两种方式：集中式、Gossip 协议。redis cluster 节点间采用 gossip 协议进行通信。</p>
 <p><strong>集中式</strong>是将集群元数据（节点信息、故障等等）几种存储在某个节点上。集中式元数据集中存储的一个典型代表，就是大数据领域的 <code>storm</code>。它是分布式的大数据实时计算引擎，是集中式的元数据存储的结构，底层基于 zookeeper（分布式协调的中间件）对所有元数据进行存储维护。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/zookeeper-centralized-storage.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/zookeeper-centralized-storage.png" alt="zookeeper-centralized-storage"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/zookeeper-centralized-storage.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/zookeeper-centralized-storage.png" alt="zookeeper-centralized-storage"></a></p>
 <p>redis 维护集群元数据采用另一个方式， <code>gossip</code> 协议，所有节点都持有一份元数据，不同的节点如果出现了元数据的变更，就不断将元数据发送给其它的节点，让其它节点也进行元数据的变更。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-gossip.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-gossip.png" alt="redis-gossip"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/redis-gossip.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/redis-gossip.png" alt="redis-gossip"></a></p>
 <p><strong>集中式</strong>的<strong>好处</strong>在于，元数据的读取和更新，时效性非常好，一旦元数据出现了变更，就立即更新到集中式的存储中，其它节点读取的时候就可以感知到；<strong>不好</strong>在于，所有的元数据的更新压力全部集中在一个地方，可能会导致元数据的存储有压力。</p>
 <p>gossip 好处在于，元数据的更新比较分散，不是集中在一个地方，更新请求会陆陆续续打到所有节点上去更新，降低了压力；不好在于，元数据的更新有延时，可能导致集群中的一些操作会有一些滞后。</p>
 <ul>
@@ -542,7 +540,7 @@
 <ul>
 <li>meet：某个节点发送 meet 给新加入的节点，让新节点加入集群中，然后新节点就会开始与其它节点进行通信。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-trib.rb add-node</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-trib.rb add-node</span><br></pre></td></tr></table></figure>
 
 <p>其实内部就是发送了一个 gossip meet 消息给新加入的节点，通知那个节点去加入我们的集群。</p>
 <ul>
@@ -552,23 +550,23 @@
 </ul>
 <h4><span id="ping-消息深入">ping 消息深入</span></h4><p>ping 时要携带一些元数据，如果很频繁，可能会加重网络负担。</p>
 <p>每个节点每秒会执行 10 次 ping，每次会选择 5 个最久没有通信的其它节点。当然如果发现某个节点通信延时达到了 <code>cluster_node_timeout / 2</code>，那么立即发送 ping，避免数据交换延时过长，落后的时间太长了。比如说，两个节点之间都 10 分钟没有交换数据了，那么整个集群处于严重的元数据不一致的情况，就会有问题。所以 <code>cluster_node_timeout</code> 可以调节，如果调得比较大，那么会降低 ping 的频率。</p>
-<p>每次 ping，会带上自己节点的信息，还有就是带上 1/10 其它节点的信息，发送出去，进行交换。至少包含 <code>3</code> 个其它节点的信息，最多包含 <code>总节点数减 2</code> 个其它节点的信息。</p>
+<p>每次 ping，会带上自己节点的信息，还有就是带上 1&#x2F;10 其它节点的信息，发送出去，进行交换。至少包含 <code>3</code> 个其它节点的信息，最多包含 <code>总节点数减 2</code> 个其它节点的信息。</p>
 <h3><span id="分布式寻址算法">分布式寻址算法</span></h3><ul>
 <li>hash 算法（大量缓存重建）</li>
 <li>一致性 hash 算法（自动缓存迁移）+ 虚拟节点（自动负载均衡）</li>
 <li>redis cluster 的 hash slot 算法</li>
 </ul>
 <h4><span id="hash-算法">hash 算法</span></h4><p>来了一个 key，首先计算 hash 值，然后对节点数取模。然后打在不同的 master 节点上。一旦某一个 master 节点宕机，所有请求过来，都会基于最新的剩余 master 节点数去取模，尝试去取数据。这会导致<strong>大部分的请求过来，全部无法拿到有效的缓存</strong>，导致大量的流量涌入数据库。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/hash.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/hash.png" alt="hash"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/hash.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/hash.png" alt="hash"></a></p>
 <h4><span id="一致性-hash-算法">一致性 hash 算法</span></h4><p>一致性 hash 算法将整个 hash 值空间组织成一个虚拟的圆环，整个空间按顺时针方向组织，下一步将各个 master 节点（使用服务器的 ip 或主机名）进行 hash。这样就能确定每个节点在其哈希环上的位置。</p>
 <p>来了一个 key，首先计算 hash 值，并确定此数据在环上的位置，从此位置沿环<strong>顺时针“行走”</strong>，遇到的第一个 master 节点就是 key 所在位置。</p>
 <p>在一致性哈希算法中，如果一个节点挂了，受影响的数据仅仅是此节点到环空间前一个节点（沿着逆时针方向行走遇到的第一个节点）之间的数据，其它不受影响。增加一个节点也同理。</p>
 <p>燃鹅，一致性哈希算法在节点太少时，容易因为节点分布不均匀而造成<strong>缓存热点</strong>的问题。为了解决这种热点问题，一致性 hash 算法引入了虚拟节点机制，即对每一个节点计算多个 hash，每个计算结果位置都放置一个虚拟节点。这样就实现了数据的均匀分布，负载均衡。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/consistent-hashing-algorithm.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/consistent-hashing-algorithm.png" alt="consistent-hashing-algorithm"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/consistent-hashing-algorithm.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/consistent-hashing-algorithm.png" alt="consistent-hashing-algorithm"></a></p>
 <h4><span id="redis-cluster-的-hash-slot-算法">redis cluster 的 hash slot 算法</span></h4><p>redis cluster 有固定的 <code>16384</code> 个 hash slot，对每个 <code>key</code> 计算 <code>CRC16</code> 值，然后对 <code>16384</code> 取模，可以获取 key 对应的 hash slot。</p>
 <p>redis cluster 中每个 master 都会持有部分 slot，比如有 3 个 master，那么可能每个 master 持有 5000 多个 hash slot。hash slot 让 node 的增加和移除很简单，增加一个 master，就将其他 master 的 hash slot 移动部分过去，减少一个 master，就将它的 hash slot 移动到其他 master 上去。移动 hash slot 的成本是非常低的。客户端的 api，可以对指定的数据，让他们走同一个 hash slot，通过 <code>hash tag</code> 来实现。</p>
 <p>任何一台机器宕机，另外两个节点，不影响的。因为 key 找的是 hash slot，不是机器。</p>
-<p><a href="https://github.com/Disda-coding/advanced-java/blob/master/images/hash-slot.png" target="_blank" rel="noopener"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/hash-slot.png" alt="hash-slot"></a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Disda-coding/advanced-java/blob/master/images/hash-slot.png"><img src="https://github.com/Disda-coding/advanced-java/raw/master/images/hash-slot.png" alt="hash-slot"></a></p>
 <h3><span id="redis-cluster-的高可用与主备切换原理">redis cluster 的高可用与主备切换原理</span></h3><p>redis cluster 的高可用的原理，几乎跟哨兵是类似的。</p>
 <h4><span id="判断节点宕机">判断节点宕机</span></h4><p>如果一个节点认为另外一个节点宕机，那么就是 <code>pfail</code>，<strong>主观宕机</strong>。如果多个节点都认为另外一个节点宕机了，那么就是 <code>fail</code>，<strong>客观宕机</strong>，跟哨兵的原理几乎一样，sdown，odown。</p>
 <p>在 <code>cluster-node-timeout</code> 内，某个节点一直没有返回 <code>pong</code>，那么就被认为 <code>pfail</code>。</p>
@@ -581,7 +579,7 @@
 <h4><span id="与哨兵比较">与哨兵比较</span></h4><p>整个流程跟哨兵相比，非常类似，所以说，redis cluster 功能强大，直接集成了 replication 和 sentinel 的功能。</p>
 <h1><span id="生产环境中的-redis-是怎么部署的">生产环境中的 redis 是怎么部署的？</span></h1><h2><span id="面试官心理分析">面试官心理分析</span></h2><p>看看你了解不了解你们公司的 redis 生产集群的部署架构，如果你不了解，那么确实你就很失职了，你的 redis 是主从架构？集群架构？用了哪种集群方案？有没有做高可用保证？有没有开启持久化机制确保可以进行数据恢复？线上 redis 给几个 G 的内存？设置了哪些参数？压测后你们 redis 集群承载多少 QPS？</p>
 <p>兄弟，这些你必须是门儿清的，否则你确实是没好好思考过。</p>
-<h2><span id="面试题剖析">面试题剖析</span></h2><p>redis cluster，10 台机器，5 台机器部署了 redis 主实例，另外 5 台机器部署了 redis 的从实例，每个主实例挂了一个从实例，5 个节点对外提供读写服务，每个节点的读写高峰qps可能可以达到每秒 5 万，5 台机器最多是 25 万读写请求/s。</p>
+<h2><span id="面试题剖析">面试题剖析</span></h2><p>redis cluster，10 台机器，5 台机器部署了 redis 主实例，另外 5 台机器部署了 redis 的从实例，每个主实例挂了一个从实例，5 个节点对外提供读写服务，每个节点的读写高峰qps可能可以达到每秒 5 万，5 台机器最多是 25 万读写请求&#x2F;s。</p>
 <p>机器是什么配置？32G 内存+ 8 核 CPU + 1T 磁盘，但是分配给 redis 进程的是10g内存，一般线上生产环境，redis 的内存尽量不要超过 10g，超过 10g 可能会有问题。</p>
 <p>5 台机器对外提供读写，一共有 50g 内存。</p>
 <p>因为每个主实例都挂了一个从实例，所以是高可用的，任何一个主实例宕机，都会自动故障迁移，redis 从实例会自动变成主实例继续提供读写服务。</p>

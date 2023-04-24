@@ -1,50 +1,50 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>Tencent-SCF | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Tencent-SCF</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">Tencent-SCF</h1><div class="post-content"><p>记录一下使用serverless SCF中实践的过程遇到的一些坑。</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
-<li><a href="#配置环境">配置环境</a><ul>
-<li><a href="#设置api密钥">设置API密钥</a></li>
-<li><a href="#设置角色">设置角色</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83">配置环境</a><ul>
+<li><a href="#%E8%AE%BE%E7%BD%AEapi%E5%AF%86%E9%92%A5">设置API密钥</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E8%A7%92%E8%89%B2">设置角色</a></li>
 </ul>
 </li>
-<li><a href="#生产环境">生产环境</a><ul>
-<li><a href="#控制台">控制台</a></li>
+<li><a href="#%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83">生产环境</a><ul>
+<li><a href="#%E6%8E%A7%E5%88%B6%E5%8F%B0">控制台</a></li>
 <li><a href="#cli">CLI</a></li>
-<li><a href="#vscode推荐">VSCode（推荐）</a></li>
+<li><a href="#vscode%E6%8E%A8%E8%8D%90">VSCode（推荐）</a></li>
 </ul>
 </li>
-<li><a href="#scf进阶使用">SCF进阶使用</a><ul>
-<li><a href="#测试">测试</a></li>
-<li><a href="#日志查询">日志查询</a></li>
-<li><a href="#scf监控与告警">SCF监控与告警</a></li>
+<li><a href="#scf%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8">SCF进阶使用</a><ul>
+<li><a href="#%E6%B5%8B%E8%AF%95">测试</a></li>
+<li><a href="#%E6%97%A5%E5%BF%97%E6%9F%A5%E8%AF%A2">日志查询</a></li>
+<li><a href="#scf%E7%9B%91%E6%8E%A7%E4%B8%8E%E5%91%8A%E8%AD%A6">SCF监控与告警</a></li>
 </ul>
 </li>
-<li><a href="#scf触发器类型以及如何配置">SCF触发器类型以及如何配置</a><ul>
-<li><a href="#触发器类型">触发器类型</a></li>
-<li><a href="#scf网络与配置">SCF网络与配置</a><ul>
-<li><a href="#配置vpc">配置VPC</a></li>
+<li><a href="#scf%E8%A7%A6%E5%8F%91%E5%99%A8%E7%B1%BB%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE">SCF触发器类型以及如何配置</a><ul>
+<li><a href="#%E8%A7%A6%E5%8F%91%E5%99%A8%E7%B1%BB%E5%9E%8B">触发器类型</a></li>
+<li><a href="#scf%E7%BD%91%E7%BB%9C%E4%B8%8E%E9%85%8D%E7%BD%AE">SCF网络与配置</a><ul>
+<li><a href="#%E9%85%8D%E7%BD%AEvpc">配置VPC</a></li>
 </ul>
 </li>
-<li><a href="#配置环境变量">配置环境变量</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">配置环境变量</a></li>
 <li><a href="#api-explorer">API Explorer</a></li>
 </ul>
 </li>
 </ul>
 <!-- tocstop -->
 
-<h1><span id="配置环境">配置环境</span></h1><h2><span id="设置api密钥">设置API密钥</span></h2><p><img src="image-20200507125902880.png" alt="设置API密钥"></p>
+<h1><span id="配置环境">配置环境</span></h1><h2><span id="设置api密钥">设置API密钥</span></h2><p><img src="/2020/05/07/SCF/image-20200507125902880.png" alt="设置API密钥"></p>
 <p>登录腾讯云，在云产品中去设置一个新的秘钥。</p>
-<h2><span id="设置角色">设置角色</span></h2><p><img src="image-20200507130010962.png" alt="设置角色"></p>
+<h2><span id="设置角色">设置角色</span></h2><p><img src="/2020/05/07/SCF/image-20200507130010962.png" alt="设置角色"></p>
 <p>需要注意的是我们需要为scf去设置角色，防止上传的时候出现问题。</p>
-<p><img src="image-20200507130137864.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507130137864.png"></p>
 <p>选择一个策略名，然后重命名为SCF_QcsRole，这个是使用命令行工具的时候运行scf deploy的时候默认上传使用的名字。</p>
 <h1><span id="生产环境">生产环境</span></h1><h2><span id="控制台">控制台</span></h2><p>直接打开我们web端的控制台去coding</p>
 <h2><span id="cli">CLI</span></h2><ul>
 <li>配置python环境和pip。</li>
 </ul>
-<p><a href="https://cloud.tencent.com/document/product/583/33449" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/583/33449</a> 根据链接配置</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/document/product/583/33449">https://cloud.tencent.com/document/product/583/33449</a> 根据链接配置</p>
 <ul>
 <li>执行以下命令，并按照提示输入对应信息：</li>
 </ul>
@@ -57,15 +57,15 @@
 <blockquote>
 <p>使用本地调试，然后选择方法即可</p>
 </blockquote>
-<p><img src="image-20200507132307806.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507132307806.png"></p>
 <ul>
 <li>控制台</li>
 </ul>
 <blockquote>
 <p>通过 函数服务-&gt; 函数代码里面选择测试方法即可</p>
 </blockquote>
-<p><img src="image-20200507132358519.png" alt></p>
-<p><img src="image-20200507132425062.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507132358519.png"></p>
+<p><img src="/2020/05/07/SCF/image-20200507132425062.png"></p>
 <h2><span id="日志查询">日志查询</span></h2><ul>
 <li><p>方法一</p>
 <blockquote>
@@ -78,22 +78,22 @@
 </blockquote>
 </li>
 </ul>
-<p><img src="image-20200507132646019.png" alt="日志流水"></p>
+<p><img src="/2020/05/07/SCF/image-20200507132646019.png" alt="日志流水"></p>
 <ol>
 <li><p>创建日志集（地点一定要保持一致）</p>
-<p><img src="image-20200507133349054.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507133349054.png"></p>
 </li>
 <li><p>创建日志主题</p>
-<p><img src="image-20200507133421836.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507133421836.png"></p>
 </li>
 <li><p>创建日志索引</p>
-<p><img src="image-20200507133451675.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507133451675.png"></p>
 </li>
 <li><p>云函数配置日志投递</p>
-<p><img src="image-20200507133545799.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507133545799.png"></p>
 </li>
 <li><p>查询日志</p>
-<p><img src="image-20200507133738427.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507133738427.png"></p>
 </li>
 </ol>
 <p>在函数配置中可以配置日志投递信息，选择日志集就可以了。</p>
@@ -104,11 +104,11 @@
 </blockquote>
 </li>
 <li><p>配置告警</p>
-<p><img src="image-20200507134302273.png" alt></p>
-<p><img src="image-20200507134340161.png" alt></p>
-<p><img src="image-20200507134616754.png" alt></p>
-<p><img src="image-20200507134558753.png" alt></p>
-<p><img src="image-20200507143042137.png" alt></p>
+<p><img src="/2020/05/07/SCF/image-20200507134302273.png"></p>
+<p><img src="/2020/05/07/SCF/image-20200507134340161.png"></p>
+<p><img src="/2020/05/07/SCF/image-20200507134616754.png"></p>
+<p><img src="/2020/05/07/SCF/image-20200507134558753.png"></p>
+<p><img src="/2020/05/07/SCF/image-20200507143042137.png"></p>
 </li>
 </ol>
 <h1><span id="scf触发器类型以及如何配置">SCF触发器类型以及如何配置</span></h1><h2><span id="触发器类型">触发器类型</span></h2><ul>
@@ -118,10 +118,10 @@
 <li>Ckafka触发</li>
 <li>API网关触发</li>
 </ul>
-<h2><span id="scf网络与配置">SCF网络与配置</span></h2><p><img src="image-20200507143736842.png" alt></p>
-<h3><span id="配置vpc">配置VPC</span></h3><p><img src="image-20200507155739972.png" alt></p>
-<p><img src="image-20200507155713492.png" alt></p>
-<h2><span id="配置环境变量">配置环境变量</span></h2><p><img src="image-20200507155926430.png" alt></p>
+<h2><span id="scf网络与配置">SCF网络与配置</span></h2><p><img src="/2020/05/07/SCF/image-20200507143736842.png"></p>
+<h3><span id="配置vpc">配置VPC</span></h3><p><img src="/2020/05/07/SCF/image-20200507155739972.png"></p>
+<p><img src="/2020/05/07/SCF/image-20200507155713492.png"></p>
+<h2><span id="配置环境变量">配置环境变量</span></h2><p><img src="/2020/05/07/SCF/image-20200507155926430.png"></p>
 <h2><span id="api-explorer">API Explorer</span></h2><blockquote>
 <p>文档-&gt;API中心-&gt;云函数-&gt;函数相关接口-&gt;运行函数-&gt;API Explorer</p>
 </blockquote>

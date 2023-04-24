@@ -1,68 +1,68 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>JVM | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">JVM</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">JVM</h1><div class="post-content"><p>盘点了常考的JVM考点</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
-<li><a href="#对java的理解">对Java的理解</a></li>
-<li><a href="#compile-once-run-anywhere如何实现">Compile Once, Run Anywhere如何实现</a></li>
-<li><a href="#为什么jvm不直接将源码解析成机器码去执行">为什么JVM不直接将源码解析成机器码去执行</a></li>
-<li><a href="#jvm如何加载class文件">JVM如何加载.class文件</a></li>
-<li><a href="#反射">反射</a><ul>
-<li><a href="#获取构造函数">获取构造函数</a></li>
-<li><a href="#获取修饰符">获取修饰符</a></li>
-<li><a href="#获取名字">获取名字</a></li>
-<li><a href="#获取字段属性">获取字段（属性）</a></li>
-<li><a href="#获取方法">获取方法</a></li>
-<li><a href="#设置访问属性">设置访问属性</a></li>
-<li><a href="#使用方法">使用方法</a></li>
+<li><a href="#%E5%AF%B9java%E7%9A%84%E7%90%86%E8%A7%A3">对Java的理解</a></li>
+<li><a href="#compile-once-run-anywhere%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0">Compile Once, Run Anywhere如何实现</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88jvm%E4%B8%8D%E7%9B%B4%E6%8E%A5%E5%B0%86%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E6%88%90%E6%9C%BA%E5%99%A8%E7%A0%81%E5%8E%BB%E6%89%A7%E8%A1%8C">为什么JVM不直接将源码解析成机器码去执行</a></li>
+<li><a href="#jvm%E5%A6%82%E4%BD%95%E5%8A%A0%E8%BD%BDclass%E6%96%87%E4%BB%B6">JVM如何加载.class文件</a></li>
+<li><a href="#%E5%8F%8D%E5%B0%84">反射</a><ul>
+<li><a href="#%E8%8E%B7%E5%8F%96%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0">获取构造函数</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E4%BF%AE%E9%A5%B0%E7%AC%A6">获取修饰符</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E5%90%8D%E5%AD%97">获取名字</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E5%AD%97%E6%AE%B5%E5%B1%9E%E6%80%A7">获取字段（属性）</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95">获取方法</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E8%AE%BF%E9%97%AE%E5%B1%9E%E6%80%A7">设置访问属性</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95">使用方法</a></li>
 </ul>
 </li>
-<li><a href="#类从编译到执行的过程">类从编译到执行的过程</a></li>
-<li><a href="#谈谈classloader">谈谈ClassLoader</a></li>
-<li><a href="#classloader的种类">ClassLoader的种类</a></li>
-<li><a href="#类加载器双亲委派模型">类加载器双亲委派模型</a><ul>
-<li><a href="#为什么要使用双亲委派模型">为什么要使用双亲委派模型</a></li>
-<li><a href="#为什么需要破坏双亲委派">为什么需要破坏双亲委派？</a></li>
+<li><a href="#%E7%B1%BB%E4%BB%8E%E7%BC%96%E8%AF%91%E5%88%B0%E6%89%A7%E8%A1%8C%E7%9A%84%E8%BF%87%E7%A8%8B">类从编译到执行的过程</a></li>
+<li><a href="#%E8%B0%88%E8%B0%88classloader">谈谈ClassLoader</a></li>
+<li><a href="#classloader%E7%9A%84%E7%A7%8D%E7%B1%BB">ClassLoader的种类</a></li>
+<li><a href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B">类加载器双亲委派模型</a><ul>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B">为什么要使用双亲委派模型</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE">为什么需要破坏双亲委派？</a></li>
 </ul>
 </li>
-<li><a href="#类的加载方式">类的加载方式</a><ul>
-<li><a href="#两种类加载方式的区别">两种类加载方式的区别：</a></li>
-<li><a href="#forname和loadclass的区别">forName和loadCLass的区别：</a></li>
+<li><a href="#%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%96%B9%E5%BC%8F">类的加载方式</a><ul>
+<li><a href="#%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%96%B9%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB">两种类加载方式的区别：</a></li>
+<li><a href="#forname%E5%92%8Cloadclass%E7%9A%84%E5%8C%BA%E5%88%AB">forName和loadCLass的区别：</a></li>
 </ul>
 </li>
-<li><a href="#java内存模型">Java内存模型</a><ul>
-<li><a href="#内存简介">内存简介</a></li>
-<li><a href="#地址空间的划分">地址空间的划分</a></li>
-<li><a href="#jvm内存模型">JVM内存模型</a><ul>
-<li><a href="#程序计数器program-counter-register">程序计数器（Program Counter Register）</a></li>
-<li><a href="#java虚拟机栈stack">Java虚拟机栈（Stack）</a><ul>
-<li><a href="#递归为什么会引发javalangstackoverflowerror异常">递归为什么会引发java.lang.StackOverflowError异常</a></li>
+<li><a href="#java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">Java内存模型</a><ul>
+<li><a href="#%E5%86%85%E5%AD%98%E7%AE%80%E4%BB%8B">内存简介</a></li>
+<li><a href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E7%9A%84%E5%88%92%E5%88%86">地址空间的划分</a></li>
+<li><a href="#jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">JVM内存模型</a><ul>
+<li><a href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8program-counter-register">程序计数器（Program Counter Register）</a></li>
+<li><a href="#java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88stack">Java虚拟机栈（Stack）</a><ul>
+<li><a href="#%E9%80%92%E5%BD%92%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%BC%95%E5%8F%91javalangstackoverflowerror%E5%BC%82%E5%B8%B8">递归为什么会引发java.lang.StackOverflowError异常</a></li>
 </ul>
 </li>
-<li><a href="#本地方法栈">本地方法栈</a></li>
-<li><a href="#元空间与永久代">元空间与永久代</a><ul>
-<li><a href="#metaspace相比permgen的优势">MetaSpace相比PermGen的优势</a></li>
+<li><a href="#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88">本地方法栈</a></li>
+<li><a href="#%E5%85%83%E7%A9%BA%E9%97%B4%E4%B8%8E%E6%B0%B8%E4%B9%85%E4%BB%A3">元空间与永久代</a><ul>
+<li><a href="#metaspace%E7%9B%B8%E6%AF%94permgen%E7%9A%84%E4%BC%98%E5%8A%BF">MetaSpace相比PermGen的优势</a></li>
 </ul>
 </li>
-<li><a href="#java堆heap">Java堆（Heap）</a></li>
-<li><a href="#java三大性能调优参数-xms-xmx-xss的含义">Java三大性能调优参数-Xms –Xmx –Xss的含义</a></li>
-<li><a href="#java内存模型中堆和栈的区别-内存分配策略-">Java内存模型中堆和栈的区别-内存分配策略【-】</a></li>
-<li><a href="#元空间-堆-线程独占部分间的联系-内存角度">元空间、堆、线程独占部分间的联系-内存角度【】</a></li>
-<li><a href="#不同jdk版本间intern方法的区别">不同JDK版本间intern()方法的区别</a></li>
+<li><a href="#java%E5%A0%86heap">Java堆（Heap）</a></li>
+<li><a href="#java%E4%B8%89%E5%A4%A7%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E5%8F%82%E6%95%B0-xms-xmx-xss%E7%9A%84%E5%90%AB%E4%B9%89">Java三大性能调优参数-Xms –Xmx –Xss的含义</a></li>
+<li><a href="#java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB-%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5-">Java内存模型中堆和栈的区别-内存分配策略【-】</a></li>
+<li><a href="#%E5%85%83%E7%A9%BA%E9%97%B4-%E5%A0%86-%E7%BA%BF%E7%A8%8B%E7%8B%AC%E5%8D%A0%E9%83%A8%E5%88%86%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB-%E5%86%85%E5%AD%98%E8%A7%92%E5%BA%A6">元空间、堆、线程独占部分间的联系-内存角度【】</a></li>
+<li><a href="#%E4%B8%8D%E5%90%8Cjdk%E7%89%88%E6%9C%AC%E9%97%B4intern%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB">不同JDK版本间intern()方法的区别</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#引入">引入</a></li>
-<li><a href="#字面量和运行时常量池">字面量和运行时常量池</a><ul>
-<li><a href="#补充">补充:</a></li>
+<li><a href="#%E5%BC%95%E5%85%A5">引入</a></li>
+<li><a href="#%E5%AD%97%E9%9D%A2%E9%87%8F%E5%92%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0">字面量和运行时常量池</a><ul>
+<li><a href="#%E8%A1%A5%E5%85%85">补充:</a></li>
 </ul>
 </li>
-<li><a href="#new-string创建了几个对象">new String创建了几个对象</a></li>
-<li><a href="#运行时常量池的动态扩展">运行时常量池的动态扩展</a></li>
-<li><a href="#intern-的正确用法">intern 的正确用法</a></li>
-<li><a href="#总结">总结</a></li>
+<li><a href="#new-string%E5%88%9B%E5%BB%BA%E4%BA%86%E5%87%A0%E4%B8%AA%E5%AF%B9%E8%B1%A1">new String创建了几个对象</a></li>
+<li><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0%E7%9A%84%E5%8A%A8%E6%80%81%E6%89%A9%E5%B1%95">运行时常量池的动态扩展</a></li>
+<li><a href="#intern-%E7%9A%84%E6%AD%A3%E7%A1%AE%E7%94%A8%E6%B3%95">intern 的正确用法</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
 </ul>
 <!-- tocstop -->
 
@@ -82,10 +82,10 @@
 <td align="center">异常处理</td>
 </tr>
 </tbody></table>
-<p><img src="image-20200329101756779.png" alt></p>
+<p><img src="/2020/03/29/JVM/image-20200329101756779.png"></p>
 <h2><span id="compile-once-run-anywhere如何实现">Compile Once, Run Anywhere如何实现</span></h2><p>Javap是jdk自带的反汇编器，可以查看java编译器为我们生成的字节码。                               </p>
-<p><img src="image-20200329101856128.png" alt></p>
-<p><img src="image-20200329101916755.png" alt></p>
+<p><img src="/2020/03/29/JVM/image-20200329101856128.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329101916755.png"></p>
 <ul>
 <li><p>Java源码会被编译成字节码文件，再由不同平台的JVM解析</p>
 </li>
@@ -113,34 +113,34 @@
 </li>
 </ul>
 <p>初始化：对静态变量和静态代码块执行初始化工作</p>
-<p><img src="image-20200329102811874.png" alt></p>
+<p><img src="/2020/03/29/JVM/image-20200329102811874.png"></p>
 <h2><span id="反射">反射</span></h2><p>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象都能调用它的任意方法和属性；这种动态获取信息以及动态调用对象方法的功能称为java语言的反射机制</p>
-<p> <img src="image-20200329103352571.png" alt>                             </p>
-<p> <img src="image-20200329103359919.png" alt></p>
+<p> <img src="/2020/03/29/JVM/image-20200329103352571.png">                             </p>
+<p> <img src="/2020/03/29/JVM/image-20200329103359919.png"></p>
 <h3><span id="获取构造函数">获取构造函数</span></h3><p>　　　getDeclaredConstructors();　　　　获取所有的构造函数</p>
 <p>　　　getDeclaredConstructor(参数类型);　　这个方法会返回制定参数类型的</p>
 <p>所有构造器，<strong>包括</strong>public的和非public的，当然也包括private的。</p>
 <p>　　　getConstructors();　　　　　　　　　　获取所有公开的构造函数</p>
 <p>　　　getConstructor(参数类型);　　　　　　　　获取单个公开的构造函数</p>
-<h3><span id="获取修饰符">获取修饰符</span></h3><p>　　　getModifiers();　　//获取所有修饰符</p>
+<h3><span id="获取修饰符">获取修饰符</span></h3><p>　　　getModifiers();　　&#x2F;&#x2F;获取所有修饰符</p>
 <p>　　　返回类型：整数类型，如果有两个修饰符，则返回两个修饰符之和，例如public  static void getAll(){  }</p>
 <p>　　　返回值会是public和static之和</p>
 <p>　　　整数定义：</p>
 <p>　　　0–默认不写 1–public 2–private 4–protected<br> 　　8–static 16–final 32–synchronized<br> 　　64–volatile 128–transient 256–native<br> 　　512–interface 1024–abstract</p>
-<h3><span id="获取名字">　获取名字</span></h3><p>　　　返回类型：String,可以反射类名，方法名，构造函数名等等</p>
-<p>　　　getName();　　　　//获取全名 例如：com.bean.Book</p>
-<p>　　　getSimpleName()　　//获取类名 例如：Book</p>
-<h3><span id="获取字段属性">获取字段（属性）</span></h3><p>　　　getFields()　　　//返回一个Field类型数组，其中包含当前类的public字段，如果此类继承于某个父类，同时包括父类的public字段。其它的proteced和private字段，无论是属于当前类还是父类都不被此方法获取。</p>
-<p>　　　getField(String name)　　//参数可以指定字段　　获取单个public字段</p>
+<h3><span id="获取名字">获取名字</span></h3><p>　　　返回类型：String,可以反射类名，方法名，构造函数名等等</p>
+<p>　　　getName();　　　　&#x2F;&#x2F;获取全名 例如：com.bean.Book</p>
+<p>　　　getSimpleName()　　&#x2F;&#x2F;获取类名 例如：Book</p>
+<h3><span id="获取字段属性">获取字段（属性）</span></h3><p>　　　getFields()　　　&#x2F;&#x2F;返回一个Field类型数组，其中包含当前类的public字段，如果此类继承于某个父类，同时包括父类的public字段。其它的proteced和private字段，无论是属于当前类还是父类都不被此方法获取。</p>
+<p>　　　getField(String name)　　&#x2F;&#x2F;参数可以指定字段　　获取单个public字段</p>
 <p>　　　</p>
-<p>　　　getDeclaredFields()　　//返回一个Field类型数组，结果包含当前类的所有字段，private、protected、public或者无修饰符都在内。另外，此方法返回的结果不包括父类的任何字段。 此方法只是针对当前类的。</p>
-<p>　　　getDeclaredField(String name)　　//获取单个字段 参数可以指定字段</p>
-<h3><span id="获取方法">　获取方法</span></h3><p>　　　getMethods()　　//<strong>返回当前Class对象表示的类或接口的所有公有成员方法对象数组,包括已声明的和从父类继承或实现接口的方法</strong>　　　getMethod(String name)　　//获取单个公开的方法，参数是可以指定方法名</p>
-<p>　    getDeclaredMethods()　　　//获取所有的方法</p>
+<p>　　　getDeclaredFields()　　&#x2F;&#x2F;返回一个Field类型数组，结果包含当前类的所有字段，private、protected、public或者无修饰符都在内。另外，此方法返回的结果不包括父类的任何字段。 此方法只是针对当前类的。</p>
+<p>　　　getDeclaredField(String name)　　&#x2F;&#x2F;获取单个字段 参数可以指定字段</p>
+<h3><span id="获取方法">获取方法</span></h3><p>　　　getMethods()　　&#x2F;&#x2F;<strong>返回当前Class对象表示的类或接口的所有公有成员方法对象数组,包括已声明的和从父类继承或实现接口的方法</strong>　　　getMethod(String name)　　&#x2F;&#x2F;获取单个公开的方法，参数是可以指定方法名</p>
+<p>　    getDeclaredMethods()　　　&#x2F;&#x2F;获取所有的方法</p>
 <p>　　　注意：它不会获取系统自带的方法，<strong>不</strong>包括从父类继承和接口实现的方法</p>
-<p>getDeclaredMethod(String name)　　　 //获取单个的所有方法　参数是可指定方法名</p>
-<h3><span id="设置访问属性">　设置访问属性</span></h3><p>　　　clz.setAccessible(true)　　//可访问</p>
-<p>　　　clz.setAccessible(false)　　//不可访问</p>
+<p>getDeclaredMethod(String name)　　　 &#x2F;&#x2F;获取单个的所有方法　参数是可指定方法名</p>
+<h3><span id="设置访问属性">设置访问属性</span></h3><p>　　　clz.setAccessible(true)　　&#x2F;&#x2F;可访问</p>
+<p>　　　clz.setAccessible(false)　　&#x2F;&#x2F;不可访问</p>
 <h3><span id="使用方法">使用方法</span></h3><p>　　　method.invoke(Object obj,Object… args)</p>
 <p>　　　obj：如果是实例方法，则放个该方法的类对象给它</p>
 <p>　　　obj：静态方法，写null</p>
@@ -153,14 +153,14 @@
 <p>Ø ExtClassLoader：Java编写，加载扩展库Javax.*</p>
 <p>Ø AppClassLoader：Java编写，加载程序所在目录</p>
 <p>Ø 自定义ClassLoader：java编写，定制化加载 </p>
-<h2><span id="类加载器双亲委派模型">类加载器双亲委派模型</span></h2><p><img src="image-20200329105409059.png" alt></p>
+<h2><span id="类加载器双亲委派模型">类加载器双亲委派模型</span></h2><p><img src="/2020/03/29/JVM/image-20200329105409059.png"></p>
 <p>自底向上看如果曾经加载过，就直接返回。如果没有就向上委派给父类加载器。</p>
 <p>最终到Bootstrap ClassLoader，如果它也没有，则进入Load JRE\lib\rt.jar或者-Xbootclasspath</p>
 <p>（这个就是命令行输入-jar 接上jar包，接上的参数）选项指定的jar包中寻找。</p>
 <p>如果没有找到，就向下继续寻找。</p>
-<p><img src="image-20200329105647977.png" alt></p>
+<p><img src="/2020/03/29/JVM/image-20200329105647977.png"></p>
 <p>为什么它们都是extends URLClassLoader却能保证父类的继承关系：即custom父类是app，app父类是ext</p>
-<p><img src="image-20200329105703238.png" alt></p>
+<p><img src="/2020/03/29/JVM/image-20200329105703238.png"></p>
 <p>Ext的parent是空，bootstrap clsloader是c++的</p>
 <h3><span id="为什么要使用双亲委派模型">为什么要使用双亲委派模型</span></h3><p>以System举例，如果类a打印了一句话加载了System的字节码，类b也打印一句话反复加载已加载的字节码，就会造成内存的浪费。</p>
 <p> 采用双亲委派的一个好处是比如加载位于rt.jar包中的类java.lang.Object，不管是哪个加载器加载这个类，最终都是委托给顶层的启动类加载器进行加载，这样就保证了使用不同的类加载器最终得到的都是同样一个Object对象。</p>
@@ -168,52 +168,50 @@
 <h2><span id="类的加载方式">类的加载方式</span></h2><p>Ø 隐式加载 new</p>
 <p>Ø 显式加载 loadClass，forName等</p>
 <ul>
-<li>第一种：使用Class.forName(String classPath)　　//ClassPath：写需要反射的类名，一般是以包名.类名</li>
+<li>第一种：使用Class.forName(String classPath)　　&#x2F;&#x2F;ClassPath：写需要反射的类名，一般是以包名.类名</li>
 </ul>
 <p>注意事项：这里会产生一个ClassNotFoundException异常，我们需要将异常处理或者抛出</p>
 <p>返回值：Class对象</p>
 <p>​                               </p>
 <ul>
-<li>第二种：直接使用Class clz = 类名.class</li>
+<li>第二种：直接使用Class clz &#x3D; 类名.class</li>
 </ul>
 <p>这种情况一般在我们知道有这个类的时候去使用</p>
 <ul>
-<li>第三种：Class clz = 对象. getClass();</li>
+<li>第三种：Class clz &#x3D; 对象. getClass();</li>
 </ul>
 <p>　前提是对象已经被实例化出来了 </p>
 <h3><span id="两种类加载方式的区别">两种类加载方式的区别：</span></h3><p>Ø 隐式加载能够直接获取对象的实例，而显式加载需要调用 Class 对象的 newInstance() 方法来生成对象的实例。</p>
 <p>Ø 隐式加载能够使用有参的构造函数，而使用 Class 对象的 newInstance() 不支持传入参数，如果想使用有参的构造函数，必须通过反射的方式，来获取到该类的有参构造方法。</p>
 <h3><span id="forname和loadclass的区别">forName和loadCLass的区别：</span></h3><p>Ø 使用 loadClass() 方法获得的 Class 对象只完成了类装载过程中的第一步：加载，后续的操作均未进行。（还没有链接的）</p>
 <p>Ø 使用 Class.forName() 方法获得 Class 对象是已经执行完初始化的了</p>
-<h2><span id="java内存模型">Java内存模型</span></h2><h3><span id="内存简介">内存简介</span></h3><p><img src="image-20200329112332929.png" alt></p>
-<h3><span id="地址空间的划分">地址空间的划分</span></h3><p><img src="image-20200329112347172.png" alt></p>
-<h3><span id="jvm内存模型">JVM内存模型</span></h3><p><img src="image-20200329112436551.png" alt></p>
+<h2><span id="java内存模型">Java内存模型</span></h2><h3><span id="内存简介">内存简介</span></h3><p><img src="/2020/03/29/JVM/image-20200329112332929.png"></p>
+<h3><span id="地址空间的划分">地址空间的划分</span></h3><p><img src="/2020/03/29/JVM/image-20200329112347172.png"></p>
+<h3><span id="jvm内存模型">JVM内存模型</span></h3><p><img src="/2020/03/29/JVM/image-20200329112436551.png"></p>
 <h4><span id="程序计数器program-counter-register">程序计数器（Program Counter Register）</span></h4><p>Ø 当前线程所执行的字节码行号指示器（逻辑）</p>
 <p>Ø 改变计数器的值来选取下一条需要执行的字节码指令</p>
 <p>Ø 和线程是一对一的关系即“线程私有”</p>
 <p>Ø 对Java方法计数，如果是Native方法则计数器值为Undefined</p>
 <p>Ø 不会发生内存泄漏</p>
-<h4><span id="java虚拟机栈stack">Java虚拟机栈（Stack）</span></h4><p><img src="image-20200329112546740.png" alt>                            </p>
+<h4><span id="java虚拟机栈stack">Java虚拟机栈（Stack）</span></h4><p><img src="/2020/03/29/JVM/image-20200329112546740.png">                            </p>
 <ul>
 <li><p>Java虚拟机栈保存的主要内容为栈帧，每一次函数调用，都会有一个对应的栈帧被压入java栈，每一个函数调用结束，都会有一个栈帧被弹出java栈。</p>
 </li>
 <li><p>栈帧包含：本地变量表、操作数栈、返回地址等</p>
 </li>
-<li><p>虚拟机提供参数<strong>-Xss</strong>来指定线程的最大栈空间，决定了函数调用的最大深度。 </p>
+<li><p>虚拟机提供参数**-Xss**来指定线程的最大栈空间，决定了函数调用的最大深度。</p>
 </li>
 </ul>
 <p>Java 虚拟机栈会出现两种异常：StackOverFlowError 和 OutOfMemoryError。</p>
 <ul>
-<li><p>StackOverFlowError 若 Java 虚拟机栈的大小不允许动态扩展，那么当线程请求栈的深度超过当前 Java 虚拟机栈的最大深度时，抛出 StackOverFlowError 异常。</p>
-</li>
-<li><p>OutOfMemoryError 若允许动态扩展，那么当线程请求栈时内存用完了，无法再动态扩展时，抛出 OutOfMemoryError 异常。</p>
-<p><img src="image-20200329112911648.png" alt></p>
-<p><img src="image-20200329113050542.png" alt></p>
-<p><img src="image-20200329113102131.png" alt></p>
-<p><img src="image-20200329113112976.png" alt></p>
-<p><img src="image-20200329113122285.png" alt></p>
-</li>
+<li>StackOverFlowError 若 Java 虚拟机栈的大小不允许动态扩展，那么当线程请求栈的深度超过当前 Java 虚拟机栈的最大深度时，抛出 StackOverFlowError 异常。</li>
+<li>OutOfMemoryError 若允许动态扩展，那么当线程请求栈时内存用完了，无法再动态扩展时，抛出 OutOfMemoryError 异常。</li>
 </ul>
+<p> <img src="/2020/03/29/JVM/image-20200329112911648.png"></p>
+<p>  <img src="/2020/03/29/JVM/image-20200329113050542.png"></p>
+<p> <img src="/2020/03/29/JVM/image-20200329113102131.png"></p>
+<p> <img src="/2020/03/29/JVM/image-20200329113112976.png"></p>
+<p> <img src="/2020/03/29/JVM/image-20200329113122285.png"></p>
 <p>Iconst_0 是将int值0压入操作栈中，</p>
 <p>Istone_2 是将操作数栈顶的元素(0)pop出来，存入局部变量表的第2个（0,1,2）位置中</p>
 <p>Iload_0 将局部变量表的第0个元素压入操作数栈中</p>
@@ -224,108 +222,108 @@
 <p>ireturn 返回操作数栈顶元素。</p>
 <p>返回后所有栈帧销毁</p>
 <p><font color="red">栈的内存不需要GC回收，自动销毁（运行完就回收了）。</font></p>
-<p> <img src="image-20200329113455603.png" alt></p>
+<p> <img src="/2020/03/29/JVM/image-20200329113455603.png"></p>
 <h5><span id="递归为什么会引发javalangstackoverflowerror异常">递归为什么会引发java.lang.StackOverflowError异常</span></h5><p>栈帧数超过虚拟机栈深度</p>
-<p> <img src="image-20200329113511734.png" alt></p>
-<p><img src="image-20200329113520222.png" alt></p>
+<p> <img src="/2020/03/29/JVM/image-20200329113511734.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329113520222.png"></p>
 <h4><span id="本地方法栈">本地方法栈</span></h4><p>Ø 与虚拟机栈相似，主要作用于标注了native的方法</p>
 <h4><span id="元空间与永久代">元空间与永久代</span></h4><p>它们都是Java方法区的实现</p>
 <p>元空间使用本地内存，永久代使用的是jvm内存 </p>
-<p><img src="image-20200329113534717.png" alt></p>
+<p><img src="/2020/03/29/JVM/image-20200329113534717.png"></p>
 <h5><span id="metaspace相比permgen的优势">MetaSpace相比PermGen的优势</span></h5><p>Ø 字符串常量池存在永久代中，容易出现性能问题和内存溢出</p>
 <p>Ø 类和方法的信息大小难以确定，给永久代的大小指定带来困难</p>
 <p>Ø 永久代会为GC带来不必要的复杂性（永久代在堆中）</p>
 <p>Ø 方便HotSpot与其他JVM如Jrockit的集成</p>
-<h4><span id="java堆heap">Java堆（Heap）</span></h4><p><img src="image-20200329113548468.png" alt></p>
+<h4><span id="java堆heap">Java堆（Heap）</span></h4><p><img src="/2020/03/29/JVM/image-20200329113548468.png"></p>
 <h4><span id="java三大性能调优参数-xms-xmx-xss的含义">Java三大性能调优参数-Xms –Xmx –Xss的含义</span></h4><p>Ø -Xss：规定了每个线程虚拟机栈（堆栈）的大小</p>
 <p>Ø -Xms：堆的初始值</p>
 <p>Ø -Xmx：堆能达到的最大值</p>
-<p>一般会让-Xms=-Xmx因为，当heap不够用而发生扩容时会发生内存抖动，影响程序运行时的稳定性。</p>
+<p>一般会让-Xms&#x3D;-Xmx因为，当heap不够用而发生扩容时会发生内存抖动，影响程序运行时的稳定性。</p>
 <h4><span id="java内存模型中堆和栈的区别-内存分配策略-">Java内存模型中堆和栈的区别-内存分配策略【-】</span></h4><p>Ø 静态存储：编译时确定每个数据目标在运行时的存储空间需求</p>
 <p>Ø 栈式存储：数据区需求在编译时未知，运行时模块入口前确定</p>
 <p>Ø 堆式存储：编译时或运行时模块入口都无法确定，动态分配</p>
-<p>​    <img src="image-20200329113633980.png" alt>                   </p>
+<p>​    <img src="/2020/03/29/JVM/image-20200329113633980.png">                   </p>
 <p>Ø 管理方式：栈自动释放，堆需要GC</p>
 <p>Ø 空间大小：栈比堆小</p>
 <p>Ø 碎片相关：栈产生的碎片远小于堆</p>
 <p>Ø 分配方式：栈支持静态和动态分配，而堆仅支持动态分配</p>
 <p>Ø 效率：栈的效率比堆高</p>
-<h4><span id="元空间-堆-线程独占部分间的联系-内存角度">元空间、堆、线程独占部分间的联系-内存角度【】</span></h4><p><img src="image-20200329113803997.png" alt></p>
-<p><img src="image-20200329113811855.png" alt></p>
-<p><img src="image-20200329113830564.png" alt></p>
-<p><img src="image-20200329113837079.png" alt></p>
-<p><img src="image-20200329113848685.png" alt></p>
-<h4><span id="不同jdk版本间intern方法的区别">不同JDK版本间intern()方法的区别</span></h4><p><img src="image-20200329113858806.png" alt></p>
-<p><img src="image-20200329113905280.png" alt></p>
-<p><img src="image-20200329113918059.png" alt></p>
+<h4><span id="元空间-堆-线程独占部分间的联系-内存角度">元空间、堆、线程独占部分间的联系-内存角度【】</span></h4><p><img src="/2020/03/29/JVM/image-20200329113803997.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329113811855.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329113830564.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329113837079.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329113848685.png"></p>
+<h4><span id="不同jdk版本间intern方法的区别">不同JDK版本间intern()方法的区别</span></h4><p><img src="/2020/03/29/JVM/image-20200329113858806.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329113905280.png"></p>
+<p><img src="/2020/03/29/JVM/image-20200329113918059.png"></p>
 <p><strong>JDK8中</strong></p>
 <p>False</p>
 <p>True</p>
 <p><strong>JDK6中：</strong></p>
 <p>FALSE</p>
 <p>FALSE</p>
-<p><img src="image-20200329113929389.png" alt></p>
+<p><img src="/2020/03/29/JVM/image-20200329113929389.png"></p>
 <p>在JDK1.6中所有的输出结果都是 false，因为JDK1.6以及以前版本中，常量池是放在 Perm 区（属于方法区）中的，熟悉JVM的话应该知道这是和堆区完全分开的。</p>
-<p>使用<font color="red">引号声明的字符串都是会直接在字符串常量池</font>中生成的，而 new 出来的 String 对象是放在堆空间中的。所以两者的内存地址肯定是不相同的，即使调用了intern()方法也是不影响的。如果不清楚String类的“==”和equals()的区别可以查看我的这篇博文Java面试——从Java堆、栈角度比较equals和==的区别。</p>
-<p>intern()方法在JDK1.6中的作用是：比如String s = new String(“SEU_Calvin”)，再调用s.intern()，此时返回值还是字符串”SEU_Calvin”，表面上看起来好像这个方法没什么用处。但实际上，在JDK1.6中它做了个小动作：检查字符串池里是否存在”SEU_Calvin”这么一个字符串，如果存在，就返回池里的字符串；如果不存在，该方法会把”SEU_Calvin”添加到字符串池中，然后再返回它的引用。然而在JDK1.7中却不是这样的，后面会讨论。</p>
+<p>使用<font color="red">引号声明的字符串都是会直接在字符串常量池</font>中生成的，而 new 出来的 String 对象是放在堆空间中的。所以两者的内存地址肯定是不相同的，即使调用了intern()方法也是不影响的。如果不清楚String类的“&#x3D;&#x3D;”和equals()的区别可以查看我的这篇博文Java面试——从Java堆、栈角度比较equals和&#x3D;&#x3D;的区别。</p>
+<p>intern()方法在JDK1.6中的作用是：比如String s &#x3D; new String(“SEU_Calvin”)，再调用s.intern()，此时返回值还是字符串”SEU_Calvin”，表面上看起来好像这个方法没什么用处。但实际上，在JDK1.6中它做了个小动作：检查字符串池里是否存在”SEU_Calvin”这么一个字符串，如果存在，就返回池里的字符串；如果不存在，该方法会把”SEU_Calvin”添加到字符串池中，然后再返回它的引用。然而在JDK1.7中却不是这样的，后面会讨论。</p>
 <p>下面代码</p>
 <p>两个new string就会在heap中生成一个aa，然后intern将aa的副本放入常量池中，由于是副本所以指针也不一样，因此还是false；</p>
 <p><strong>JDK1.7以上</strong></p>
-<p><img src="image-20200329113945392.png" alt></p>
-<p>String s = newString(“1”)，生成了常量池中的“1” 和堆空间中的字符串对象。</p>
+<p><img src="/2020/03/29/JVM/image-20200329113945392.png"></p>
+<p>String s &#x3D; newString(“1”)，生成了常量池中的“1” 和堆空间中的字符串对象。</p>
 <p>s.intern()，这一行的作用是s对象去常量池中寻找后发现”1”已经存在于常量池中了。</p>
-<p>String s2 = “1”，这行代码是生成一个s2的引用指向常量池中的“1”对象。</p>
+<p>String s2 &#x3D; “1”，这行代码是生成一个s2的引用指向常量池中的“1”对象。</p>
 <p>结果就是 s 和 s2 的引用地址明显不同。因此返回了false。</p>
-<p>String s3 = new String(“1”) + newString(“1”)，这行代码在字符串常量池中生成“1” ，并在堆空间中生成s3引用指向的对象（内容为”11”）。注意此时常量池中是没有 “11”对象的。</p>
+<p>String s3 &#x3D; new String(“1”) + newString(“1”)，这行代码在字符串常量池中生成“1” ，并在堆空间中生成s3引用指向的对象（内容为”11”）。注意此时常量池中是没有 “11”对象的。</p>
 <p>s3.intern()，这一行代码，是将 s3中的“11”字符串放入 String 常量池中，此时常量池中不存在“11”字符串，JDK1.6的做法是直接在常量池中生成一个 “11” 的对象。</p>
-<p><font color="red">但是在JDK1.7中，常量池中不需要再存储一份对象了，可以直接存储堆中的引用。这份引用直接指向 s3 引用的对象，也就是说s3.intern() ==s3会返回true。</font>&gt;</p>
-<p>String s4 = “11”， 这一行代码会直接去常量池中创建，但是发现已经有这个对象了，此时也就是指向 s3 引用对象的一个引用。因此s3 == s4返回了true。</p>
-<p> 看例1：<br>  String s0=”kvill”;<br>  String s1=”kvill”;<br>  String s2=”kv” + “ill”;<br>  System.out.println( s0==s1 );<br>  System.out.println( s0==s2 );<br>  结果为：<br>  true<br>  true</p>
+<p><font color="red">但是在JDK1.7中，常量池中不需要再存储一份对象了，可以直接存储堆中的引用。这份引用直接指向 s3 引用的对象，也就是说s3.intern() &#x3D;&#x3D;s3会返回true。</font>&gt;</p>
+<p>String s4 &#x3D; “11”， 这一行代码会直接去常量池中创建，但是发现已经有这个对象了，此时也就是指向 s3 引用对象的一个引用。因此s3 &#x3D;&#x3D; s4返回了true。</p>
+<p> 看例1：<br>  String s0&#x3D;”kvill”;<br>  String s1&#x3D;”kvill”;<br>  String s2&#x3D;”kv” + “ill”;<br>  System.out.println( s0&#x3D;&#x3D;s1 );<br>  System.out.println( s0&#x3D;&#x3D;s2 );<br>  结果为：<br>  true<br>  true</p>
 <p> 看例2：</p>
-<p>  String s0=”kvill”;</p>
-<p>  String s1=new String(”kvill”);</p>
-<p>  String s2=”kv” + new String(“ill”);</p>
-<p>  System.out.println( s0==s1 );</p>
-<p>  System.out.println( s0==s2 );</p>
-<p>  System.out.println( s1==s2 );</p>
+<p>  String s0&#x3D;”kvill”;</p>
+<p>  String s1&#x3D;new String(”kvill”);</p>
+<p>  String s2&#x3D;”kv” + new String(“ill”);</p>
+<p>  System.out.println( s0&#x3D;&#x3D;s1 );</p>
+<p>  System.out.println( s0&#x3D;&#x3D;s2 );</p>
+<p>  System.out.println( s1&#x3D;&#x3D;s2 );</p>
 <p>  结果为：</p>
 <p>  false</p>
 <p>  false</p>
 <p>  false</p>
 <p>  例2中s0还是常量池中”kvill”的应用，s1因为无法在编译期确定，所以是运行时创建的新对象”kvill”的引用，s2因为有后半部分new String(“ill”)所以也无法在编译期确定，所以也是一个新创建对象”kvill”的应用;明白了这些也就知道为何得出此结果了。</p>
 <p><strong>例如：</strong></p>
-<p>String str1=”ABC”； 和String str2 = new String(“ABC”); </p>
-<p><strong>String str1=”ABC”</strong> <strong>可能创建一个对象或者不创建对象，如果”ABC”这个字符串在</strong>JavaString<strong>池里不存在，会在</strong>JavaString池创建这个一个String对象(“ABC”).如果已经存在，str1直接reference to这个String池里的对象。<strong>String str2 = new String(“ABC”)</strong> 至少创建一个对象，也可能两个。因为用到new关键字，会在heap创建一个 <strong>str2</strong> 的String <strong>对象，它的</strong>value <strong>是</strong> <strong>“ABC”.*</strong>同时，如果”ABC”这个字符串在java String池里不存在，会在java String池创建这个一个String对象(“ABC”).</p>
+<p>String str1&#x3D;”ABC”； 和String str2 &#x3D; new String(“ABC”); </p>
+<p><strong>String str1&#x3D;”ABC”</strong> <strong>可能创建一个对象或者不创建对象，如果”ABC”这个字符串在</strong>JavaString<strong>池里不存在，会在</strong>JavaString池创建这个一个String对象(“ABC”).如果已经存在，str1直接reference to这个String池里的对象。<strong>String str2 &#x3D; new String(“ABC”)</strong> 至少创建一个对象，也可能两个。因为用到new关键字，会在heap创建一个 <strong>str2</strong> 的String <strong>对象，它的</strong>value <strong>是</strong> **”ABC”.***同时，如果”ABC”这个字符串在java String池里不存在，会在java String池创建这个一个String对象(“ABC”).</p>
 <h2><span id="引入">引入</span></h2><p>String，是 Java 中除了基本数据类型以外，最为重要的一个类型了。很多人会认为他比较简单。但是和 String 有关的面试题有很多，下面我随便找两道面试题，看看你能不能都答对：</p>
 <p> Q1：<code>String s = new String(&quot;hollis&quot;);</code>定义了几个对象。<br> Q2：如何理解 <code>String.intern()</code>方法？<br> 上面这两个是面试题和 String 相关的比较常考的，很多人一般都知道答案。</p>
 <p> A1：若常量池中已经存在 “hollis”，则直接引用，也就是此时只会创建一个对象，如果常量池中不存在 “hollis”，则先创建后引用，也就是有两个。<br> A2：当一个 String 实例调用intern()方法时，JVM 会查找常量池中是否有相同 Unicode 的字符串常量，如果有，则返回其的引用，如果没有，则在常量池中增加一个 Unicode 等于 str 的字符串并返回它的引用；<br> 两个答案看上去没有任何问题，但是，仔细想想好像哪里不对呀。</p>
 <p>按照上面的两个面试题的回答，就是说 new String 会检查常量池，如果有的话就直接引用，如果不存在就要在常量池创建一个，那么还要 intern 干啥？难道以下代码是没有意义的吗？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>).intern();        <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>).intern();        <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
 <p>如果，每当我们使用 new 创建字符串的时候，都会到字符串池检查，然后返回。那么以下代码也应该输出结果都是 true?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"Hollis"</span>;</span><br><span class="line">String s2 = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>).intern();</span><br><span class="line"></span><br><span class="line">System.out.println(s1 == s2);</span><br><span class="line">System.out.println(s1 == s3);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>).intern();</span><br><span class="line"></span><br><span class="line">System.out.println(s1 == s2);</span><br><span class="line">System.out.println(s1 == s3);</span><br></pre></td></tr></table></figure>
 
 <p>但是，以上代码输出结果为（base jdk1.8.0_73）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
 
 <p>不知道聪明的读者看完这段代码之后，是不是有点被搞蒙了，到底是怎么回事儿？</p>
 <p>别急，且听我慢慢道来。</p>
 <h2><span id="字面量和运行时常量池">字面量和运行时常量池</span></h2><p>JVM 为了提高性能和减少内存开销，在实例化字符串常量的时候进行了一些优化。为了减少在 JVM 中创建的字符串的数量，字符串类维护了一个字符串常量池。</p>
 <p>在 JVM 运行时区域的方法区中，有一块区域是运行时常量池，主要用来存储编译期生成的各种字面量和符号引用。</p>
 <p>了解 Class 文件结构或者做过 Java 代码的反编译的朋友可能都知道，在 java 代码被 javac 编译之后，文件结构中是包含一部分 Constant pool 的。比如以下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s = <span class="string">"Hollis"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>经过编译后，常量池内容如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Constant pool:</span><br><span class="line">#1 = Methodref          #4.#20         // java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">#2 = String             #21            // Hollis</span><br><span class="line">#3 = Class              #22            // StringDemo</span><br><span class="line">#4 = Class              #23            // java/lang/Object</span><br><span class="line">...</span><br><span class="line">#16 = Utf8               s</span><br><span class="line">..</span><br><span class="line">#21 = Utf8               Hollis</span><br><span class="line">#22 = Utf8               StringDemo</span><br><span class="line">#23 = Utf8               java/lang/Object</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Constant pool:</span><br><span class="line">#<span class="number">1</span> = Methodref          #<span class="number">4.</span>#<span class="number">20</span>         <span class="comment">// java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">#<span class="number">2</span> = String             #<span class="number">21</span>            <span class="comment">// Hollis</span></span><br><span class="line">#<span class="number">3</span> = Class              #<span class="number">22</span>            <span class="comment">// StringDemo</span></span><br><span class="line">#<span class="number">4</span> = Class              #<span class="number">23</span>            <span class="comment">// java/lang/Object</span></span><br><span class="line">...</span><br><span class="line">#<span class="number">16</span> = Utf8               s</span><br><span class="line">..</span><br><span class="line">#<span class="number">21</span> = Utf8               Hollis</span><br><span class="line">#<span class="number">22</span> = Utf8               StringDemo</span><br><span class="line">#<span class="number">23</span> = Utf8               java/lang/Object</span><br></pre></td></tr></table></figure>
 
 <p>上面的 Class 文件中的常量池中，比较重要的几个内容：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#16 = Utf8               s</span><br><span class="line">#21 = Utf8               Hollis</span><br><span class="line">#22 = Utf8               StringDemo</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#<span class="number">16</span> = Utf8               s</span><br><span class="line">#<span class="number">21</span> = Utf8               Hollis</span><br><span class="line">#<span class="number">22</span> = Utf8               StringDemo</span><br></pre></td></tr></table></figure>
 
 <p>上面几个常量中，s 就是前面提到的<strong>符号引用</strong>，而 Hollis 就是前面提到的<strong>字面量</strong>。而 Class 文件中的常量池部分的内容，会在运行期被运行时常量池加载进去。关于字面量，详情参考 Java SE Specifications。</p>
-<h4><span id="补充">补充:</span></h4><p><strong>字面量</strong>是指由字母，数字等构成的字符串或者数值，它只能作为右值出现，所谓右值是指等号右边的值，如：int a=123这里的a为左值，123为右值。</p>
+<h4><span id="补充">补充:</span></h4><p><strong>字面量</strong>是指由字母，数字等构成的字符串或者数值，它只能作为右值出现，所谓右值是指等号右边的值，如：int a&#x3D;123这里的a为左值，123为右值。</p>
 <p><strong>常量</strong>和<strong>变量</strong>都属于<strong>变量</strong>，只不过常量是赋过值后不能再改变的变量，而普通的变量可以再进行赋值操作。</p>
 <p>例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a;<span class="comment">//a变量</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> b=<span class="number">10</span>;<span class="comment">//b为常量,10为字面量</span></span><br><span class="line">string str=<span class="string">"hello world"</span>;<span class="comment">//str为变量,hello world为字面量</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a;<span class="comment">//a变量</span></span><br><span class="line">const <span class="type">int</span> b=<span class="number">10</span>;<span class="comment">//b为常量,10为字面量</span></span><br><span class="line">string str=<span class="string">&quot;hello world&quot;</span>;<span class="comment">//str为变量,hello world为字面量</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -333,13 +331,13 @@
 <p>这段代码中，我们可以知道的是，在编译期，符号引用 s 和字面量 Hollis 会被加入到 Class 文件的常量池中，然后在类加载阶段，这两个常量会进入常量池。</p>
 <p>但是，这个“进入”过程，并不会直接把所有类中定义的常量全部都加载进来，而是会做个比较，如果需要加到字符串常量池中的字符串已经存在，那么就不需要再把字符串字面量加载进来了。</p>
 <p>所以，当我们说&lt;若常量池中已经存在 “hollis”，则直接引用，也就是此时只会创建一个对象&gt;说的就是这个字符串字面量在字符串池中被创建的过程。</p>
-<p>说完了编译期的事儿了，该到运行期了，在运行期，new String(“Hollis”);执行到的时候，是要在 Java 堆中创建一个字符串对象的，而这个对象所对应的字符串字面量是保存在字符串常量池中的。但是，String s = new String(“Hollis”);，对象的符号引用 s 是保存在Java虚拟机栈上的，他保存的是堆中刚刚创建出来的的字符串对象的引用。</p>
+<p>说完了编译期的事儿了，该到运行期了，在运行期，new String(“Hollis”);执行到的时候，是要在 Java 堆中创建一个字符串对象的，而这个对象所对应的字符串字面量是保存在字符串常量池中的。但是，String s &#x3D; new String(“Hollis”);，对象的符号引用 s 是保存在Java虚拟机栈上的，他保存的是堆中刚刚创建出来的的字符串对象的引用。</p>
 <p>所以，你也就知道以下代码输出结果为 false 的原因了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>);</span><br><span class="line">String s2 = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>);</span><br><span class="line">System.out.println(s1 == s2);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>);</span><br><span class="line">System.out.println(s1 == s2);</span><br></pre></td></tr></table></figure>
 
-<p>因为，== 比较的是 s1 和 s2 在堆中创建的对象的地址，当然不同了。但是如果使用 equals，那么比较的就是字面量的内容了，那就会得到 true。</p>
-<p><img src="JVM/image-20200329114023475.png" alt="image-20200329114023475"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不同版本的JDK中，Java堆和字符串常量池之间的关系也是不同的，这里为了方便表述，就画成两个独立的物理区域了。具体情况请参考Java虚拟机规范。         1</span><br></pre></td></tr></table></figure>
+<p>因为，&#x3D;&#x3D; 比较的是 s1 和 s2 在堆中创建的对象的地址，当然不同了。但是如果使用 equals，那么比较的就是字面量的内容了，那就会得到 true。</p>
+<p><img src="/2020/03/29/JVM/image-20200329114023475.png" alt="image-20200329114023475"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不同版本的JDK中，Java堆和字符串常量池之间的关系也是不同的，这里为了方便表述，就画成两个独立的物理区域了。具体情况请参考Java虚拟机规范。         1</span><br></pre></td></tr></table></figure>
 
 <p>上图中 s1 和 s2 是两个完全不同的对象，在堆中有自己的内存空间，当然不相等了。</p>
 <p>所以，<code>String s = new String(&quot;Hollis&quot;);</code>创建几个对象的答案你也就清楚了。</p>
@@ -348,36 +346,36 @@
 <p>当一个String实例调用<code>intern()</code>方法时，JVM 会查找常量池中是否有相同 Unicode 的字符串常量，如果有，则返回其的引用，如果没有，则在常量池中增加一个 Unicode 等于 str 的字符串并返回它的引用；</p>
 <p><code>intern()</code>有两个作用，<strong>第一个是将字符串字面量放入常量池（如果池没有的话），第二个是返回这个常量的引用。</strong></p>
 <p>我们再来看下开头的那个让人产生疑惑的例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"Hollis"</span>;</span><br><span class="line">String s2 = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>).intern();</span><br><span class="line"> </span><br><span class="line">System.out.println(s1 == s2);</span><br><span class="line">System.out.println(s1 == s3);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>).intern();</span><br><span class="line"> </span><br><span class="line">System.out.println(s1 == s2);</span><br><span class="line">System.out.println(s1 == s3);</span><br></pre></td></tr></table></figure>
 
 <p>你可以简单的理解为<code>String s1 = &quot;Hollis&quot;;</code>和<code>String s3 = new String(&quot;Hollis&quot;).intern();</code>做的事情是一样的（但实际有些区别，这里暂不展开）。都是定义一个字符串对象，然后将其字符串字面量保存在常量池中，并把这个字面量的引用返回给定义好的对象引用。如下图：</p>
 <p>对于<code>String s3 = new String(&quot;Hollis&quot;).intern();</code>，在不调intern情况，s3 指向的是 JVM 在堆中创建的那个对象的引用的（如图中的s2）。但是当执行了 intern 方法时，s3 将指向字符串常量池中的那个字符串常量。</p>
-<p>由于 s1 和 s3 都是字符串常量池中的字面量的引用，所以 s1==s3。但是，s2 的引用是堆中的对象，所以 s2!=s1。</p>
+<p>由于 s1 和 s3 都是字符串常量池中的字面量的引用，所以 s1&#x3D;&#x3D;s3。但是，s2 的引用是堆中的对象，所以 s2!&#x3D;s1。</p>
 <h2><span id="intern-的正确用法">intern 的正确用法</span></h2><p>不知道，你有没有发现，在<code>String s3 = new String(&quot;Hollis&quot;).intern();</code>中，其实 intern 是多余的？</p>
 <p>因为就算不用 intern，Hollis 作为一个字面量也会被加载到 Class 文件的常量池，进而加入到运行时常量池中，为啥还要多此一举呢？到底什么场景下才会用到 intern 呢?<br> 在解释这个之前，我们先来看下以下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"Hollis"</span>;</span><br><span class="line">String s2 = <span class="string">"Chuang"</span>;</span><br><span class="line">String s3 = s1 + s2;</span><br><span class="line">String s4 = <span class="string">"Hollis"</span> + <span class="string">"Chuang"</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;Chuang&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> s1 + s2;</span><br><span class="line"><span class="type">String</span> <span class="variable">s4</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span> + <span class="string">&quot;Chuang&quot;</span>;</span><br></pre></td></tr></table></figure>
 
 <p>在经过反编译后，得到代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"Hollis"</span>;</span><br><span class="line">String s2 = <span class="string">"Chuang"</span>;</span><br><span class="line">String s3 = (<span class="keyword">new</span> StringBuilder()).append(s1).append(s2).toString();</span><br><span class="line">String s4 = <span class="string">"HollisChuang"</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;Chuang&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> (<span class="keyword">new</span> <span class="title class_">StringBuilder</span>()).append(s1).append(s2).toString();</span><br><span class="line"><span class="type">String</span> <span class="variable">s4</span> <span class="operator">=</span> <span class="string">&quot;HollisChuang&quot;</span>;</span><br></pre></td></tr></table></figure>
 
 <p>可以发现，同样是字符串拼接，s3 和s4 在经过编译器编译后的实现方式并不一样。s3 被转化成 StringBuilder 及 append，而 s4 被直接拼接成新的字符串。</p>
-<p>如果你感兴趣，你还能发现，String s4 = s1 + s2; 经过编译之后，常量池中是有两个字符串常量的分别是 Hollis、Chuang（其实 Hollis 和 Chuang 是String s1 = “Hollis”;和String s2 = “Chuang”;定义出来的），<strong>拼接结果HollisChuang 并不在常量池中。</strong></p>
-<p>如果代码只有String s4 = “Hollis” + “Chuang”;，那么常量池中将只有 HollisChuang 而没有 Hollis 和 Chuang。</p>
+<p>如果你感兴趣，你还能发现，String s4 &#x3D; s1 + s2; 经过编译之后，常量池中是有两个字符串常量的分别是 Hollis、Chuang（其实 Hollis 和 Chuang 是String s1 &#x3D; “Hollis”;和String s2 &#x3D; “Chuang”;定义出来的），<strong>拼接结果HollisChuang 并不在常量池中。</strong></p>
+<p>如果代码只有String s4 &#x3D; “Hollis” + “Chuang”;，那么常量池中将只有 HollisChuang 而没有 Hollis 和 Chuang。</p>
 <p>究其原因，<strong>是因为常量池要保存的是已确定的字面量值。</strong>也就是说，对于字符串的拼接，纯字面量和字面量的拼接，会把拼接结果作为常量保存到字符串。</p>
 <p>如果在字符串拼接中，有一个参数是非字面量，而是一个变量的话，整个拼接操作会被编译成StringBuilder.append，这种情况编译器是无法知道其确定值的。只有在运行期才能确定。</p>
 <p>那么，有了这个特性了，intern 就有用武之地了。那就是很多时候，我们在程序中用到的<strong>字符串是只有在运行期才能确定</strong>的，在编译期是无法确定的，那么也就没办法在编译期被加入到常量池中。</p>
 <p>这时候，对于那种可能经常使用的字符串，使用 intern 进行定义，每次 JVM 运行到这段代码的时候，就会直接把常量池中该字面值的引用返回，这样就可以减少大量字符串对象的创建了。<br> 如一美团点评团队的《深入解析String#intern》文中举的一个例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX = <span class="number">1000</span> * <span class="number">10000</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> String[] arr = <span class="keyword">new</span> String[MAX];</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Integer[] DB_DATA = <span class="keyword">new</span> Integer[<span class="number">10</span>];</span><br><span class="line">    Random random = <span class="keyword">new</span> Random(<span class="number">10</span> * <span class="number">10000</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; DB_DATA.length; i++) &#123;</span><br><span class="line">        DB_DATA[i] = random.nextInt();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; MAX; i++) &#123;</span><br><span class="line">         arr[i] = <span class="keyword">new</span> String(String.valueOf(DB_DATA[i % DB_DATA.length])).intern();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">MAX</span> <span class="operator">=</span> <span class="number">1000</span> * <span class="number">10000</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> String[] arr = <span class="keyword">new</span> <span class="title class_">String</span>[MAX];</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    Integer[] DB_DATA = <span class="keyword">new</span> <span class="title class_">Integer</span>[<span class="number">10</span>];</span><br><span class="line">    <span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>(<span class="number">10</span> * <span class="number">10000</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; DB_DATA.length; i++) &#123;</span><br><span class="line">        DB_DATA[i] = random.nextInt();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; MAX; i++) &#123;</span><br><span class="line">         arr[i] = <span class="keyword">new</span> <span class="title class_">String</span>(String.valueOf(DB_DATA[i % DB_DATA.length])).intern();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>在以上代码中，我们明确的知道，会有很多重复的相同的字符串产生，但是这些字符串的值都是只有在运行期才能确定的。所以，只能我们通过intern显示的将其加入常量池，<strong>这样可以减少很多字符串的重复创建。</strong></p>
 <h2><span id="总结">总结</span></h2><p>我们再回到文章开头那个疑惑：按照上面的两个面试题的回答，就是说new String也会检查常量池，如果有的话就直接引用，如果不存在就要在常量池创建一个，那么还要intern干啥？难道以下代码是没有意义的吗？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"Hollis"</span>).intern();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hollis&quot;</span>).intern();        </span><br></pre></td></tr></table></figure>
 
 <p>new String 所谓的“如果有的话就直接引用”，指的是Java堆中创建的String对象中包含的字符串字面量直接引用字符串池中的字面量对象。也就是说，还是要在堆里面创建对象的。</p>
 <p>而<code>intern``中说的``“``如果有的话就直接返回其引用``”``，指的是会把字面量对象的引用直接返回给定义的对象。这个过程是不会在`` Java ``堆中再创建一个`` String ``对象的。</code></p>
 <p>的确，以上代码的写法其实是使用 intern 是没什么意义的。因为字面量 Hollis 会作为编译期常量被加载到运行时常量池。</p>
 <p>之所以能有以上的疑惑，其实是对字符串常量池、字面量等概念没有真正理解导致的。有些问题其实就是这样，单个问题，自己都知道答案，但是多个问题综合到一起就蒙了。归根结底是知识的理解还停留在点上，没有串成面。</p>
-<p><a href="https://blog.csdn.net/ShelleyLittlehero/article/details/81196418" target="_blank" rel="noopener">https://blog.csdn.net/ShelleyLittlehero/article/details/81196418</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ShelleyLittlehero/article/details/81196418">https://blog.csdn.net/ShelleyLittlehero/article/details/81196418</a></p>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',

@@ -1,18 +1,18 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>SourceCode | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">SourceCode</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">SourceCode</h1><div class="post-content"><a id="more"></a>
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>SourceCode | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">SourceCode</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">SourceCode</h1><div class="post-content"><span id="more"></span>
 
 <!-- toc -->
 
 <ul>
 <li><a href="#hashmap">HashMap</a><ul>
 <li><a href="#hashmap-17">HashMap 1.7</a><ul>
-<li><a href="#put-过程分析">put 过程分析</a></li>
-<li><a href="#get-过程分析">get 过程分析</a></li>
-<li><a href="#hashmap扩容死锁问题">HashMap扩容死锁问题</a></li>
+<li><a href="#put-%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90">put 过程分析</a></li>
+<li><a href="#get-%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90">get 过程分析</a></li>
+<li><a href="#hashmap%E6%89%A9%E5%AE%B9%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98">HashMap扩容死锁问题</a></li>
 </ul>
 </li>
 <li><a href="#hashmap-18">HashMap 1.8</a><ul>
-<li><a href="#put方法的逻辑">put方法的逻辑</a></li>
-<li><a href="#get方法的逻辑">get方法的逻辑</a></li>
+<li><a href="#put%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%BB%E8%BE%91">put方法的逻辑</a></li>
+<li><a href="#get%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%BB%E8%BE%91">get方法的逻辑</a></li>
 </ul>
 </li>
 </ul>
@@ -22,7 +22,7 @@
 
 <h1><span id="hashmap">HashMap</span></h1><h2><span id="hashmap-17">HashMap 1.7</span></h2><p><strong>数据结构</strong>： 数组+链表</p>
 <p><strong>元素结构：</strong>Entry</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Entry&lt;K,V&gt; next;</span><br><span class="line">    <span class="keyword">int</span> hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Entry</span>&lt;K,V&gt; <span class="keyword">implements</span> <span class="title class_">Map</span>.Entry&lt;K,V&gt;&#123;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Entry&lt;K,V&gt; next;</span><br><span class="line">    <span class="type">int</span> hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>capacity：当前数组容量，始终保持 2^n，可以扩容，扩容后数组大小为当前的 2 倍。</p>
 <p>loadFactor：负载因子，默认为 0.75。</p>
@@ -42,7 +42,7 @@
 <ol>
 <li>根据 key 计算 hash 值。</li>
 <li>找到相应的数组下标：hash &amp; (length - 1)。</li>
-<li>遍历该数组位置处的链表，直到找到相等(==或equals)的 key。</li>
+<li>遍历该数组位置处的链表，直到找到相等(&#x3D;&#x3D;或equals)的 key。</li>
 </ol>
 <h3><span id="hashmap扩容死锁问题">HashMap扩容死锁问题</span></h3><p>因为在 JDK1.7 中采取的是<strong>头插法</strong>，遍历一个节点就插入一个节点到新的哈希桶数组，所以才会导致出现循环链表。但 JDK1.8 中是采用<strong>两个头结点来保持旧链表的引用，直到该索引处对应的链表全部遍历完之后再分别把头结点放在新的哈希桶数组对应的位置。</strong>而不是遍历一个节点就插入一个节点到新的哈希桶数组。所以不会出现死链。</p>
 <h2><span id="hashmap-18">HashMap 1.8</span></h2><p>将Entry改名为Node</p>
@@ -72,7 +72,7 @@
 <li><p>判断数组该位置处的元素是否刚好就是我们要找的</p>
 </li>
 <li><p>如果不是，判断该元素类型是否是 TreeNode，如果是，用红黑树的方法取数据。</p>
-<p>4 . 如果不是，遍历链表，直到找到相等(==或equals)的 key。</p>
+<p>4 . 如果不是，遍历链表，直到找到相等(&#x3D;&#x3D;或equals)的 key。</p>
 </li>
 </ol>
 </div></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({

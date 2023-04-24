@@ -1,19 +1,19 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="简单记录一些笔记"><title>阿里面试 | Disda</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">阿里面试</h1><a id="logo" href="/.">Disda</a><p class="description">Disda’s Dairy</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-4-4"><div class="content_container"><div class="post"><h1 class="post-title">阿里面试</h1><div class="post-content"><p>盘点了阿里面试题</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <!-- toc -->
 
 <ul>
 <li><a href="#java">Java</a><ul>
-<li><a href="#java-new一个对象的过程中发生了什么">java new一个对象的过程中发生了什么</a></li>
+<li><a href="#java-new%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88">java new一个对象的过程中发生了什么</a></li>
 </ul>
 </li>
-<li><a href="#哈希">哈希</a><ul>
-<li><a href="#解决哈希碰撞的方法">解决哈希碰撞的方法</a></li>
+<li><a href="#%E5%93%88%E5%B8%8C">哈希</a><ul>
+<li><a href="#%E8%A7%A3%E5%86%B3%E5%93%88%E5%B8%8C%E7%A2%B0%E6%92%9E%E7%9A%84%E6%96%B9%E6%B3%95">解决哈希碰撞的方法</a></li>
 </ul>
 </li>
-<li><a href="#数据库">数据库</a><ul>
-<li><a href="#主键和唯一索引的区别以及索引的优缺点">主键和唯一索引的区别以及索引的优缺点</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a><ul>
+<li><a href="#%E4%B8%BB%E9%94%AE%E5%92%8C%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BB%A5%E5%8F%8A%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9">主键和唯一索引的区别以及索引的优缺点</a></li>
 </ul>
 </li>
 </ul>
@@ -28,7 +28,7 @@
 <p>　　将方法区内对实例变量的定义拷贝一份到堆区，然后赋默认值</p>
 <p><strong>3、执行实例初始化代码</strong></p>
 <p>　　初始化顺序是先初始化父类再初始化子类，初始化时先执行实例代码块然后是构造方法</p>
-<p><strong>4、如果有类似于Child c = new Child()形式的c引用的话，在栈区定义Child类型引用变量c，然后将堆区对象的地址赋值给它</strong></p>
+<p><strong>4、如果有类似于Child c &#x3D; new Child()形式的c引用的话，在栈区定义Child类型引用变量c，然后将堆区对象的地址赋值给它</strong></p>
 <h1><span id="哈希">哈希</span></h1><h2><span id="解决哈希碰撞的方法">解决哈希碰撞的方法</span></h2><ol>
 <li><p>开放定址法<br>所谓的开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入 </p>
 </li>
