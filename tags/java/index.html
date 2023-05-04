@@ -1,0 +1,36 @@
+extends base
+
+block title
+  if page.category
+     title= page.category + ' | ' + config.title
+  if page.tag
+     title= page.tag + ' | ' + config.title
+  if page.archive
+     title= __('archive') + ' | ' + config.title
+block content
+  if page.category || page.tag
+      h1.label-title=  __('reading_label', page.category || page.tag)
+  .post
+    .post-archive
+          function groupBy(collection, keyFunc) {
+              var result = {};
+              collection.forEach(function(x) {
+                  var key = keyFunc(x);
+                  if (hasOwnProperty.call(result, key)) {
+                    result[key].push(x);
+                  } else {
+                    result[key] = [x];
+                  }
+              });
+              return result;
+            }
+          each posts, year in groupBy(page.posts.toArray(), function(p){return -p.date.format('YYYY')})
+            h2= -year
+            ul.listing
+              for post in posts
+                li
+                  span.date= post.date.format('YYYY/MM/DD')
+                  a(href=url_for(post.path), title=post.title)
+                    = post.title
+
+  include _partial/paginator.pug
