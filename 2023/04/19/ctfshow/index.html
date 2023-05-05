@@ -45,6 +45,10 @@
 </li>
 <li><a href="#php%E7%89%B9%E6%80%A7">php特性</a><ul>
 <li><a href="#web89">web89</a></li>
+<li><a href="#web90">web90</a></li>
+<li><a href="#web91">web91</a></li>
+<li><a href="#web93">web93</a></li>
+<li><a href="#web94">web94</a></li>
 </ul>
 </li>
 </ul>
@@ -440,6 +444,68 @@
 <ul>
 <li><p>preg_match有个漏洞，当检测的变量是数组的时候会报错并返回0。而intval函数当传入的变量也是数组的时候，会返回1，所以我们可以传个数组绕过，构造payload</p>
 <p><code>?num[]=abc</code></p>
+</li>
+</ul>
+<h4><span id="web90">web90</span></h4><p>intval($num,0)意思是检测num的进制类型并返回其十进制的值，若num前缀为0，即判断num为八进制，若num前缀为0x，则判断num为十六进制</p>
+<ul>
+<li>php中**&#x3D;&#x3D;&#x3D;**<ul>
+<li>值相等</li>
+<li>类型相同</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;num&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$num</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;num&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$num</span>===<span class="string">&quot;4476&quot;</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;no no no!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">intval</span>(<span class="variable">$num</span>,<span class="number">0</span>)===<span class="number">4476</span>)&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="title function_ invoke__">intval</span>(<span class="variable">$num</span>,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>方法一：进制转换</p>
+<ul>
+<li>若num前缀为0，即判断num为八进制，若num前缀为0x，则判断num为十六进制</li>
+</ul>
+<blockquote>
+<p>转化为八进制为010574</p>
+<p>转化为十六进制为0x117c</p>
+</blockquote>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// <span class="number">16</span></span><br><span class="line">?num=<span class="number">0</span>x117c</span><br><span class="line">// <span class="number">8</span></span><br><span class="line">?num=<span class="number">010574</span></span><br><span class="line">// <span class="number">2</span></span><br><span class="line">?num=<span class="number">0</span>b1000101111100</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法二：科学计数法</p>
+<blockquote>
+<p>4476e3表示4476*10^3，也就是4476000，</p>
+<p>而4476e3做为参数传入的时候可以当成字符串，在进行第一个（&#x3D;&#x3D;&#x3D;）比较时会先转为4476000再比较，到intval函数时，因为没有特征前缀，所以当十进制处理，而intval函数不能处理科学计数法，4476e3会被识别为4476,</p>
+</blockquote>
+</li>
+<li><p>方法三：字符串截取</p>
+<ul>
+<li>intval处理开头是数字的字符串时，返回值为开头的数。 所以我们可以直接输入 <strong>?num&#x3D;4476a</strong></li>
+</ul>
+</li>
+<li><p>方法四：浮点数</p>
+<ul>
+<li><p>构造浮点数绕过即可</p>
+<p><em>4476.0</em></p>
+</li>
+</ul>
+</li>
+<li><p>方法五：使用正号绕过</p>
+<p>+010574 </p>
+<p>%2b010574</p>
+</li>
+</ul>
+<h4><span id="web91">web91</span></h4><ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_46091464/article/details/108278486">换行解析漏洞</a></p>
+<blockquote>
+<p>^表示表达式开头，$表示表达式结尾，i表示不区分大小写，m表示多行模式</p>
+<p>\n换行，我们仅需用%0a代替即可</p>
+</blockquote>
+</li>
+</ul>
+<h4><span id="web93">web93</span></h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;num&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$num</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;num&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$num</span>==<span class="number">4476</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;no no no!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/[a-z]/i&quot;</span>, <span class="variable">$num</span>))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;no no no!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">intval</span>(<span class="variable">$num</span>,<span class="number">0</span>)==<span class="number">4476</span>)&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="title function_ invoke__">intval</span>(<span class="variable">$num</span>,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>过滤了十六进制，我们利用八进制就可以<strong>010574</strong></li>
+</ul>
+<h4><span id="web94">web94</span></h4><ul>
+<li><p>这题增加了对8进制的围追堵截，我们用浮点数绕过</p>
+<p><code>4476.0</code></p>
 </li>
 </ul>
 <h1><span id="愚人节杯">愚人节杯</span></h1><h2><span id="web">WEB</span></h2><h3><span id="easy_signin">easy_signin</span></h3><p>查看浏览器发现url链接是base64加密。<img src="https://img-blog.csdnimg.cn/img_convert/eea66e162a70efe45a115593662b2631.png" alt="image-20230404183149808"></p>
