@@ -3,6 +3,12 @@
 <!-- toc -->
 
 <ul>
+<li><a href="#crypto">Crypto</a><ul>
+<li><a href="#javascript">JavaScript</a></li>
+<li><a href="#rsa">RSA</a></li>
+<li><a href="#crypto4">Crypto4</a></li>
+</ul>
+</li>
 <li><a href="#web%E5%85%A5%E9%97%A8">WEB入门</a><ul>
 <li><a href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86">信息收集</a><ul>
 <li><a href="#web05">web05</a></li>
@@ -65,6 +71,33 @@
 </li>
 </ul>
 <!-- tocstop -->
+
+<h1><span id="crypto">Crypto</span></h1><h2><span id="javascript">JavaScript</span></h2><p><a target="_blank" rel="noopener" href="http://www.hiencode.com/jsfuck.html">js在线加解密</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bugku.com/tools/jsfuck/">jsfuck</a></p>
+<ul>
+<li>false       &#x3D;&gt;  ![]</li>
+<li>true        &#x3D;&gt;  !![]</li>
+<li>undefined   &#x3D;&gt;  [][[]]</li>
+<li>NaN         &#x3D;&gt;  +[![]]</li>
+<li>0           &#x3D;&gt;  +[]</li>
+<li>1           &#x3D;&gt;  +!+[]</li>
+<li>2           &#x3D;&gt;  !+[]+!+[]</li>
+<li>10          &#x3D;&gt;  [+!+[]]+[+[]]</li>
+<li>Array       &#x3D;&gt;  []</li>
+<li>Number      &#x3D;&gt;  +[]</li>
+<li>String      &#x3D;&gt;  []+[]</li>
+<li>Boolean     &#x3D;&gt;  ![]</li>
+<li>Function    &#x3D;&gt;  [][“filter”]</li>
+<li>eval        &#x3D;&gt;  [][“filter”][“constructor”]( CODE )()</li>
+<li>window      &#x3D;&gt;  [][“filter”][“constructor”](“return this”)()</li>
+</ul>
+<h2><span id="rsa">RSA</span></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line">p=<span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line">q=<span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line">e=<span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line"><span class="comment"># c=int(input())</span></span><br><span class="line"><span class="comment"># m=int(input())</span></span><br><span class="line">d=gmpy2.invert(e,(p-<span class="number">1</span>)*(q-<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment"># m=pow(c,d,p*q)</span></span><br><span class="line"><span class="comment"># c=pow(m,e,p*q)</span></span><br><span class="line"><span class="built_in">print</span>(m)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2><span id="crypto4">Crypto4</span></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p = <span class="number">447685307</span> </span><br><span class="line">q = <span class="number">2037</span> </span><br><span class="line">e =<span class="number">17</span> </span><br><span class="line">n = (p - <span class="number">1</span>) * (q-<span class="number">1</span>) </span><br><span class="line">d = (n+<span class="number">1</span>)//e </span><br><span class="line"><span class="built_in">print</span>(d)</span><br></pre></td></tr></table></figure>
+
+
 
 <h1><span id="web入门">WEB入门</span></h1><h3><span id="信息收集">信息收集</span></h3><h4><span id="web05">web05</span></h4><p>phps泄露，phps存放着php<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%BA%90%E7%A0%81&spm=1001.2101.3001.7020">源码</a>,可通过尝试访问&#x2F;index.phps读取,或者尝试扫描工具扫描读取。</p>
 <h4><span id="web10">web10</span></h4><p>flag信息藏在dns记录里面，使用命令</p>
