@@ -18,6 +18,10 @@
 <li><a href="#crypto13">crypto13</a></li>
 </ul>
 </li>
+<li><a href="#%E5%9F%B9%E6%A0%B9%E5%AF%86%E7%A0%81">培根密码</a><ul>
+<li><a href="#%E8%90%8C%E6%96%B0-%E5%AF%86%E7%A0%813">萌新 密码3</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -81,6 +85,17 @@
 </ul>
 <h2><span id="费纳姆密码">费纳姆密码</span></h2><h3><span id="crypto13">crypto13</span></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">r&#x27;/Users/disda/Desktop/计算机培训/网安/ctfshow/base家族/base.txt&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    text = f.read()</span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        text = base64.b64decode(text).decode()</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            text = base64.b32decode(text).decode()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                text = base64.b16decode(text).decode()</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"><span class="built_in">print</span>(text)</span><br></pre></td></tr></table></figure>
 
+<h2><span id="培根密码">培根密码</span></h2><ol>
+<li><p>密文使用英文语句来表示使用大小写来区分是a还是b，如果密文为大写那么加密就是第一种方式使用密文的每个字母大小写来判定是a还是b（大写为a,小写为b）—单文本语句模式</p>
+</li>
+<li><p>密文使用英文语句使用两种不同的·字体来区分a,b通常(将第一种字体转换为a，第二种字体转换为b)</p>
+</li>
+</ol>
+<h3><span id="萌新-密码3">萌新 密码3</span></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">题目名称：我想吃培根 题目描述： -- --- .-. ... . ..--.- .. ... ..--.- -.-. --- --- .-.. ..--.- -... ..- - ..--.- -... .- -.-. --- -. ..--.- .. ... ..--.- -.-. --- --- .-.. . .-. ..--.- -- -- -.. -.. -- -.. -- -.. -- -- -- -.. -.. -.. /-- -.. -- -.. -.. --/ -- -- -- -- -- /-- -.. -.. -- -.. -- /-- -.. -.. -- 格式：flag&#123;***********&#125;</span><br></pre></td></tr></table></figure>
+
+<p>放入CyberChef中获得</p>
+<p><code>MORSE_IS_COOL_BUT_BACON_IS_COOLER_MMDDMDMDMMMDDDMDMDDMMMMMMMDDMDMMDDM</code></p>
+<p>然后将M换成A，D换成B，解码选择Complete获得<code>GUOWANG</code></p>
 </div><div class="tags"><a href="/tags/ctf/"><i class="fa fa-tag"></i>ctf</a></div><div class="post-nav"><a class="next" href="/2023/04/19/ctfshow-Web%E7%AF%87/">ctfshow-Web篇</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
