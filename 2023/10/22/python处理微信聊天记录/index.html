@@ -15,6 +15,7 @@
 </ul>
 </li>
 <li><a href="#%E8%81%8A%E5%A4%A9%E9%A2%91%E7%8E%87%E7%83%AD%E5%9B%BE%E5%88%86%E6%9E%90">聊天频率热图分析</a></li>
+<li><a href="#lldb%E6%89%8B%E5%8A%A8%E6%96%B9%E6%B3%95%E5%8E%9F%E7%90%86">lldb手动方法（原理）</a></li>
 </ul>
 </li>
 </ul>
@@ -136,6 +137,33 @@
 
 
 <p><img src="/2023/10/22/python%E5%A4%84%E7%90%86%E5%BE%AE%E4%BF%A1%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/history.png" alt="history"></p>
+<h2><span id="lldb手动方法原理">lldb手动方法（原理）</span></h2><p>Tencent的开源项目WCDB[2]是一个高效、完整、易用的移动数据库框架，基于SQLCipher[3]，支持iOS, macOS和Android。</p>
+<p>SQLCipher[4] 中使用 sqlite3_key[5] 函数打开加密的数据库，wcdb 将其封装在setCipherKey[6]方法下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int sqlite3_key(sqlite3 *db, const void *pKey, int nKey)</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>br set -n sqlite3_key</code> 设置其断点。再使用<code>memory read --size 1 --format x --count 32 $rsi</code> 获取 pKey 传参的值：</p>
+<p>arm则是<code>memory read --size 1 --format x --count 32 $x1</code></p>
+<ol>
+<li><p>打开电脑端微信（不要登陆）</p>
+</li>
+<li><p>在Terminal输入命令<code>lldb -p $(pgrep WeChat)</code></p>
+</li>
+</ol>
+<p>   <img src="/2023/10/22/python%E5%A4%84%E7%90%86%E5%BE%AE%E4%BF%A1%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/1.jpg" alt="lldb"></p>
+<ol start="3">
+<li><p><code>br set -n sqlite3_key</code> 设置断点</p>
+</li>
+<li><p>输入<code>c</code>，回车（继续运行</p>
+</li>
+<li><p>登陆电脑端微信</p>
+</li>
+<li><p>输入<code>memory read --size 1 --format x --count 32 $x1</code>，回车</p>
+</li>
+</ol>
+<p><img src="/2023/10/22/python%E5%A4%84%E7%90%86%E5%BE%AE%E4%BF%A1%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/2.jpg"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ori_key=<span class="string">&quot;&quot;&quot;0x600001ea4760: 0x1b 0x89 0xb2 0x6f 0xf2 0xfd 0x48 0x2e</span></span><br><span class="line"><span class="string">0x600001ea4768: 0x98 0x7a 0xdd 0x77 0xdc 0x4b 0xc2 0x63</span></span><br><span class="line"><span class="string">0x600001ea4770: 0xd6 0xff 0xa2 0x78 0x14 0x36 0x46 0x65</span></span><br><span class="line"><span class="string">0x600001ea4778: 0x89 0xaf 0xca 0x80 0xaa 0xa8 0xe6 0xa3&quot;&quot;&quot;</span></span><br><span class="line">key = <span class="string">&#x27;0x&#x27;</span> + <span class="string">&#x27;&#x27;</span>.join(i.partition(<span class="string">&#x27;:&#x27;</span>)[<span class="number">2</span>].replace(<span class="string">&#x27;0x&#x27;</span>, <span class="string">&#x27;&#x27;</span>).replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;&#x27;</span>) <span class="keyword">for</span> i <span class="keyword">in</span> ori_key.split(<span class="string">&#x27;\n&#x27;</span>)[<span class="number">1</span>:<span class="number">5</span>])</span><br><span class="line"><span class="built_in">print</span>(key)</span><br></pre></td></tr></table></figure>
+
+
 <hr>
 <p>参考🔗：</p>
 <p><a target="_blank" rel="noopener" href="https://sspai.com/post/82577">导出多年微信聊天记录，我用可视化分析了出自己的口头禅</a></p>
