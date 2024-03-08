@@ -16,8 +16,10 @@
 <li><a href="#redis">redis</a></li>
 <li><a href="#nginx">NGINX</a></li>
 <li><a href="#java">Java</a></li>
+<li><a href="#%E5%BD%92%E6%A1%A3%E5%AF%BC%E5%87%BA">归档导出</a></li>
 </ul>
 </li>
+<li><a href="#%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85docker">离线安装docker</a></li>
 </ul>
 <!-- tocstop -->
 
@@ -77,6 +79,42 @@
 
 <p>运行<code>docker build -t zdh-web:v1 .</code> 然后会构建好我们的镜像</p>
 <p>然后运行<code>docker run -d -p 8081:8081 --name zdh-web zdh-web:v1</code></p>
+<h2><span id="归档导出">归档导出</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止容器</span></span><br><span class="line">docker stop zdh-web</span><br><span class="line">docker stop nginx</span><br><span class="line">docker stop mysql</span><br><span class="line">docker stop redis</span><br><span class="line"><span class="comment"># 导出容器</span></span><br><span class="line">docker <span class="built_in">export</span> -o xxx.tar container_name</span><br><span class="line"><span class="comment"># 导入为镜像</span></span><br><span class="line">docker import xxx.tar xxx_name:tag</span><br></pre></td></tr></table></figure>
+
+
+
+<h1><span id="离线安装docker">离线安装docker</span></h1><p>   1.下载docker安装包：</p>
+<p> <a target="_blank" rel="noopener" href="https://download.docker.com/linux/static/stable/x86_64/">https://download.docker.com/linux/static/stable/x86_64/</a></p>
+<ol start="2">
+<li>由于我们使用的是pve，因此需要用UltraISO打包成ISO文件上传服务器</li>
+<li>使用<code>lsblk</code>查看盘符，使用<code>mount /dev/sr0 /mnt/cdrom</code>挂载</li>
+<li>复制到个人文件夹<code>cp -r /mnt/cdrom ~/work</code></li>
+<li>复制可执行文件到bin<code>cp /work/docker/* /usr/bin/</code></li>
+<li>注册Docker为服务，进入 <code>/etc/systemd/system/</code> 目录，并创建 <code>docker.service</code> 文件。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/systemd/system/docker.service</span><br></pre></td></tr></table></figure>
+
+<p> 复制下面内容，ip换为自己主机的ip</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Docker Application Container Engine</span><br><span class="line">Documentation=https://docs.docker.com</span><br><span class="line">After=network-online.target firewalld.service</span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=notify</span><br><span class="line">ExecStart=/usr/bin/dockerd --selinux-enabled=false --insecure-registry=192.168.93.133</span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line">LimitNOFILE=infinity</span><br><span class="line">LimitNPROC=infinity</span><br><span class="line">LimitCORE=infinity</span><br><span class="line">Delegate=yes</span><br><span class="line">KillMode=process</span><br><span class="line">Restart=on-failure</span><br><span class="line">StartLimitBurst=3</span><br><span class="line">StartLimitInterval=60s</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>建立必需的目录<code>mkdir /etc/docker &amp;&amp; touch daemon.json</code></li>
+<li>赋予 <code>docker.service</code> 文件执行权限：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 644 /etc/systemd/system/docker.service</span><br><span class="line">groupadd docker</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>重新加载systemd守护进程以应用更改：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>启动Docker并设置开机自启动：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker</span><br><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+
 </div><div class="tags"></div><div class="post-nav"><a class="next" href="/2024/02/20/Ansible/">Ansible</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
   clientID: 'd154fff64901622afbb6',
   clientSecret: '5b3f1d58c331b54703e4477e1f8fa1e42e9c1082',
